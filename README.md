@@ -4,7 +4,9 @@
 ###### Github Repo Link: https://github.com/ptellier/nimbase
 ###### Project name: *Nimbase*
 
-![](readme/nimbase_icon.png)
+<p align="center">
+<img src="readme/nimbase_icon.png" width="200px">
+</p>
 
 ## Project Description
 
