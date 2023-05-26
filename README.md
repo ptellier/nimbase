@@ -86,6 +86,3 @@ Home, login, signup and signup pages and their functionality
 
 Explore, project dashboard, and edit project pages and their functionality
 ![explore, project dashboard, and edit project key tasks](readme/explore_dashboard_edit.jpg)
-
-How to hand in:
-Put all of the writing (Project Description, Project Task requirements, task breakdown), as well as your prototypes into the README of your project repo. Send the repo link to your lab TAs in a slack channel along with your group members. ALSO, for each team member, go on slack and edit your profile. In the “What I do” space, put your team name!
