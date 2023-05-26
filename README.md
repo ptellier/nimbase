@@ -64,20 +64,20 @@ page of our site lets anyone on the internet browse publicly hosted projects.
 
 ###### Requirement: Setup MongoDB Database that stores user account info, GitHub repo links, docker files and authentication tokens.
 
-Design the data structure that would be best implemented to adhere to our project requirements. This entails looking at the relationships between the data we are collecting and storing and if and how other parts of the project would require that data.
-Following the structure of the database, we need collections for storing user account info, GitHub repo links, docker files and authentication tokens.
-Develop the create, read, update and delete operations for each collection
-Test the database with edge cases and potential bugs, ensuring data integrity. This will be testing the create, read, update and delete functionality and making sure data is collected, stored and retrieved properly.
+- Design the data structure that would be best implemented to adhere to our project requirements. This entails looking at the relationships between the data we are collecting and storing and if and how other parts of the project would require that data.
+- Following the structure of the database, we need collections for storing user account info, GitHub repo links, docker files and authentication tokens.
+- Develop the create, read, update and delete operations for each collection
+- Test the database with edge cases and potential bugs, ensuring data integrity. This will be testing the create, read, update and delete functionality and making sure data is collected, stored and retrieved properly.
 
 ##### Minimal task 2 Jake
 
 ###### Requirement: Create an interface to sign-in/ authenticate users to edit the applications they want to host on our server.
 
-Research and decide on an authentication method. Could be password-based authentication, multi-factor authentication and token-based authentication.
-Design the user interface for the sign-in page. Would require fields for username/ email and password, and a submission button to “Sign-In” and a “forgot your password” button as well.
-Develop the frontend in react. This will look like a sign-in component and would likely have a statement management library to manage user state. The component will also contain the functions that send POST requests to our back-end.
-Implement the server-side code that will handle all sign-in requests. This involves validating users input, checking credentials against the database and sending the correct response back to the frontend.
-Test the authentication system to prevent potential threats and vulnerabilities in the system.
+- Research and decide on an authentication method. This could be password-based authentication, multi-factor authentication and token-based authentication.
+- Design the user interface for the sign-in page. This would require fields for username/ email and password, and a submission button to “Sign-In” and a “forgot your password” button as well.
+- Develop the frontend in react. This will look like a sign-in component and would likely have a statement management library to manage user state. The component will also contain the functions that send POST requests to our back-end.
+- Implement the server-side code that will handle all sign-in requests. This involves validating users input, checking credentials against the database and sending the correct response back to the frontend.
+- Test the authentication system to prevent potential threats and vulnerabilities in the system.
 
 ### 2-3 rough sketch prototypes of some key tasks of your app
 
