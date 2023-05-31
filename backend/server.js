@@ -30,4 +30,29 @@ async function run() {
 run().catch(console.dir);
 
 
+//create a express server at port 8080
+const express = require('express');
+const app = express();
 
+const port = 8080;
+
+app.get('/', (req, res) => {
+    run()
+    res.send('Hello World!');
+    }
+);
+
+app.get('/api', (req, res) => {
+    res.send('Hello World! from api');
+    }
+);
+
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+    }
+);
+
+
+
+//write a router
+// const router = express.Router()
