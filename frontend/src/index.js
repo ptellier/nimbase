@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import './styles/layout.css'
 import reportWebVitals from './reportWebVitals';
+import Home from "./pages/home";
+import Explore from "./pages/explore";
+import Login from "./pages/login";
+import ProjectDashboard from "./pages/projectDashboard";
+import ProjectEdit from "./pages/projectEdit";
+import Signup from "./pages/signup";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Home />
   </React.StrictMode>
 );
 

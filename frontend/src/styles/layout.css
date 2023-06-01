@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    background-color: #DEF4F0;
+    font-family: inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+    text-align: center;
+}
+
+.floaty-logo {
+    height: 5rem;
+    pointer-events: none;
+}
+
+.nav-bar-logo {
+    height: 5rem;
+    margin-left: 2rem;
+    margin-right: 1rem;
+    margin-bottom: -15px;
+}
+
+.nav-bar {
+    font-family: roboto, sans-serif;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    box-shadow: 0 20px 20px rgba(255, 255, 255, 0.5);
+}
+
+.nav-item {
+    padding: 1.2rem;
+    padding-bottom: 0.8rem;
+    text-decoration: none;
+    color: black;
+    font-size: 1.3rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-item:hover {
+    color: FireBrick;
+}
+
+.red-brick-gradient-text {
+    background: -webkit-linear-gradient(#afa8a8, #a72a2a); /* Example gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .floaty-logo {
+        animation: logoAnimation infinite 5s ease-in-out;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes logoAnimation {
+    0% {
+        transform: translateX(-8px);
+    }
+    50% {
+        transform: translateX(8px);
+    }
+    100% {
+        transform: translateX(-8px);
+    }
+}

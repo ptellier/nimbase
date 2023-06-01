@@ -1,0 +1,9 @@
+
+.background-image {
+    background-image: url('../static/svg/sky_gradient.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    position:fixed;
+    width:100vw;
+    height:100vh;
+}
