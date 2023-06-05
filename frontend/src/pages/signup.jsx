@@ -1,10 +1,109 @@
 import NavBar from "../components/NavBar";
 import '../styles/signup.css';
+import {useState} from "react";
 
 const Signup = () => {
-  return (
+    const [formData, setFormData] = useState(   {
+        email: "",
+        password: "",
+        confirmPassword: "",
+        username: "",
+        firstName: "",
+        lastName: "",
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        console.log("Form submitted");
+    }
+
+    return (
     <div className="background-image">
       <NavBar/>
+        <div className={"signup-container"}>
+            <div className={"signup-box"}>
+                <form className={"signup-form"} onSubmit={handleSubmit}>
+                    <h2>Sign Up</h2>
+                    <div className={"firstname"}>
+                        <label htmlFor="firstName">First Name:</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="lastName">Last Name:</label>
+                        <input
+                            type={"text"}
+                            id={"lastName"}
+                            name={"lastName"}
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type={"text"}
+                            id={"username"}
+                            name={"username"}
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type={"email"}
+                            id={"email"}
+                            name={"email"}
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type={"password"}
+                            id={"password"}
+                            name={"password"}
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword">Confirm Password:</label>
+                        <input
+                            type={"password"}
+                            id={"confirmPassword"}
+                            name={"confirmPassword"}
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <button type={"submit"}>Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
   );
 }
