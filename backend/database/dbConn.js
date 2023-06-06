@@ -21,5 +21,5 @@ async function run() {
 }
 run().catch(console.dir);
 
-const db = client.db("stormhacks");
+const db = client.db("nimbase");
 module.exports = db

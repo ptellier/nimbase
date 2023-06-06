@@ -4,6 +4,10 @@ function isString(value) {
   return typeof value === 'string' || value instanceof String;
 }
 
+function isBoolean(value) {
+  return value === true || value === false;
+}
+
 function isObject(value) {
   return typeof value === 'object' && !Array.isArray(value) && value !== null;
 }
@@ -13,7 +17,7 @@ function isStringArray(value) {
 }
 
 function isEmail(value) {
-  validator.isEmail(value);
+  return validator.isEmail(value);
 }
 
 function isNewUser(val) {
@@ -24,9 +28,10 @@ function isNewUser(val) {
 }
 
 function isProject(val) {
-  return Object.keys(val).length === 5
+  return Object.keys(val).length === 6
     && isString(val.name)
     && isString(val.description)
+    && isBoolean(val.public)
     && isString(val.dockerfile)
     && isString(val.github_url)
     && isString(val.github_auth_token)
