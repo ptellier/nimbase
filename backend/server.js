@@ -2,6 +2,7 @@ const db  = require('./database/dbConn.js');
 const express = require('express');
 const check = require('./api/check.js');
 const {isStringArray} = require("./api/check");
+const {ObjectId} = require("mongodb");
 const port = 8080;
 const app = express();
 
@@ -85,13 +86,13 @@ app.post('/api/user/login', async (req, res) => {
 /**
  * schema:
  * {
- *   username: string,
  *   _id: ObjectId,
+ *   owner: string,
  *   name: string,
  *   description: string,
- *   dockerfile: string,
  *   public: boolean
- *   github_url: ObjectId[],
+ *   dockerfile: string,
+ *   github_url: string,
  *   github_auth_tokens: string,
  * }
  * note: also need username of owner in the request body: owner -> string
@@ -103,18 +104,20 @@ app.post('/api/user/login', async (req, res) => {
 app.post('/api/project', express.json(), async (req, res) => {
     if (!check.isProject(req.body)) {
         res.status(400).send("invalid project in request body (as json)");
+        return;
     }
     const projects = db.collection("projects");
     const users = db.collection("users");
-    const ownerUser = await users.findOne({username: req.body.owner});
+    let ownerUser = await users.findOne({username: req.body.owner});
     if (!ownerUser) {
         res.status(400).send("user does not exist");
         return;
     }
     const result1 = await projects.insertOne(req.body);
-    const insertedId = result1.insertedId;
-    const newProjectIds = ownerUser.project_ids.push(insertedId);
-    const result2 = await users.updateOne({_id: req.body.id}, { $set: req.body.project});
+    const insertedId = result1.insertedId.toString();
+    if (!Array.isArray(ownerUser.project_ids)) {console.error("ownerUser.project_ids should br a string array");}
+    ownerUser.project_ids.push(insertedId);
+    const result2 = await users.updateOne({_id: ownerUser._id}, { $set: ownerUser});
     res.status(200).send(result2);
 });
 
@@ -123,22 +126,31 @@ app.post('/api/project', express.json(), async (req, res) => {
 app.get('/api/project', express.json(), async (req, res) => {
     if (!check.isString(req.body.id)) {
         res.status(400).send("need id -> string in request body");
+        return;
     }
     const projects = db.collection("projects");
-    const result = await projects.findOne({id: req.body.id});
-    if (!result ) {res.status(404).send(result);}
+    const result = await projects.findOne({_id: new ObjectId(req.body.id)});
+    if (!result ) {
+        res.status(404).send(result);
+        return;
+    }
     res.status(200).send(result);
 });
 
-// set an existing project's fields (all of them)
-// REQUIRES: JSON body with "id" -> id to update, and "project" -> new project matching the project schema
+// set an existing project's fields (all of them except _id)
+// REQUIRES: JSON body matching project schema and _id -> matching project to update
 app.put('/api/project', express.json(), async (req, res) => {
     if (!check.isProjectPut(req.body)) {
-        res.status(400).send("invalid project \"put\" request schema body (as json)");
+        res.status(400).send("invalid project in request body (as json)");
+        return;
     }
     const projects = db.collection("projects");
-    const result = await projects.updateOne({_id: req.body.id}, { $set: req.body.project});
-    if (!result ) {res.status(404).send(result);}
+    req.body._id = new ObjectId(req.body._id);
+    const result = await projects.updateOne({_id: req.body._id}, { $set: req.body});
+    if (!result ) {
+        res.status(404).send(result);
+        return;
+    }
     res.status(200).send(result);
 });
 

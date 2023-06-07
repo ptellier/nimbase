@@ -28,7 +28,8 @@ function isNewUser(val) {
 }
 
 function isProject(val) {
-  return Object.keys(val).length === 6
+  return Object.keys(val).length === 7
+    && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
     && isBoolean(val.public)
@@ -38,11 +39,14 @@ function isProject(val) {
 }
 
 function isProjectPut(val) {
-  return Object.keys(val).length === 2
-    && isString(val.id)
-    && isObject(val.project)
-    && isProject(val.project)
-
+  return Object.keys(val).length === 8
+    && isString(val.owner)
+    && isString(val.name)
+    && isString(val.description)
+    && isBoolean(val.public)
+    && isString(val.dockerfile)
+    && isString(val.github_url)
+    && isString(val.github_auth_token)
 }
 
 module.exports = {
