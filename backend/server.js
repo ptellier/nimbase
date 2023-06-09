@@ -33,7 +33,7 @@ app.get('/api', async (req, res) => {
  */
 
 // create a new user
-// REQUIRES: JSON body matching user schema
+// REQUIRES: JSON body matching user schema (excluding _id and project_ids)
 // REQUIRES: username is not already taken
 // REQUIRES: email is not already taken
 app.post('/api/user', express.json(), async (req, res) => {
@@ -60,13 +60,13 @@ app.post('/api/user', express.json(), async (req, res) => {
 });
 
 // get all projects (ids) of a user
-app.get('/api/user/projects', express.json(), async (req, res) => {
-    if (!check.isString(req.body.username)) {
-        res.status(400).send("need username -> string in request body");
+app.get('/api/user/:username/projects', express.json(), async (req, res) => {
+    if (!check.isString(req.params.username)) {
+        res.status(400).send("need username -> string in path parameters");
         return;
     }
     const users = db.collection("users");
-    const result = await users.findOne({username: req.body.username}, {projection: {_id: 0, project_ids: 1}});
+    const result = await users.findOne({username: req.params.username}, {projection: {_id: 0, project_ids: 1}});
     if (!result) {res.status(404).send(result);}
     if (!isStringArray(result.project_ids)) {console.error("result.project_ids should have been a string array");}
     res.status(200).send(result);
@@ -100,7 +100,8 @@ app.post('/api/user/login', async (req, res) => {
  */
 
 // create a new project
-// REQUIRES: JSON body matching project schema (and additionally owner -> string)
+// REQUIRES: JSON body matching project schema
+// REQUIRES: owner is the username of an existing user
 app.post('/api/project', express.json(), async (req, res) => {
     if (!check.isProject(req.body)) {
         res.status(400).send("invalid project in request body (as json)");
@@ -122,14 +123,13 @@ app.post('/api/project', express.json(), async (req, res) => {
 });
 
 // get an existing project
-// REQUIRES: JSON body with project id
-app.get('/api/project', express.json(), async (req, res) => {
-    if (!check.isString(req.body.id)) {
-        res.status(400).send("need id -> string in request body");
+app.get('/api/project/:id', express.json(), async (req, res) => {
+    if (!check.isString(req.params.id)) {
+        res.status(400).send("need id -> string in path parameter");
         return;
     }
     const projects = db.collection("projects");
-    const result = await projects.findOne({_id: new ObjectId(req.body.id)});
+    const result = await projects.findOne({_id: new ObjectId(req.params.id)});
     if (!result ) {
         res.status(404).send(result);
         return;
