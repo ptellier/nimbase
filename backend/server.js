@@ -1,10 +1,17 @@
 const db  = require('./database/dbConn.js');
 const express = require('express');
 const check = require('./api/check.js');
+const cors = require('cors')
 const {isStringArray} = require("./api/check");
 const {ObjectId} = require("mongodb");
 const port = 8080;
 const app = express();
+
+let CORS_OPTIONS = {
+    origin : ['http://localhost:3000'],
+}
+
+app.use(cors(CORS_OPTIONS));
 
 // root sends welcome message
 app.get('/', (req, res) => {
@@ -141,7 +148,7 @@ app.get('/api/project/:id', express.json(), async (req, res) => {
 // REQUIRES: JSON body matching project schema and _id -> matching project to update
 app.put('/api/project', express.json(), async (req, res) => {
     if (!check.isProjectPut(req.body)) {
-        res.status(400).send("invalid project in request body (as json)");
+        res.status(400).send("invalid 'project put' in request body (as json)");
         return;
     }
     const projects = db.collection("projects");

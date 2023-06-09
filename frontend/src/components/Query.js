@@ -1,9 +1,11 @@
 import axios from "axios";
 
+const BASE_URL = 'http://localhost:8080';
+
 class Query {
 
   async createUser(username, password_hash, email) {
-    return await axios.post('/api/user', {
+    return await axios.post(BASE_URL+'/api/user', {
       username: username,
       password_hash: password_hash,
       email: email,
@@ -12,12 +14,12 @@ class Query {
 
   // Get all projects (ids) of a user
   async getUserProjects(username) {
-    return await axios.get(`/api/user/${username}/projects`);
+    return await axios.get(BASE_URL+`/api/user/${username}/projects`);
   }
 
   // Authenticate/ login user
   async loginUser(username, password_hash) {
-    return await axios.post('/api/user/login', {
+    return await axios.post(BASE_URL+'/api/user/login', {
       // TODO: implement loginUser
     });
   }
@@ -26,7 +28,7 @@ class Query {
 
   // create a new project
   async createProject(owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens) {
-    return await axios.post('/api/project', {
+    return await axios.post(BASE_URL+'/api/project', {
       owner: owner,
       name: name,
       description: description,
@@ -38,12 +40,13 @@ class Query {
   }
 
   async getProject(project_id) {
-    return await axios.get(`/api/project/${project_id}`);
+    return await axios.get(BASE_URL+`/api/project/${project_id}`);
   }
 
-  // set an existing project's fields (all of them except _id)
-  async updateProject(owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens) {
-    return await axios.put('/api/project', {
+  // set an existing project's fields (all of them except _id which must match an existing project)
+  async updateProject(_id, owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens) {
+    return await axios.put(BASE_URL+'/api/project', {
+      _id: _id,
       owner: owner,
       name: name,
       description: description,
@@ -60,6 +63,5 @@ class Query {
 
 export default Query;
 
-const query = new Query();
-query.createUser("user1", "secret123", "it's a secret").then((res) => console.log(res.data));
+
 

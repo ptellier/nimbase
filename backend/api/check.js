@@ -35,18 +35,19 @@ function isProject(val) {
     && isBoolean(val.public)
     && isString(val.dockerfile)
     && isString(val.github_url)
-    && isString(val.github_auth_token)
+    && isString(val.github_auth_tokens)
 }
 
 function isProjectPut(val) {
   return Object.keys(val).length === 8
+    && isString(val._id)
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
     && isBoolean(val.public)
     && isString(val.dockerfile)
     && isString(val.github_url)
-    && isString(val.github_auth_token)
+    && isString(val.github_auth_tokens)
 }
 
 module.exports = {
