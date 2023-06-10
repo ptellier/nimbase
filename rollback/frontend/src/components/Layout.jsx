@@ -1,13 +1,21 @@
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/layout.css";
 import user from "../styles/user.png";
 import "../styles/search.css";
 import ListingLeft from "./createListing";
 import ListingRight from "./searchListing";
-import Map, {Marker} from 'react-map-gl';
 
+
+import Map, {Marker} from 'react-map-gl';
+import {Source, Layer} from 'react-map-gl';
+
+// import ControlPanel from './control-panel';
+import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from './layers';
+
+// import  {MapRef} from 'react-map-gl';
+import  {GeoJSONSource} from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 
@@ -56,21 +64,59 @@ const Layout = () => {
     );
   };
 
+
+
+  const mapRef = useRef(null);
+
+  const onClick = event => {
+    const feature = event.features[0];
+    const clusterId = feature.properties.cluster_id;
+
+    const mapboxSource = mapRef.current.getSource('earthquakes');
+
+    mapboxSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err) {
+        return;
+      }
+
+      mapRef.current.easeTo({
+        center: feature.geometry.coordinates,
+        zoom,
+        duration: 500
+      });
+    });
+  };
+
   const CustomMap = () => {
     return (
       <div className="map">
-        <Map
-          initialViewState={{
-            latitude: latitude,
-            longitude: longitude,
-            zoom: 14
-          }}
-          className="map"
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          mapboxAccessToken={MAPBOX_TOKEN}
+      <Map
+        initialViewState={{
+          latitude: latitude,
+          longitude: longitude,
+          zoom: 3
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v10"
+        mapboxAccessToken={MAPBOX_TOKEN}
+        interactiveLayerIds={[clusterLayer.id]}
+        onClick={onClick}
+        ref={mapRef}
+      >
+        <Source
+          id="earthquakes"
+          type="geojson"
+          data="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={50}
         >
-          <Marker longitude={longitude} latitude={latitude} color="red" />
-        </Map>
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
+          <Layer {...unclusteredPointLayer} />
+        </Source>
+        <Marker longitude={longitude} latitude={latitude} color="red" />
+      </Map>
+      {/* <ControlPanel /> */}
       </div>
     );
   };

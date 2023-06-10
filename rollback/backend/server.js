@@ -8,12 +8,12 @@ const app = express();
 
 // root sends welcome message
 app.get('/', (req, res) => {
-    res.send('Welcome to the Nimbase Back-end API!');
+    res.send('Welcome to the rollback Back-end API!');
 });
 
 
 app.get('/api', async (req, res) => {
-    const collection = db.collection("users");
+    const collection = db.collection("datapoints");
     const result = await collection.find({}).toArray();
     res.send(result);
 });

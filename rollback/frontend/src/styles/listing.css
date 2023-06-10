@@ -6,6 +6,9 @@
   overflow-y: scroll;
   display: flex;
   width: 30%;
+  right: 0;
+  position: absolute;
+  z-index: 10;
 }
 
 .leftbar {
@@ -15,6 +18,9 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  position: absolute;
+  z-index: 10;
+  height: 91%;
 }
 
 .create {
@@ -41,6 +47,7 @@
   margin: 5px;
   font-family: "Roboto", sans-serif;
   /* font-size: 20px; */
+  
 
 }
 
