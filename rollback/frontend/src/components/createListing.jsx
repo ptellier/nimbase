@@ -47,7 +47,10 @@ const ListingLeft = () => {
 
   const handleLocation = (e) => {
     e.preventDefault();
-    setLocation("V6T2G9");
+    navigator.geolocation.getCurrentPosition((position) => {
+      
+    setLocation(position.coords.latitude + "," + position.coords.longitude);
+    });
   };
 
   const ModalItem = () => {
@@ -82,32 +85,12 @@ const ListingLeft = () => {
                 />
               </Form.Group>
             </Row>
-
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formGridCity">
-                <Form.Label>Quantity</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Quantity"
-                  name="quantity"
-                />
-              </Form.Group>
-
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>Expiration Date</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Expiration Date"
-                  name="expirationDate"
-                />
-              </Form.Group>
-            </Row>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="formGridEmail">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows={15}
+                  rows={8}
                   placeholder="Description"
                   name="description"
                 />
@@ -146,17 +129,17 @@ const ListingLeft = () => {
                         <Form.Label>Keyword</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Chips, broccoli,..."
+                          placeholder="Vancouver, Calgary, etc."
                           name="keyword"
                         />
                       </Form.Group>
                     </Row>
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="formGridPassword">
-                        <Form.Label>Postal Code</Form.Label>
+                        <Form.Label>Location</Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Postal Code"
+                          placeholder="Location"
                           name="location"
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
@@ -164,7 +147,7 @@ const ListingLeft = () => {
                       </Form.Group>
                     </Row>
                     <Button variant="primary" onClick={handleLocation}>
-                      Current Location
+                      Set Current Location
                     </Button>
                     <br />
                     <br />
@@ -176,26 +159,6 @@ const ListingLeft = () => {
                       max={50}
                       name="radius"
                     />
-
-                    <Row className="mb-3">
-                      <Form.Group as={Col} controlId="formGridCity">
-                        <Form.Label>Quantity</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Quantity"
-                          name="quantity"
-                        />
-                      </Form.Group>
-
-                      <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>Expiration Date</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Expiration Date"
-                          name="expirationDate"
-                        />
-                      </Form.Group>
-                    </Row>
                     <Row style={{ margin: "20px" }}>
                       <Button variant="primary" type="submit">
                         Search
@@ -205,7 +168,6 @@ const ListingLeft = () => {
                 </div>
               </div>
             </div>
-
       </div>
     </>
   );

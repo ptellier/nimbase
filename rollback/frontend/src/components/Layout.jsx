@@ -94,7 +94,7 @@ const Layout = () => {
         initialViewState={{
           latitude: latitude,
           longitude: longitude,
-          zoom: 3
+          zoom: 10
         }}
         mapStyle="mapbox://styles/mapbox/streets-v10"
         mapboxAccessToken={MAPBOX_TOKEN}

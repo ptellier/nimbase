@@ -1,5 +1,5 @@
 import React from "react";
-import "./components.css";
+// import "./components.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteItem,

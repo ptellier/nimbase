@@ -25,8 +25,6 @@ const ListingRight = () => {
     image: "",
     title: "",
     location: "",
-    expirationDate: "",
-    quantity: "",
     description: "",
   });
 
@@ -99,10 +97,6 @@ const ListingRight = () => {
             />
             <div>
               <strong>Location:</strong> {modalInfo.location}
-              <br />
-              <strong>Expiration Date:</strong> {modalInfo.expirationDate}
-              <br />
-              <strong>Quantity:</strong> {modalInfo.quantity}
               <br />
               <strong>Description:</strong> {modalInfo.description}
               <br />
