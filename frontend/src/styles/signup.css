@@ -12,15 +12,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 80px;
+    margin-top: 10px;
 }
 
 .signup-box {
-    background: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 5px;
     width: 300px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .signup-box h2 {
@@ -34,28 +32,10 @@
     margin-top: 20px;
 }
 
-
-.signup-box input {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    box-sizing: border-box;
-    width: 100%;
-}
-
-.signup-box button {
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    margin-top: 10px;
-    background-color: #333;
-    color: #fff;
-    cursor: pointer;
-    outline: none;
-    width: 100%;
-}
-
 .signup-box button:hover {
     background-color: #444;
+}
+
+.field-div, .signup-box button{
+    margin-top: 10px;
 }

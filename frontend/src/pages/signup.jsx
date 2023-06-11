@@ -32,8 +32,9 @@ const Signup = () => {
             <div className={"signup-box"}>
                 <form className={"signup-form"} onSubmit={handleSubmit}>
                     <h2>Sign Up</h2>
-                    <div className={"firstname"}>
-                        <label htmlFor="firstName">First Name:</label>
+                    <div className={"firstname field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
+                        <label htmlFor="firstName"> First Name:</label>
                         <input
                             type="text"
                             id="firstName"
@@ -43,7 +44,8 @@ const Signup = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
                         <label htmlFor="lastName">Last Name:</label>
                         <input
                             type={"text"}
@@ -54,7 +56,8 @@ const Signup = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
                         <label htmlFor="username">Username:</label>
                         <input
                             type={"text"}
@@ -65,7 +68,8 @@ const Signup = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
                         <label htmlFor="email">Email:</label>
                         <input
                             type={"email"}
@@ -76,8 +80,9 @@ const Signup = () => {
                             required
                         />
                     </div>
-                    <div>
-                        <label htmlFor="email">Email:</label>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
+                        <label htmlFor="email">Password:</label>
                         <input
                             type={"password"}
                             id={"password"}
@@ -87,7 +92,8 @@ const Signup = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
                         <label htmlFor="confirmPassword">Confirm Password:</label>
                         <input
                             type={"password"}
@@ -99,7 +105,9 @@ const Signup = () => {
                         />
                     </div>
                     <div>
-                        <button type={"submit"}>Sign Up</button>
+                        <div style={{width:"max-content", marginLeft:"auto", marginRight:"auto", marginTop:"20px"}}>
+                            <button type={"submit"}>Sign Up</button>
+                        </div>
                     </div>
                 </form>
             </div>
