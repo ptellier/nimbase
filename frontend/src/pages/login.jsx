@@ -35,29 +35,38 @@ const Login = () => {
             <div className="login-box">
                 <h2>Login</h2>
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Log In</button>
+                    <div className={"field-div"}>
+                    <span style={{display:"inline-block", width:"0.5em"}}/>
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            type="email"
+                            value={email}
+                            name={"email"}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className={"field-div"}>
+                        <span style={{display:"inline-block", width:"0.5em"}}/>
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            name={"password"}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div id="login-button-box">
+                        <button id="login-button" type="submit">Log In</button>
+                        <button onClick={handleGithubLogin}>
+                            <FontAwesomeIcon icon={faGithub}/> Log in with GitHub
+                        </button>
+                    </div>
                 </form>
-
-                <button onClick={handleGithubLogin}>
-                    <FontAwesomeIcon icon={faGithub}/> Log in with GitHub
-                </button>
-                <h4>
+                <p>
                     Don't have an account? <a href="/signup">Sign Up</a>
-                </h4>
+                </p>
             </div>
         </div>
     </div>
