@@ -1,6 +1,7 @@
 import NavBar from "../components/NavBar";
 import '../styles/signup.css';
 import {useState} from "react";
+import Query from "../components/Query";
 
 const Signup = () => {
     const [formData, setFormData] = useState(   {
@@ -20,8 +21,18 @@ const Signup = () => {
         }));
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
+        try {
+            const {username, password, email} = formData;
+            const query = new Query();
+            const response = await query.createUser(username, password, email);
+            console.log("User created:", response.data);
+            await query.loginUser(email, password);
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Error creating user:", error);
+        }
         console.log("Form submitted");
     }
 
