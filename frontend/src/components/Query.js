@@ -19,12 +19,27 @@ class Query {
 
   // Authenticate/ login user
   async loginUser(username, password_hash) {
-    return await axios.post(BASE_URL+'/api/user/login', {
-      // TODO: implement loginUser
-    });
+    try {
+      return await axios.post(BASE_URL+'/api/user/login', {
+        username: username,
+        password_hash: password_hash,
+      });
+    } catch (e) {
+        console.log("error logging in user ", e);
+    }
+
   }
 
   // TODO: logout user '/api/user/logout'
+  async logoutUser(username) {
+    try {
+      return await axios.post(BASE_URL+'/api/user/logout', {
+        username: username
+      });
+    } catch (e) {
+      console.log("error logging out user ");
+    }
+  }
 
   // create a new project
   async createProject(owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens) {
