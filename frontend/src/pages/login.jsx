@@ -3,22 +3,34 @@ import '../styles/login.css';
 import {useState} from "react";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Query from "../components/Query";
 
 const Login = () => {
+    const [user, setUser] = useState(null);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    let que = new Query();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        try {
+            const user = await que.loginUser(email, password);
+            setUser(user);
+        } catch (error) {
+            console.log("Error in login: ", error);
+        }
     };
 
     const handleGithubLogin = () => {
+        const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=0ed3bca2eb2b455e8aed&scope=user`;
+        window.location.href = githubAuthUrl
         console.log("Logging in with Github");
     }
 
   return (
     <div className="background-image">
-      <NavBar/>
+      <NavBar user={user}/>
         <div className="login-container">
             <div className="login-box">
                 <h2>Login</h2>
