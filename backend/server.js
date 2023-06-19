@@ -161,6 +161,17 @@ app.put('/api/project', express.json(), async (req, res) => {
     res.status(200).send(result);
 });
 
+// get all existing projects
+app.get('/api/projects', express.json(), async (req, res) => {
+    const projects = db.collection("projects");
+    // TODO: create endpoint for all public projects (filter by field: public = true)
+    if (!projects ) {
+        res.status(404).send(projects);
+        return;
+    }
+    res.status(200).send(projects);
+});
+
 // TODO: perform gitHub action on project '/api/project/deploy'
 
 /****** Listen *****************/
