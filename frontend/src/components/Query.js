@@ -74,7 +74,7 @@ class Query {
 
   // TODO: perform gitHub action on project '/api/project/deploy'
 
-  // TODO: get all projects
+  // TODO: implement backend and remove mock
   async getAllProjects() {
     // return await axios.get(BASE_URL+'/api/projects');
     // }
@@ -83,13 +83,43 @@ class Query {
         {
           id: 1,
           title: 'Project 1',
-          imageUrl: 'https://via.placeholder.com/150', // a placeholder image URL
+          imageUrl: 'https://picsum.photos/200/300', // a placeholder image URL
           description: 'This is the description for Project 1.',
         },
         {
           id: 2,
           title: 'Project 2',
-          imageUrl: 'https://via.placeholder.com/150', // a placeholder image URL
+          imageUrl: 'https://picsum.photos/200/301', // a placeholder image URL
+          description: 'This is the description for Project 2.',
+        },
+        {
+          id: 3,
+          title: 'Project 3',
+          imageUrl: 'https://picsum.photos/200/3000', // a placeholder image URL
+          description: 'This is the description for Project 3.',
+        },
+        {
+          id: 4,
+          title: 'Project 4',
+          imageUrl: 'https://picsum.photos/200/4', // a placeholder image URL
+          description: 'This is the description for Project 2.',
+        },
+        {
+          id: 5,
+          title: 'Project 5',
+          imageUrl: 'https://picsum.photos/200/201', // a placeholder image URL
+          description: 'This is the description for Project 2.',
+        },
+        {
+          id: 6,
+          title: 'Project 6',
+          imageUrl: 'https://picsum.photos/200/202', // a placeholder image URL
+          description: 'This is the description for Project 2.',
+        },
+        {
+          id: 7,
+          title: 'Project 7',
+          imageUrl: 'https://picsum.photos/200/203', // a placeholder image URL
           description: 'This is the description for Project 2.',
         },
         // add more
