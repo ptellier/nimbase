@@ -1,6 +1,6 @@
 # CPSC 455 Project Progress #1: Project Requirements
 
-###### Group Members: Nick Mercuri, Landseer Enga, Phillip Tellier, Jake Milad, Bhairaw Aryan
+###### Group Members: Landseer Enga, Phillip Tellier, Jake Milad, Bhairaw Aryan
 ###### Github Repo Link: https://github.com/ptellier/nimbase
 ###### Project name: *Nimbase*
 
