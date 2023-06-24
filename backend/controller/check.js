@@ -24,7 +24,7 @@ function isNewUser(val) {
   return Object.keys(val).length === 3
     && isString(val.username)
     && validator.isEmail(val.email)
-    && isString(val.password_hash)
+    && isString(val.password)
 }
 
 function isProject(val) {
@@ -53,6 +53,7 @@ function isProjectPut(val) {
 module.exports = {
   isString,
   isStringArray,
+  isObject,
   isEmail,
   isNewUser,
   isProject,
