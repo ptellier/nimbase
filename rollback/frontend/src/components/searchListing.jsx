@@ -8,7 +8,14 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
+import { useSelector, useDispatch } from "react-redux";
+import { useMap } from "react-map-gl";
+
+
 const ListingRight = () => {
+
+  const visibleListing = useSelector((state) => state.displayListing);
+
 
   const [posts, setPosts] = useState([]);
   const [isBoxVisible, setIsBoxVisible] = useState(false);
@@ -21,8 +28,9 @@ const ListingRight = () => {
   }, []);
 
   const [modalInfo, setModalInfo] = useState({
+    postedBy: "",
     id: "",
-    image: "",
+    price: "",
     title: "",
     location: "",
     description: "",
@@ -40,16 +48,26 @@ const ListingRight = () => {
     email: "email",
   };
 
-  const listing = posts.map((item) => {
+  const {mymap} = useMap();
+  const listing = visibleListing.map((listing) => {
+    const item = listing.properties;
     return (
-      <Card key={item.id} style={{ width: "12rem", margin: "10px" }}>
+      <Card onMouseOver={() => {
+        console.log(listing.geometry.coordinates);
+        mymap.easeTo({
+          center: [listing.geometry.coordinates[0], listing.geometry.coordinates[1]],
+          
+          duration: 500,
+        });
+      }
+      } key={item.id} style={{ width: "12rem", margin: "10px" }}>
         <Card.Img variant="top" src={item.image || "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} />
         <Card.Body>
           <Card.Title>{item.title}</Card.Title>
-          <Card.Text>
+          {/* <Card.Text>
             <strong>{item.location}</strong> <br/>
             {item.description}
-          </Card.Text>
+          </Card.Text> */}
           <Button
             variant="primary"
             onClick={() => {
@@ -58,9 +76,8 @@ const ListingRight = () => {
                 id: item.id,
                 image: item.image,
                 title: item.title,
-                location: item.location,
-                expirationDate: item.expirationDate,
-                quantity: item.quantity,
+                price: item.price,
+                postedBy: item.username,
                 description: item.description,
               });
             }}
@@ -96,7 +113,9 @@ const ListingRight = () => {
               style={{ width: "50%", marginRight: "10px" }}
             />
             <div>
-              <strong>Location:</strong> {modalInfo.location}
+            <strong>Posted By:</strong> {modalInfo.postedBy}
+              <br />
+              <strong>Price: </strong> CA${modalInfo.price}
               <br />
               <strong>Description:</strong> {modalInfo.description}
               <br />

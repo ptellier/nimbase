@@ -13,26 +13,18 @@ import Layout from './components/Layout';
 import Missing from './components/Missing';
 import Unauthorized from './components/Unauthorized';
 import { Routes, Route } from 'react-router-dom';
+import ProtectedRoutes from "./components/protectedRoutes";
 
 function App() {
   return (
 <>    
 <Routes>
-        {/* <Navigation />
-        <div className="main">
-          <div className="col">
-            <Form /> <br />
-            <Stat />
-          </div>
-          <div className="col">
-            <List />
-          </div>
-          <Item />
-        </div> */}
         <Route path="login" element={<Login />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
-        <Route path="/" element={<Layout />}>
-          <Route path="*" element={<Missing />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="*" element={<Missing />} />
+          </Route>
         </Route>
     </Routes>
     </>

@@ -38,6 +38,11 @@
   flex-direction: column;
 }
 
+.create:hover {
+  cursor: pointer;
+  background-color: #474747;
+}
+
 .search {
   /* border: 1px solid black; */
   background-color: #262626;
@@ -47,7 +52,6 @@
   margin: 5px;
   font-family: "Roboto", sans-serif;
   /* font-size: 20px; */
-  
 
 }
 
@@ -89,4 +93,29 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.half{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container{
+  display: flex;
+  gap: 20px;
+}
+
+#mymapcreate{
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.card{
+  width: 100% !important;
+  max-height: fit-content !important;
+  height: fit-content !important;
 }

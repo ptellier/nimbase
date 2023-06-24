@@ -37,3 +37,34 @@ export const updateItem = (item) => {
     payload: item,
   };
 };
+
+
+
+export const setLocation = (location) => {
+  return {
+    type: "SET_LOCATION",
+    payload: location,
+  };
+}
+
+export const setVisibileListing = (listing) => {
+  return {
+    type: "SET_VISIBLE_LISTING",
+    payload: listing,
+  };
+}
+
+export const setListing = (listings) => {
+  console.log(listings);
+  return {
+    type: "SET_LISTING",
+    payload: listings,
+  };
+}
+
+export const setVisibleListing = (listingIDs) => {
+  return {
+    type: "SET_VISIBLE_LISTING",
+    payload: listingIDs,
+  };
+}

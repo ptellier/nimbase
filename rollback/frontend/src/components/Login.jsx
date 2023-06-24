@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../styles/signinup.css";
-
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {setUsername} from "../actions/index.jsx";
 const LOGIN_URL = "/user/login";
 const REGISTER_URL = "/user/register";
 
@@ -9,6 +11,8 @@ const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Login = () => {
+  const dispatch = useDispatch();
+
   const [persist, setPersist] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,7 +65,7 @@ const Login = () => {
               Username
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="usernameL"
               ref={userRefL}
@@ -89,18 +93,6 @@ const Login = () => {
               required
               placeholder="Password"
             />
-          </div>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="persist"
-              onChange={togglePersist}
-              checked={persist}
-            />
-            <label className="form-check-label" htmlFor="persist">
-              Remember me
-            </label>
           </div>
           <div className="form-check"></div>
           <button
@@ -270,16 +262,50 @@ const Login = () => {
   }, [userL, pwdL]);
 
   const handleLogin = async (e) => {
-//    e.preventDefault();
+   e.preventDefault();
+  try {
+    const result = await axios.post("http://localhost:8080/login", { username: userL, password: pwdL },
+    { withCredentials: true}
+    );
+    
+    // localStorage.setItem("token", result.data.token);
+    console.log(result.data);
+    localStorage.setItem("isLogged", result.data.isAuth);
+    localStorage.setItem("username", userL);
     navigate('/')
-    try {
-    } catch (err) {
+  } catch (err) {
+    console.log(err);
+    if (!err?.response) {
+      setErrMsgL("No Server Response");
+    } else if (err.response?.status === 401) {
+      setErrMsgL("Invalid Credentials");
+    } else {
+      setErrMsgL("Login Failed");
     }
+  }
+
   };
+
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
+
+      const result = await axios.post("http://localhost:8080/register", 
+      {
+        username: user,
+        password: pwd,
+        address: address,
+        zip: zip,
+        city: city,
+        country: country,
+      },
+      // include credentials here
+      { withCredentials: true }
+
+      );
+
+      setSlider(false);
       setSuccess(true);
       setUser("");
       setPwd("");
@@ -288,14 +314,15 @@ const Login = () => {
       setCity("");
       setCountry("");
     } catch (err) {
+      console.log(err);
       if (!err?.response) {
         setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
+      } else if (err.response?.status === 400) {
         setErrMsg("Username Taken");
       } else {
         setErrMsg("Registration Failed");
       }
-      errRefL.current.focus();
+
     }
   };
 
