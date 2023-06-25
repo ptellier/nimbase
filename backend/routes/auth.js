@@ -23,7 +23,9 @@ router.post('/login', async (req, res) => {
     return res.status(401).send(foundUser); //Unauthorized
   }
   // evaluate password
-  const match = await bcrypt.compare(password, foundUser.password);
+  console.log("foundUser: ", foundUser.password_hash)
+  console.log("password: ", password)
+  const match = await bcrypt.compare(password, foundUser.password_hash);
   if (match) {
     // create JWTs
     const accessToken = jwt.sign(
@@ -37,7 +39,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: EXPIRY_TIME_OF_REFRESH_TOKEN }
     );
     // Saving refreshToken with current user
-    await users.updateOne({username: foundUser.username}, { $set: refreshToken});
+    await users.updateOne({username: foundUser.username}, { $set: {refreshToken: refreshToken}});
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
       sameSite: 'none',
@@ -52,7 +54,7 @@ router.post('/login', async (req, res) => {
 
 
 // logout user
-router.delete('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
   // on client, also delete the accessToken
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.sendStatus(204); //No content

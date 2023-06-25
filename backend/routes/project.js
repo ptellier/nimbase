@@ -25,7 +25,7 @@ const router = express.Router();
 // create a new project
 // REQUIRES: JSON body matching project schema
 // REQUIRES: owner is the username of an existing user
-router.post('/api/project', express.json(), async (req, res) => {
+router.post('/', express.json(), async (req, res) => {
   if (!check.isProject(req.body)) {
     res.status(400).send("invalid project in request body (as json)");
     return;
@@ -38,6 +38,7 @@ router.post('/api/project', express.json(), async (req, res) => {
     return;
   }
   const result1 = await projects.insertOne(req.body);
+  console.log(result1)
   const insertedId = result1.insertedId.toString();
   if (!Array.isArray(ownerUser.project_ids)) {console.error("ownerUser.project_ids should br a string array");}
   ownerUser.project_ids.push(insertedId);
@@ -46,7 +47,7 @@ router.post('/api/project', express.json(), async (req, res) => {
 });
 
 // get an existing project
-router.get('/api/project/:id', express.json(), async (req, res) => {
+router.get('/:id', express.json(), async (req, res) => {
   if (!check.isString(req.params.id)) {
     res.status(400).send("need id -> string in path parameter");
     return;
@@ -62,15 +63,18 @@ router.get('/api/project/:id', express.json(), async (req, res) => {
 
 // set an existing project's fields (all of them except _id)
 // REQUIRES: JSON body matching project schema and _id -> matching project to update
-router.put('/api/project', express.json(), async (req, res) => {
+router.put('/', express.json(), async (req, res) => {
   if (!check.isProjectPut(req.body)) {
-    res.status(400).send("invalid 'project put' in request body (as json)");
-    return;
+    if (!validator.isMongoId(req.body._id)) {
+      return res.status(400).send("need _id -> mongoDB ObjectId in request body (as json)");
+    }
+    return res.status(400).send("invalid 'project put' in request body (as json)");
   }
   const projects = db.collection("projects");
   req.body._id = new ObjectId(req.body._id);
   const result = await projects.updateOne({_id: req.body._id}, { $set: req.body});
-  if (!result ) {
+  console.log(result);
+  if (!result || result.matchedCount === 0) {
     res.status(404).send(result);
     return;
   }
@@ -78,7 +82,7 @@ router.put('/api/project', express.json(), async (req, res) => {
 });
 
 // get all existing projects
-router.get('/api/projects', express.json(), async (req, res) => {
+router.get('/', express.json(), async (req, res) => {
   const projects = db.collection("projects");
   // TODO: create endpoint for all public projects (filter by field: public = true)
   if (!projects ) {

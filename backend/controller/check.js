@@ -40,7 +40,7 @@ function isProject(val) {
 
 function isProjectPut(val) {
   return Object.keys(val).length === 8
-    && isString(val._id)
+    && validator.isMongoId(val._id)
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
