@@ -24,7 +24,7 @@ function isNewUser(val) {
   return Object.keys(val).length === 3
     && isString(val.username)
     && validator.isEmail(val.email)
-    && isString(val.password_hash)
+    && isString(val.password)
 }
 
 function isProject(val) {
@@ -40,7 +40,7 @@ function isProject(val) {
 
 function isProjectPut(val) {
   return Object.keys(val).length === 8
-    && isString(val._id)
+    && validator.isMongoId(val._id)
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
@@ -53,6 +53,7 @@ function isProjectPut(val) {
 module.exports = {
   isString,
   isStringArray,
+  isObject,
   isEmail,
   isNewUser,
   isProject,
