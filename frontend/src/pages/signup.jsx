@@ -1,8 +1,11 @@
 import NavBar from "../components/NavBar";
 import '../styles/signup.css';
 import {useEffect, useState} from "react";
-import Query from "../components/Query";
 import Field from "../components/Field";
+import {useDispatch, useSelector} from "react-redux";
+import {signup, signupErrorMessageSelector} from "../state/userSlice";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 // REFERENCE: regex for password/email validation generated with chatGPT
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -16,6 +19,10 @@ const Signup = () => {
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+
+    const errorMessage = useSelector(signupErrorMessageSelector);
+
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState(   {
         email: "",
@@ -70,17 +77,17 @@ const Signup = () => {
     async function handleSubmit(e) {
         e.preventDefault()
         setSubmitAttempted(true);
-
         const isValid = validateFormData();
         if (!isValid) {return;}
-
         try {
-            const {username, password, email} = formData;
-            const query = new Query();
-            const response = await query.createUser(username, password, email);
-            console.log("User created:", response.data);
-            await query.loginUser(email, password);
-            window.location.href = "/";
+            console.log("Dispatching signup action")
+            dispatch(signup({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                username: formData.username,
+                email: formData.email,
+                password: formData.password
+            }));
         } catch (error) {
             console.error("Error creating user:", error);
         }
@@ -94,6 +101,11 @@ const Signup = () => {
             <div className={"signup-box"}>
                 <form className={"signup-form"} onSubmit={handleSubmit}>
                     <h2>Sign Up</h2>
+
+                    {(errorMessage) ?
+                      <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>
+                      :
+                      null}
 
                     <Field label="First Name" type="text" name="firstName" value={formData.firstName}
                            onChange={handleInputChange} error={firstNameError} autoComplete="given-name"/>

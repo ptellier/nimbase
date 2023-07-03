@@ -3,17 +3,15 @@ import '../styles/login.css';
 import {useState} from "react";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Query from "../components/Query";
 import Field from "../components/Field";
 import {useDispatch, useSelector} from "react-redux";
-import {errorMessageSelector, login} from "../state/userSlice";
+import {loginErrorMessageSelector, login} from "../state/userSlice";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
-    const [user, setUser] = useState(null);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const errorMessage = useSelector(errorMessageSelector);
+    const errorMessage = useSelector(loginErrorMessageSelector);
     const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
@@ -29,7 +27,7 @@ const Login = () => {
 
   return (
     <div className="background-image">
-      <NavBar user={user}/>
+      <NavBar/>
         <div className="login-container">
             <div className="login-box">
                 <h2>Login</h2>

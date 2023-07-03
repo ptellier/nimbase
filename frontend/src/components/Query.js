@@ -6,11 +6,15 @@ const BASE_URL = 'http://localhost:8080';
 
 class Query {
 
-  async createUser(username, password, email) {
+  async createUser(firstName, lastName, username, password, email) {
     return await axios.post(BASE_URL + '/api/register', {
+      firstName: firstName,
+      lastName: lastName,
       username: username,
       password: password,
       email: email,
+    }, {
+      validateStatus: (status) => (status === 201 || status === 400 || status === 409)
     });
   }
 

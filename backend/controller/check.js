@@ -21,7 +21,9 @@ function isEmail(value) {
 }
 
 function isNewUser(val) {
-  return Object.keys(val).length === 3
+  return Object.keys(val).length === 5
+    && isString(val.firstName)
+    && isString(val.lastName)
     && isString(val.username)
     && validator.isEmail(val.email)
     && isString(val.password)

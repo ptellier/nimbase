@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
   const users = db.collection("users");
   const foundUser = await users.findOne({username: username});
   if (!foundUser ) {
-    return res.status(401).json({ 'message': `Could not find user "${username}"` }); //Unauthorized
+    return res.status(401).json({ 'message': `Could not find user "${username}"` });
   }
   // evaluate password
   console.log("foundUser: ", foundUser.password_hash)
