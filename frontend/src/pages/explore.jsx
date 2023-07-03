@@ -22,12 +22,14 @@ const Explore = () => {
     return (
         <div className="background-image">
             <NavBar/>
-            <h1 className="title">Explore Public Projects Hosted on Nimbase</h1>
+            <h1 className="red-brick-gradient-text title">Explore Public Projects Hosted on <b>Nimbase</b></h1>
             <div className="projects-grid">
                 {projects.map(project => (
                     <div className="project" key={project.id}>
-                        <h2>{project.title}</h2>
-                        <img src={project.imageUrl} alt={project.title} className="project-image"/>
+                        <h3>{project.title}</h3>
+                        <div className="project-image-container">
+                          <img src={project.imageUrl} alt={project.title} className="project-image"/>
+                        </div>
                         <p>{project.description}</p>
                     </div>
                 ))}
