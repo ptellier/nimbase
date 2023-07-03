@@ -15,16 +15,17 @@ const EXPIRY_TIME_OF_REFRESH_TOKEN = '30s';
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ 'message': 'Username and password are required.' });
+    return res.status(400).json({ 'message': 'Username and password are required' });
   }
   const users = db.collection("users");
   const foundUser = await users.findOne({username: username});
   if (!foundUser ) {
-    return res.status(401).send(foundUser); //Unauthorized
+    return res.status(401).json({ 'message': `Could not find user "${username}"` }); //Unauthorized
   }
   // evaluate password
   console.log("foundUser: ", foundUser.password_hash)
   console.log("password: ", password)
+  console.log("email: ", foundUser.email)
   const match = await bcrypt.compare(password, foundUser.password_hash);
   if (match) {
     // create JWTs
@@ -46,9 +47,9 @@ router.post('/login', async (req, res) => {
       secure: true,
       maxAge: MAX_AGE_OF_REFRESH_TOKEN_COOKIE
     });
-    res.json({ accessToken });
+    res.json({ username, email: foundUser.email, accessToken });
   } else {
-    res.sendStatus(401);
+    res.status(401).json({ 'message': 'Password is incorrect'});
   }
 });
 

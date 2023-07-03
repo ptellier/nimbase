@@ -26,6 +26,8 @@ class Query {
     return await axios.post(BASE_URL + '/api/auth/login', {
       username: username,
       password: password,
+    }, {
+      validateStatus: (status) => (status === 200 || status === 400 || status === 401)
     }).catch((err) => {console.log(err)});
   }
 

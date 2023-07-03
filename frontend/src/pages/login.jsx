@@ -4,22 +4,21 @@ import {useState} from "react";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Query from "../components/Query";
+import Field from "../components/Field";
+import {useDispatch, useSelector} from "react-redux";
+import {errorMessageSelector, login} from "../state/userSlice";
+import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
     const [user, setUser] = useState(null);
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    let que = new Query();
+    const errorMessage = useSelector(errorMessageSelector);
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            const user = await que.loginUser(email, password);
-            setUser(user);
-        } catch (error) {
-            console.log("Error in login: ", error);
-        }
+        dispatch(login({username, password}));
     };
 
     const handleGithubLogin = () => {
@@ -34,29 +33,15 @@ const Login = () => {
         <div className="login-container">
             <div className="login-box">
                 <h2>Login</h2>
+                {(errorMessage) ?
+                  <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>
+                  :
+                  null}
                 <form onSubmit={handleSubmit}>
-                    <div className={"field-div"}>
-                    <span style={{display:"inline-block", width:"0.5em"}}/>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            value={email}
-                            name={"email"}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className={"field-div"}>
-                        <span style={{display:"inline-block", width:"0.5em"}}/>
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            value={password}
-                            name={"password"}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <Field label="Username" type="text" name="loginUsername" value={username}
+                           onChange={(e) => setUsername(e.target.value)} error={false} autoComplete="username"/>
+                    <Field label="Password" type="text" name="loginPassword" value={password}
+                           onChange={(e) => setPassword(e.target.value)} error={false} autoComplete="current-password"/>
                     <div id="login-button-box">
                         <button id="login-button" type="submit">Log In</button>
                         <button onClick={handleGithubLogin}>

@@ -15,7 +15,6 @@
 }
 
 .login-box {
-    width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -52,4 +51,8 @@
 
 .login-box button:hover {
     background-color: #444;
+}
+
+.error-text {
+    text-align: center;
 }
