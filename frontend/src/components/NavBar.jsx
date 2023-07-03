@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 
 const NavBar = ({user}) => {
   return (
+    <div className="nav-bar-container">
       <nav className="nav-bar">
           <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo" /></Link>
           <Link to={"/explore"} className="nav-item">Explore</Link>
@@ -18,6 +19,7 @@ const NavBar = ({user}) => {
               </>
           )}
       </nav>
+    </div>
   );
 }
 
