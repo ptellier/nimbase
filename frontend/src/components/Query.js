@@ -6,11 +6,15 @@ const BASE_URL = 'http://localhost:8080';
 
 class Query {
 
-  async createUser(username, password, email) {
+  async createUser(firstName, lastName, username, password, email) {
     return await axios.post(BASE_URL + '/api/register', {
+      firstName: firstName,
+      lastName: lastName,
       username: username,
       password: password,
       email: email,
+    }, {
+      validateStatus: (status) => (status === 201 || status === 400 || status === 409)
     });
   }
 
@@ -26,15 +30,15 @@ class Query {
     return await axios.post(BASE_URL + '/api/auth/login', {
       username: username,
       password: password,
+    }, {
+      validateStatus: (status) => (status === 200 || status === 400 || status === 401)
     }).catch((err) => {console.log(err)});
   }
 
   // logout user
-  async logoutUser(username) {
+  async logoutUser() {
     try {
-      return await axios.post(BASE_URL + '/api/auth/logout', {
-        username: username
-      });
+      return await axios.post(BASE_URL + '/api/auth/logout', {});
     } catch (e) {
       console.log("error logging out user ");
     }
