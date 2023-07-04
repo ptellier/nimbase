@@ -36,11 +36,9 @@ class Query {
   }
 
   // logout user
-  async logoutUser(username) {
+  async logoutUser() {
     try {
-      return await axios.post(BASE_URL + '/api/auth/logout', {
-        username: username
-      });
+      return await axios.post(BASE_URL + '/api/auth/logout', {});
     } catch (e) {
       console.log("error logging out user ");
     }

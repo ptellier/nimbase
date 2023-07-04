@@ -39,8 +39,8 @@ export const signup = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   "user/logout",
-  async (username) => {
-    const response = await query.logoutUser(username);
+  async () => {
+    const response = await query.logoutUser();
     return response.data;
   }
 )
@@ -50,6 +50,13 @@ export const userSlice = createSlice({
   initialState: INITIAL_STATE,
   extraReducers: (builder) => {
     builder
+      .addCase(logout.fulfilled, (state) => {
+        state.accessToken = "";
+        state.username = undefined;
+        state.email = undefined;
+        state.loginError = undefined;
+        state.signupError = undefined;
+      })
       .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled),
         (state, action) => {
           state.accessToken = action.payload.accessToken;
@@ -67,3 +74,4 @@ export const userSlice = createSlice({
 
 export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
+export const usernameSelector = (state) => state.user.username;
