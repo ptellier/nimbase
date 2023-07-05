@@ -17,7 +17,7 @@
     margin: 0 auto;
 }
 
-.projects-grid {
+.explore-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 300px); /*repeat(5, 1fr);*/ /*repeat(auto-fill, minmax(200px, 1fr));*/
     grid-auto-rows: 300px;
@@ -28,14 +28,14 @@
     justify-content: center;
 }
 
-.project {
+.explore-project {
     text-align: center;
     display: flex;
     flex-direction: column;
     width: 300px;
 }
 
-.project h3 {
+.explore-project h3 {
     margin: 0;
     line-height: 30px;
     text-align: left;
@@ -44,7 +44,7 @@
     text-overflow: ellipsis;
 }
 
-.project-image {
+.explore-image {
     object-fit: cover;
     width: 100%;
     height: 100%;
@@ -52,26 +52,12 @@
     position: relative;
     z-index: -2;
 }
-.project-image-container {
+.explore-image-container {
     box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
     border-radius: 4px;
     margin: 10px auto;
     width: 300px;
     height: 180px; /*calc(100% - 70px);*/
-}
-
-
-.project p {
-    margin: 0;
-    font-size: 0.9rem;
-    height: 4em;
-    text-align: left;
-    color: dimgrey;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* REFERENCE: used chatGPT to figure out how to wrap lines with an ellipsis for overflow */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .title {

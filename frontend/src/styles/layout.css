@@ -102,6 +102,19 @@ input {
     -webkit-text-fill-color: transparent;
 }
 
+.explore-project p, .dashboard-project p {
+    margin: 0;
+    font-size: 0.9rem;
+    height: 4em;
+    text-align: left;
+    color: dimgrey;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* REFERENCE: used chatGPT to figure out how to wrap lines with an ellipsis for overflow */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .floaty-logo {
         animation: logoAnimation infinite 5s ease-in-out;
