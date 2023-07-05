@@ -23,12 +23,12 @@ const Explore = () => {
         <div className="background-image">
             <NavBar/>
             <h1 className="red-brick-gradient-text title">Explore Public Projects Hosted on <b>Nimbase</b></h1>
-            <div className="projects-grid">
+            <div className="explore-grid">
                 {projects.map(project => (
-                    <div className="project" key={project.id}>
+                    <div className="explore-project" key={project.id}>
                         <h3>{project.title}</h3>
-                        <div className="project-image-container">
-                          <img src={project.imageUrl} alt={project.title} className="project-image"/>
+                        <div className="explore-image-container">
+                          <img src={project.imageUrl} alt={project.title} className="explore-image"/>
                         </div>
                         <p>{project.description}</p>
                     </div>

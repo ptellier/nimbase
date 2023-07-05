@@ -7,3 +7,55 @@
     width:100vw;
     height:100vh;
 }
+
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 2em;
+    width: min-content;
+    margin: auto;
+}
+
+.dashboard-project h3 {
+    margin: 0;
+    line-height: 30px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dashboard-project {
+    width: 500px
+}
+
+
+.dashboard-image-container {
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    height: 180px;
+    width: 300px;
+}
+.dashboard-image {
+    object-fit: cover;
+    height: 180px;
+    width: 300px;
+    border-radius: inherit;
+    position: relative;
+    z-index: -2;
+}
+.dashboard-text-container {
+    display:inline-block;
+    max-width: 50px;
+}
+
+.dashboard-project-buttons {
+    margin-top:1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 1em;
+}
