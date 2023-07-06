@@ -1,0 +1,121 @@
+.createSearch {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  display: flex;
+  width: 30%;
+  right: 0;
+  position: absolute;
+  z-index: 10;
+}
+
+.leftbar {
+  min-width: 300px;
+  max-width: 20%;
+  width: 20%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 10;
+  height: 91%;
+}
+
+.create {
+  /* border: 1px solid black; */
+  background-color: #262626;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px;
+  font-family: "Roboto", sans-serif;
+  /* font-size: 20px; */
+  flex-grow: 0;
+  transition: flex-grow 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.create:hover {
+  cursor: pointer;
+  background-color: #474747;
+}
+
+.search {
+  /* border: 1px solid black; */
+  background-color: #262626;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px;
+  font-family: "Roboto", sans-serif;
+  /* font-size: 20px; */
+
+}
+
+.grow {
+  transition: flex-grow 0.3s ease-in-out;
+  flex-grow: 1;
+}
+
+.box {
+  transition: opacity 0.2s ease-in-out 0.3s;
+  opacity: 1;
+  visibility: visible;
+  height: 0px;
+}
+
+.hidden {
+  transition: opacity 0.2s ease-in-out 0.3s;
+  opacity: 0;
+  visibility: hidden;
+  height: 0px;
+}
+
+.item {
+  margin: 10px;
+  padding: 5px;
+}
+
+.box-content{
+  overflow-y: scroll;
+  color: black;
+  height: 80vh;
+  columns: 2;
+  column-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.moreinfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.half{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container{
+  display: flex;
+  gap: 20px;
+}
+
+#mymapcreate{
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.card{
+  width: 100% !important;
+  max-height: fit-content !important;
+  height: fit-content !important;
+}
