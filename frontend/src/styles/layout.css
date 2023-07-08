@@ -74,17 +74,22 @@ button {
     border: none;
     font-size: 1.0rem;
     border-radius: 2px;
-    background-color: FireBrick;
     font-family: inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    background-image: linear-gradient(to top right, #CA929C, #F1C0C9);
+    background-image: linear-gradient(to top right, rgba(125, 47, 62, 0.51), rgba(237, 137, 157, 0.5));
+    background-color: #ffffff;
     color: #390000;
     cursor: pointer;
     outline: none;
+    transition: background-color 0.1s ease-in-out;
 }
 button:hover {
-    background-image: linear-gradient(to top right, #b07f88, #d9adb8);
+    background-color: #978383;
+}
+button:active {
+    background-color: #390000;
+    color: #ffffff;
 }
 
 input {
@@ -157,6 +162,34 @@ input {
 
 .error-text {
     color: firebrick;
+}
+
+/***** CONFIRMATION POPUP ******/
+
+.darken-background {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.popup {
+    padding: 2em;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+.popup-container {
+    position: fixed;
+    top: 20%;
+    z-index: 100;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 

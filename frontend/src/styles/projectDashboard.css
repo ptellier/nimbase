@@ -28,7 +28,11 @@
 }
 
 .dashboard-project {
-    width: 500px
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 2em;
 }
 
 
@@ -48,7 +52,7 @@
 }
 .dashboard-text-container {
     display:inline-block;
-    max-width: 50px;
+    max-width: 250px;
 }
 
 .dashboard-project-buttons {
@@ -58,4 +62,5 @@
     align-items: center;
     justify-content: flex-start;
     column-gap: 1em;
+    width: max-content;
 }
