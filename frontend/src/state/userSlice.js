@@ -75,3 +75,4 @@ export const userSlice = createSlice({
 export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
+export const accessTokenSelector = (state) => state.user.accessToken;

@@ -64,3 +64,12 @@
     column-gap: 1em;
     width: max-content;
 }
+
+.create-project-link {
+    margin: 0;
+    text-align: center;
+    color: #456fb7;
+}
+.create-project-link:hover {
+    color: #7cbae8;
+}

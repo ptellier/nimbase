@@ -27,14 +27,14 @@ const router = express.Router();
 // REQUIRES: owner is the username of an existing user
 router.post('/', express.json(), async (req, res) => {
   if (!check.isProject(req.body)) {
-    res.status(400).send("invalid project in request body (as json)");
+    res.status(400).json({message: "invalid project in request body (as json)"});
     return;
   }
   const projects = db.collection("projects");
   const users = db.collection("users");
   let ownerUser = await users.findOne({username: req.body.owner});
   if (!ownerUser) {
-    res.status(400).send("user does not exist");
+    res.status(400).json({message: "user does not exist"});
     return;
   }
   const result1 = await projects.insertOne(req.body);
@@ -49,7 +49,7 @@ router.post('/', express.json(), async (req, res) => {
 // get an existing project
 router.get('/:id', express.json(), async (req, res) => {
   if (!check.isString(req.params.id)) {
-    res.status(400).send("need id -> string in path parameter");
+    res.status(400).json({message: "need id -> string in path parameter"});
     return;
   }
   const projects = db.collection("projects");
@@ -66,9 +66,9 @@ router.get('/:id', express.json(), async (req, res) => {
 router.put('/', express.json(), async (req, res) => {
   if (!check.isProjectPut(req.body)) {
     if (!validator.isMongoId(req.body._id)) {
-      return res.status(400).send("need _id -> mongoDB ObjectId in request body (as json)");
+      return res.status(400).json({message: "need _id -> mongoDB ObjectId in request body (as json)"});
     }
-    return res.status(400).send("invalid 'project put' in request body (as json)");
+    return res.status(400).json({message: "invalid 'project put' in request body (as json)"});
   }
   const projects = db.collection("projects");
   req.body._id = new ObjectId(req.body._id);
@@ -76,6 +76,20 @@ router.put('/', express.json(), async (req, res) => {
   console.log(result);
   if (!result || result.matchedCount === 0) {
     res.status(404).send(result);
+    return;
+  }
+  res.status(200).send(result);
+});
+
+// delete a project by id
+router.delete('/:id', express.json(), async (req, res) => {
+  if (!validator.isMongoId(req.params.id)) {
+    return res.status(400).json({message: "need path parameter to be a mongoDB id"});
+  }
+  const projects = db.collection("projects");
+  const result = await projects.findOne({_id: new ObjectId(req.params.id)});
+  if (!result || result.owner !== req.username) {
+    res.status(404).json({message: "Could not find a project with id " + req.params.id + "belonging to " + req.user});
     return;
   }
   res.status(200).send(result);
