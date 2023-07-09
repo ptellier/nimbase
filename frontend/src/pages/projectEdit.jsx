@@ -80,10 +80,13 @@ const ProjectEdit = () => {
         formData.owner,
         formData.name,
         formData.description,
+        formData.image,
         formData.public,
         formData.dockerfile,
         formData.github_url,
         formData.github_auth_tokens,
+        formData.env_vars,
+        formData.entry_port,
         accessToken
       );
     } catch (error) {
