@@ -92,7 +92,7 @@ button:active {
     color: #ffffff;
 }
 
-input {
+input, textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 2px;
@@ -155,7 +155,7 @@ input {
 
 /***** FIELD ******/
 
-.field-with-error input{
+.field-with-error input, .field-with-error textarea{
     border: 1px solid firebrick;
     color: firebrick;
 }
@@ -191,5 +191,29 @@ input {
     flex-direction: row;
     justify-content: center;
 }
+
+/*********** IMAGE UPLOADER ************/
+
+.image-upload-container {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.image-upload-image-container {
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
+    border-radius: 4px;
+    height: 180px;
+    width: 300px;
+}
+.image-uploader-image {
+    object-fit: cover;
+    height: 180px;
+    width: 300px;
+    border-radius: inherit;
+    position: relative;
+    z-index: -2;
+}
+
 
 

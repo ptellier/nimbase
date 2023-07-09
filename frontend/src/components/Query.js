@@ -45,15 +45,18 @@ class Query {
   }
 
   // create a new project
-  async createProject(owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens, accessToken) {
+  async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
     return await axios.post(BASE_URL + '/api/project', {
       owner: owner,
       name: name,
       description: description,
+      image: image,
       public: isPublic,
       dockerfile: dockerfile,
       github_url: github_url,
       github_auth_tokens: github_auth_tokens,
+      env_vars: env_vars,
+      entry_port: entry_port,
     }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });

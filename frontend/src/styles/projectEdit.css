@@ -17,4 +17,13 @@
 
 .submit-button-container {
     margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.image-and-desc-container, .github-fields-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: 2em;
 }
