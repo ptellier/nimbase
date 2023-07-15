@@ -69,6 +69,16 @@ class Query {
       });
   }
 
+  // returns {success: true} if successful, {success: false, message: true} if not
+  async deleteProject(project_id, accessToken) {
+    const response = await axios.delete(BASE_URL + `/api/project/${project_id}`,
+      {
+        headers: {Authorization: `Bearer ${accessToken}`},
+        validateStatus: (status) => (status === 200 || status === 400 || status === 404)
+      });
+    return (response.status === 200) ? {success: true} : {success: false, message: response.data.message};
+  }
+
   // set an existing project's fields (all of them except _id which must match an existing project)
   async updateProject(_id, owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens, accessToken) {
     return await axios.put(BASE_URL + '/api/project', {

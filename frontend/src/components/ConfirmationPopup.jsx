@@ -1,8 +1,9 @@
 // Reference: used co-pilot to help generate this component
 
-const ConfirmationPopup = ({open, setOpen, headerText, bodyText, cancelButtonText, onConfirm}) => {
+import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-  const handleClose = () => setOpen(false);
+const ConfirmationPopup = ({open, setClose, headerText, bodyText, errorText, cancelButtonText, onConfirm}) => {
 
   return (
     (open) ?
@@ -13,9 +14,14 @@ const ConfirmationPopup = ({open, setOpen, headerText, bodyText, cancelButtonTex
             <h3>{headerText}</h3>
             <p>{bodyText}</p>
             <div style={{display:"flex", justifyContent: "flex-end", columnGap: "2em"}}>
-              <button onClick={handleClose}>Cancel</button>
+              <button onClick={setClose}>Cancel</button>
               <button onClick={onConfirm}>{cancelButtonText}</button>
             </div>
+            {(errorText) ?
+              <p className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorText}</p>
+              :
+              null
+            }
           </div>
         </div>
       </>
