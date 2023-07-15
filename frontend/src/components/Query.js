@@ -60,12 +60,13 @@ class Query {
     }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
-
-
   }
 
-  async getProject(project_id) {
-    return await axios.get(BASE_URL + `/api/project/${project_id}`)
+  async getProject(project_id, accessToken) {
+    return await axios.get(BASE_URL + `/api/project/${project_id}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
   }
 
   // set an existing project's fields (all of them except _id which must match an existing project)
