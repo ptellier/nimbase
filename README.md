@@ -44,17 +44,17 @@ page of our site lets anyone on the internet browse publicly hosted projects.
 
 ##### 3-5 minimal requirements (will definitely complete)
 - Create an interface to sign-in/authenticate users
-- Have a page for users to edit the applications they want to host on our server
+- Have a page for users to edit the projects they want to host on our server
 - Create a front-end for users to be able to select a GitHub repo and docker file for making their container
 - Set up a MongoDB database that stores user account info, GitHub repo links, docker files, and authentication tokens
 - Use GitHub actions for CI/CD. Create a pipeline which pulls the changes from GitHub, builds the dockerfile, pushes the docker image to an image repo,and runs it in a container
 
 
 ##### 3-7 "standard" requirements (will most likely complete)
-- Have a front-end for anyone on a search engine like Google to look at all the hosted projects. This would not require authentication
+- Have a front-end "explore page" for anyone on a search engine like Google to look at all the publicly hosted projects. This would not require authentication
+- Make the "explore" page have a picture, a title, a short description, and a link to use each public hosted project
 - Set up a reverse proxy manager to redirect to the correct containers hosting different web apps
 - Toggle the visibility for hosted projects so that users can choose to make their project private or public
-- Create a Landing page that shows all publicly available web applications with a picture, a title, short description, and a link to use each hosted project
 
 ##### 2-3 stretch requirements (plan to complete at least 1!)
 - Create a server cluster on AWS to host the service, possibly including scaling server resources based on demand and the number of users that want to host their
