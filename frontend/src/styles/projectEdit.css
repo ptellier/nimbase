@@ -27,3 +27,31 @@
     align-items: flex-start;
     column-gap: 2em;
 }
+
+.help-icon-container {
+    position: relative;
+}
+
+.help-icon {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 5px;
+    font-size: 16px;
+    color: #999;
+    transition: color 0.3s;
+}
+.help-icon.visible {
+    color: #555;
+}
+
+.help-text {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 200px;
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
