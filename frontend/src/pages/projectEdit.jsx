@@ -9,6 +9,7 @@ import {faWandMagicSparkles} from "@fortawesome/free-solid-svg-icons";
 import Query from "../components/Query";
 import FieldArea from "../components/FieldArea";
 import ImageUploader from "../components/ImageUploader";
+import {useParams} from "react-router-dom";
 
 const FIELD_WIDTH = "20rem";
 const query = new Query();
@@ -26,6 +27,8 @@ const ProjectEdit = () => {
 
   const username = useSelector(usernameSelector);
   const accessToken = useSelector(accessTokenSelector);
+
+  const { id } = useParams();
 
   const [formData, setFormData] = useState(   {
     owner: username,
@@ -76,19 +79,36 @@ const ProjectEdit = () => {
     if (!isValid) {return;}
     try {
       console.log("Creating/updating project");
-      await query.createProject(
-        formData.owner,
-        formData.name,
-        formData.description,
-        formData.image,
-        formData.public,
-        formData.dockerfile,
-        formData.github_url,
-        formData.github_auth_tokens,
-        formData.env_vars,
-        formData.entry_port,
-        accessToken
-      );
+      if (id) {
+        await query.updateProject(
+          id,
+          formData.owner,
+          formData.name,
+          formData.description,
+          formData.image,
+          formData.public,
+          formData.dockerfile,
+          formData.github_url,
+          formData.github_auth_tokens,
+          formData.env_vars,
+          formData.entry_port,
+          accessToken
+        );
+      } else {
+        await query.createProject(
+          formData.owner,
+          formData.name,
+          formData.description,
+          formData.image,
+          formData.public,
+          formData.dockerfile,
+          formData.github_url,
+          formData.github_auth_tokens,
+          formData.env_vars,
+          formData.entry_port,
+          accessToken
+        );
+      }
     } catch (error) {
       console.error("Error creating/updating project:", error);
     }

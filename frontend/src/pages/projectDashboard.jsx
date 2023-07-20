@@ -6,7 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare, faSquarePlus} from "@fortawesome/free-regular-svg-icons";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import ConfirmationPopup from "../components/ConfirmationPopup";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {accessTokenSelector, usernameSelector} from "../state/userSlice";
 import {useSelector} from "react-redux";
 
@@ -23,13 +23,14 @@ const ProjectDashboard = () => {
   const username = useSelector(usernameSelector);
   const accessToken = useSelector(accessTokenSelector);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (username && accessToken) {
         query.getUserProjects(username, accessToken)
           .then((response) => {
             const promises = [];
             for (const id of response.data.project_ids) {
-              console.log("id: ", id);
               promises.push(query.getProject(id, accessToken));
             }
             Promise.all(promises)
@@ -58,6 +59,10 @@ const ProjectDashboard = () => {
     }
   }
 
+  const handleClickEdit = (_id) => {
+    navigate("/projectEdit/"+_id);
+  }
+
   const onClickDeleteButton = (_id, index) => {
     setDeletePopupId(_id);
     setDeletePopupIndex(index);
@@ -80,7 +85,7 @@ const ProjectDashboard = () => {
         <div className="projects-container">
           <div style={{display:"flex", justifyContent:"flex-start", alignSelf:"flex-start"}}>
             <div style={{width: "300px"}}>
-              <Link to={"/projectEdit"} style={{textDecoration: "none"}}>
+              <Link to={"/projectNew"} style={{textDecoration: "none"}}>
                 <h2 className="create-project-link"><FontAwesomeIcon icon={faSquarePlus}/> Add Project</h2>
               </Link>
             </div>
@@ -100,8 +105,8 @@ const ProjectDashboard = () => {
                       <h3>{project.name}</h3>
                       <p>{project.description}</p>
                       <div className="dashboard-project-buttons">
-                        <button>Edit <FontAwesomeIcon icon={faPenToSquare}/></button>
-                        <button onClick={() => {onClickDeleteButton(project._id,i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></button>
+                        <button onClick={() => {handleClickEdit(project._id)}}>Edit <FontAwesomeIcon icon={faPenToSquare}/></button>
+                        <button onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></button>
                       </div>
                     </div>
                   </div>

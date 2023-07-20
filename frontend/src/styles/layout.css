@@ -215,5 +215,22 @@ input, textarea {
     z-index: -2;
 }
 
+/************ CUSTOM SCOLLBAR ************/
+/* note: doesn't work on firefox */
+
+
+::-webkit-scrollbar {
+    margin-right: 2px;
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(to top right, rgba(234, 173, 189, 0.5), rgba(234, 173, 189, 0.5));
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ac7b7b;
+}
+
 
 
