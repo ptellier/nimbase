@@ -71,33 +71,42 @@ router.post('/logout', async (req, res) => {
   res.sendStatus(204);
 });
 
+router.post('/refresh', async (req, res) => {
+  const refreshToken = req.cookies.jwt;
 
-// refresh accessToken
-router.get('/refresh', async (req, res) => {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(401);
-  const refreshToken = cookies.jwt;
+  console.log("refreshToken: ", refreshToken)
 
-  const users = db.collection("users");
-  const foundUser = await users.findOne({refreshToken: refreshToken});
-  if (!foundUser) {
-    return res.sendStatus(403); //Forbidden
+  if (!refreshToken) {
+    return res.sendStatus(401);
   }
 
-  // evaluate jwt
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    (err, decoded) => {
-      if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
-      const accessToken = jwt.sign(
-        { "username": decoded.username },
+  const users = db.collection("users");
+  const foundUser = await users.findOne({ refreshToken: refreshToken });
+
+  if (!foundUser) {
+    return res.sendStatus(403); // Forbidden
+  }
+
+  // Verify the refresh token
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    if (err || foundUser.username !== decoded.username) {
+      return res.sendStatus(403);
+    }
+
+    // Generate a new access token
+    const accessToken = jwt.sign(
+        { username: decoded.username },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '30s' }
-      );
-      res.json({ accessToken })
-    }
-  );
+    );
+
+    // Update the refresh token and access token in the user's session
+    foundUser.refreshToken = refreshToken;
+    foundUser.accessToken = accessToken;
+    users.updateOne({ _id: foundUser._id }, { $set: foundUser });
+
+    res.json({ accessToken });
+  });
 });
 
 module.exports = router;

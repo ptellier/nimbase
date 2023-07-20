@@ -1,8 +1,28 @@
 import axios from "axios";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 
 const BASE_URL = 'http://localhost:8080';
+
+const axiosInstance = axios.create({
+  withCredentials: true,
+});
+
+// axiosInstance.interceptors.response.use(null, async error => {
+//   const originalRequest = error.config;
+//   if (error.response.status === 401 && originalRequest.url !== '/api/auth/refresh') {
+//     try {
+//       const refreshTokenResponse = await axiosInstance.post('/api/auth/refresh');
+//       const newAccessToken = refreshTokenResponse.data.accessToken;
+//       originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+//       return axiosInstance.request(originalRequest);
+//     } catch (refreshError) {
+//       throw refreshError;
+//     }
+//   }
+//   return Promise.reject(error);
+// });
 
 class Query {
 
@@ -26,7 +46,7 @@ class Query {
   }
 
   // Authenticate/ login user
-  async loginUser(username, password) {
+  async loginUser(username, password){
     return await axios.post(BASE_URL + '/api/auth/login', {
       username: username,
       password: password,
@@ -87,12 +107,22 @@ class Query {
   // TODO: perform gitHub action on project '/api/project/deploy'
 
   // TODO: implement backend and remove mock
-  async getAllProjects() {
-    // return await axios.get(BASE_URL+'/api/projects');
-    // }
-    return Promise.resolve(mockProjects);
+  async getUserProjects(username, accessToken) {
+    return await axios.get(BASE_URL + `/api/user/${username}/projects`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
   }
 
+
+  async refreshAccessToken() {
+    try {
+      const response = await axiosInstance.post(BASE_URL + '/api/auth/refresh');
+      return response.data.accessToken;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err.message);
+    }
+  }
 }
 
 export default Query;

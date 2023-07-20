@@ -3,7 +3,7 @@ import '../styles/signup.css';
 import {useEffect, useState} from "react";
 import Field from "../components/Field";
 import {useDispatch, useSelector} from "react-redux";
-import {signup, signupErrorMessageSelector} from "../state/userSlice";
+import {signup, signupErrorMessageSelector, signupSuccessSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
@@ -19,8 +19,8 @@ const Signup = () => {
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-
     const errorMessage = useSelector(signupErrorMessageSelector);
+    const signupSuccess = useSelector(signupSuccessSelector);
 
     const dispatch = useDispatch();
 
@@ -45,7 +45,23 @@ const Signup = () => {
         if (submitAttempted) {
             validateFormData();
         }
-    }, [formData]);
+        if (signupSuccess) {
+            window.location.href = "/";
+        }
+    }, [formData, signupSuccess]);
+
+    // useEffect(() => {
+    //     if (submitAttempted) {
+    //         validateFormData();
+    //     }
+    // }, [formData]);
+    //
+    // useEffect(() => {
+    //     if (signupSuccess) {
+    //         window.location.href = "/";
+    //     }
+    // }, [signupSuccess]);
+
 
     const validateFormData = () => {
         let valid = true;
