@@ -47,6 +47,9 @@ router.post('/login', async (req, res) => {
       secure: true,
       maxAge: MAX_AGE_OF_REFRESH_TOKEN_COOKIE
     });
+    res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.json({ username, email: foundUser.email, accessToken });
   } else {
     res.status(401).json({ 'message': 'Password is incorrect'});

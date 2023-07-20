@@ -31,7 +31,8 @@ class Query {
       username: username,
       password: password,
     }, {
-      validateStatus: (status) => (status === 200 || status === 400 || status === 401)
+      validateStatus: (status) => (status === 200 || status === 400 || status === 401),
+      withCredentials: true
     }).catch((err) => {console.log(err)});
   }
 
