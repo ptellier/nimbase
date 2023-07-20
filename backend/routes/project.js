@@ -91,12 +91,17 @@ router.delete('/:id', express.json(), async (req, res) => {
     return res.status(400).json({message: "need path parameter to be a mongoDB id"});
   }
   const projects = db.collection("projects");
-  const result = await projects.findOne({_id: new ObjectId(req.params.id)});
-  if (!result || result.owner !== req.username) {
+  const users = db.collection("users");
+  const resultFind = await projects.findOne({_id: new ObjectId(req.params.id)});
+  if (!resultFind || resultFind.owner !== req.user) {
     res.status(404).json({message: "Could not find a project with id " + req.params.id + "belonging to " + req.user});
     return;
   }
-  res.status(200).send(result);
+  const resultDelete = await projects.deleteOne({_id: new ObjectId(req.params.id)});
+  const resultUpdate = await users.updateOne({username : req.user},
+    {$pull: {project_ids: req.params.id}}
+  );
+  res.status(200).send(resultUpdate);
 });
 
 // get all existing projects

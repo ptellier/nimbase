@@ -7,7 +7,6 @@ const INITIAL_STATE = {
   email: undefined,
   signupError: undefined,
   loginError: undefined,
-    signupSuccess: false,
 }
 
 const query = new Query();
@@ -60,13 +59,11 @@ export const userSlice = createSlice({
       })
         .addCase(signup.fulfilled, (state, action) => {
             if(action.payload.accessToken){
-                state.signupSuccess = true;
                 state.username = action.payload.username;
                 state.email = action.payload.email;
                 state.accessToken = action.payload.accessToken;
             } else {
                 state.signupError = action.payload.signupError;
-                state.signupSuccess = false;
             }
         })
         .addCase(refresh.fulfilled, (state, action) => {
@@ -91,8 +88,8 @@ export const refresh = createAsyncThunk(
     "user/refresh",
     async (_, thunkAPI) => {
         try {
-            const response = await query.refreshAccessToken();
-            return response.data.accessToken;
+            const accessToken = await query.refreshAccessToken();
+            return { accessToken };
         } catch (error) {
             console.log(error);
             thunkAPI.dispatch(logout());
@@ -105,4 +102,3 @@ export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
 export const accessTokenSelector = (state) => state.user.accessToken;
-export const signupSuccessSelector = (state) => state.user.signupSuccess;

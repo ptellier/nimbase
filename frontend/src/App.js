@@ -9,8 +9,9 @@ import ProjectDashboard from "./pages/projectDashboard";
 import ProjectEdit from "./pages/projectEdit";
 import ApiTestPage from "./pages/apiTestPage";
 import {Provider, useDispatch} from "react-redux";
-import store from "./store";
+import {persistor, store} from "./store";
 import {refresh} from "./state/userSlice";
+import {PersistGate} from "redux-persist/integration/react";
 
 const InitComponent = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const InitComponent = () => {
 const App = () => {
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <InitComponent/>
       <Router>
         <Routes>
@@ -32,11 +34,13 @@ const App = () => {
           <Route exact path="/login" element={<Login/>}/>
           <Route exact path="/signup" element={<Signup/>}/>
           <Route exact path="/projectDashboard" element={<ProjectDashboard/>}/>
-          <Route exact path="/projectEdit" element={<ProjectEdit/>}/>
+          <Route exact path="/projectNew" element={<ProjectEdit/>}/>
+          <Route exact path="/projectEdit/:id" element={<ProjectEdit/>}/>
           <Route exact path="/api-test-page" element={<ApiTestPage/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Routes>
       </Router>
+      </PersistGate>
     </Provider>
   );
 };

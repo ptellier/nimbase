@@ -8,7 +8,7 @@ const router = express.Router();
 
 const MAX_AGE_OF_REFRESH_TOKEN_COOKIE = 24 * 60 * 60 * 1000; // 1 day (in milliseconds)
 const EXPIRY_TIME_OF_ACCESS_TOKEN = '1d';
-const EXPIRY_TIME_OF_REFRESH_TOKEN = '30s';
+const EXPIRY_TIME_OF_REFRESH_TOKEN = '7d';
 
 
 // authenticate/login user
@@ -47,6 +47,9 @@ router.post('/login', async (req, res) => {
       secure: true,
       maxAge: MAX_AGE_OF_REFRESH_TOKEN_COOKIE
     });
+    res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.json({ username, email: foundUser.email, accessToken });
   } else {
     res.status(401).json({ 'message': 'Password is incorrect'});
@@ -74,38 +77,37 @@ router.post('/logout', async (req, res) => {
 router.post('/refresh', async (req, res) => {
   const refreshToken = req.cookies.jwt;
 
-  console.log("refreshToken: ", refreshToken)
-
   if (!refreshToken) {
     return res.sendStatus(401);
   }
 
-  const users = db.collection("users");
-  const foundUser = await users.findOne({ refreshToken: refreshToken });
-
-  if (!foundUser) {
-    return res.sendStatus(403); // Forbidden
-  }
-
-  // Verify the refresh token
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err || foundUser.username !== decoded.username) {
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+    if (err) {
       return res.sendStatus(403);
     }
 
-    // Generate a new access token
-    const accessToken = jwt.sign(
-        { username: decoded.username },
+    const users = db.collection("users");
+    const foundUser = await users.findOne({ refreshToken: refreshToken });
+
+    if (!foundUser) {
+      return res.sendStatus(403);
+    }
+
+    const newAccessToken = jwt.sign(
+        { username: user.username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30s' }
+        { expiresIn: EXPIRY_TIME_OF_ACCESS_TOKEN }
     );
 
-    // Update the refresh token and access token in the user's session
-    foundUser.refreshToken = refreshToken;
-    foundUser.accessToken = accessToken;
-    users.updateOne({ _id: foundUser._id }, { $set: foundUser });
+    const newRefreshToken = jwt.sign(
+        { username: foundUser.username },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: EXPIRY_TIME_OF_REFRESH_TOKEN }
+    );
 
-    res.json({ accessToken });
+    await users.updateOne({username: foundUser.username}, { $push: {refreshTokens: newRefreshToken}});
+
+    res.json({ accessToken: newAccessToken });
   });
 });
 

@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {signup, signupErrorMessageSelector, signupSuccessSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
 
 // REFERENCE: regex for password/email validation generated with chatGPT
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -20,7 +21,7 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
     const errorMessage = useSelector(signupErrorMessageSelector);
-    const signupSuccess = useSelector(signupSuccessSelector);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -45,22 +46,8 @@ const Signup = () => {
         if (submitAttempted) {
             validateFormData();
         }
-        if (signupSuccess) {
-            window.location.href = "/";
-        }
-    }, [formData, signupSuccess]);
+    }, [formData]);
 
-    // useEffect(() => {
-    //     if (submitAttempted) {
-    //         validateFormData();
-    //     }
-    // }, [formData]);
-    //
-    // useEffect(() => {
-    //     if (signupSuccess) {
-    //         window.location.href = "/";
-    //     }
-    // }, [signupSuccess]);
 
 
     const validateFormData = () => {
@@ -103,7 +90,11 @@ const Signup = () => {
                 username: formData.username,
                 email: formData.email,
                 password: formData.password
-            }));
+            })).then((response) => {
+                if (response.payload) {
+                    navigate("/");
+                }
+            });
         } catch (error) {
             console.error("Error creating user:", error);
         }
