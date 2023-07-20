@@ -38,7 +38,7 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <Field label="Username" type="text" name="loginUsername" value={username}
                            onChange={(e) => setUsername(e.target.value)} error={false} autoComplete="username"/>
-                    <Field label="Password" type="text" name="loginPassword" value={password}
+                    <Field label="Password" type="password" name="loginPassword" value={password}
                            onChange={(e) => setPassword(e.target.value)} error={false} autoComplete="current-password"/>
                     <div id="login-button-box">
                         <button id="login-button" type="submit">Log In</button>

@@ -80,16 +80,19 @@ class Query {
   }
 
   // set an existing project's fields (all of them except _id which must match an existing project)
-  async updateProject(_id, owner, name, description, isPublic, dockerfile, github_url, github_auth_tokens, accessToken) {
+  async updateProject(_id, owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
     return await axios.put(BASE_URL + '/api/project', {
       _id: _id,
       owner: owner,
       name: name,
       description: description,
+      image: image,
       public: isPublic,
       dockerfile: dockerfile,
       github_url: github_url,
       github_auth_tokens: github_auth_tokens,
+      env_vars: env_vars,
+      entry_port: entry_port,
     },{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
