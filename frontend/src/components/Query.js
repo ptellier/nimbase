@@ -108,7 +108,9 @@ class Query {
 
   // TODO: implement backend and remove mock
 
-
+  async getAllProjects() {
+    return mockProjects;
+  }
   async refreshAccessToken() {
     try {
       const response = await axiosInstance.post(BASE_URL + '/api/auth/refresh');

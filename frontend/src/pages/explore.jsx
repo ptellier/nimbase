@@ -16,7 +16,7 @@ const Explore = () => {
                 console.error(err);
             }
         }
-        fetchData();
+        fetchData().then(r => console.log("Fetched all projects"));
     }, []);
 
     return (
