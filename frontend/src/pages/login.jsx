@@ -1,22 +1,27 @@
 import NavBar from "../components/NavBar";
 import '../styles/login.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Field from "../components/Field";
 import {useDispatch, useSelector} from "react-redux";
 import {loginErrorMessageSelector, login} from "../state/userSlice";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
-
+import {useNavigate} from "react-router-dom";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const errorMessage = useSelector(loginErrorMessageSelector);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(login({username, password}));
+        dispatch(login({username, password})).then((res) => {
+            if (res.payload) {
+                navigate("/projectDashboard");
+            }
+        });
     };
 
     const handleGithubLogin = () => {
@@ -34,7 +39,7 @@ const Login = () => {
                 {(errorMessage) ?
                   <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>
                   :
-                  null}
+                    null}
                 <form onSubmit={handleSubmit}>
                     <Field label="Username" type="text" name="loginUsername" value={username}
                            onChange={(e) => setUsername(e.target.value)} error={false} autoComplete="username"/>

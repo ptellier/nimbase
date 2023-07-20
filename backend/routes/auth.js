@@ -8,7 +8,7 @@ const router = express.Router();
 
 const MAX_AGE_OF_REFRESH_TOKEN_COOKIE = 24 * 60 * 60 * 1000; // 1 day (in milliseconds)
 const EXPIRY_TIME_OF_ACCESS_TOKEN = '1d';
-const EXPIRY_TIME_OF_REFRESH_TOKEN = '30s';
+const EXPIRY_TIME_OF_REFRESH_TOKEN = '7d';
 
 
 // authenticate/login user
@@ -74,33 +74,41 @@ router.post('/logout', async (req, res) => {
   res.sendStatus(204);
 });
 
+router.post('/refresh', async (req, res) => {
+  const refreshToken = req.cookies.jwt;
 
-// refresh accessToken
-router.get('/refresh', async (req, res) => {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(401);
-  const refreshToken = cookies.jwt;
-
-  const users = db.collection("users");
-  const foundUser = await users.findOne({refreshToken: refreshToken});
-  if (!foundUser) {
-    return res.sendStatus(403); //Forbidden
+  if (!refreshToken) {
+    return res.sendStatus(401);
   }
 
-  // evaluate jwt
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    (err, decoded) => {
-      if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
-      const accessToken = jwt.sign(
-        { "username": decoded.username },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30s' }
-      );
-      res.json({ accessToken })
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
     }
-  );
+
+    const users = db.collection("users");
+    const foundUser = await users.findOne({ refreshToken: refreshToken });
+
+    if (!foundUser) {
+      return res.sendStatus(403);
+    }
+
+    const newAccessToken = jwt.sign(
+        { username: user.username },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: EXPIRY_TIME_OF_ACCESS_TOKEN }
+    );
+
+    const newRefreshToken = jwt.sign(
+        { username: foundUser.username },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: EXPIRY_TIME_OF_REFRESH_TOKEN }
+    );
+
+    await users.updateOne({username: foundUser.username}, { $push: {refreshTokens: newRefreshToken}});
+
+    res.json({ accessToken: newAccessToken });
+  });
 });
 
 module.exports = router;
