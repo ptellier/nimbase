@@ -4,6 +4,10 @@ function isString(value) {
   return typeof value === 'string' || value instanceof String;
 }
 
+function isNumber(value) {
+  return typeof value === 'number';
+}
+
 function isBoolean(value) {
   return value === true || value === false;
 }
@@ -30,26 +34,32 @@ function isNewUser(val) {
 }
 
 function isProject(val) {
-  return Object.keys(val).length === 7
+  return Object.keys(val).length === 10
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
+    && (isString(val.image) || val.image === null)
     && isBoolean(val.public)
     && isString(val.dockerfile)
     && isString(val.github_url)
     && isString(val.github_auth_tokens)
+    && isString(val.env_vars)
+    && isNumber(val.entry_port)
 }
 
 function isProjectPut(val) {
-  return Object.keys(val).length === 8
+  return Object.keys(val).length === 11
     && validator.isMongoId(val._id)
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
+    && (isString(val.image) || val.image === null)
     && isBoolean(val.public)
     && isString(val.dockerfile)
     && isString(val.github_url)
     && isString(val.github_auth_tokens)
+    && isString(val.env_vars)
+    && isNumber(val.entry_port)
 }
 
 module.exports = {

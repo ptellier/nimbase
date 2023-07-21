@@ -1,5 +1,5 @@
 
-// const url = process.env.REACT_APP_SERVER_URL + '/posts/';
+// const url = .env.REACT_APP_SERVER_URL + '/posts/';
 const url = '/api/posts/';
 
 export const addPost = async (content) => {

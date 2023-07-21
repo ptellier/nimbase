@@ -2,14 +2,18 @@ const db  = require('./database/dbConn.js');
 const express = require('express');
 const cors = require('cors')
 const verifyJWT = require("./middleware/verifyJWT");
+const cookieParser = require("cookie-parser");
 const port = 8080;
 const app = express();
 
 let CORS_OPTIONS = {
     origin : ['http://localhost:3000'],
+    credentials : true,
 }
 
 app.use(cors(CORS_OPTIONS));
+app.use(cookieParser());
+app.use(express.json());
 
 // root sends welcome message
 app.get('/', (req, res) => {
@@ -22,7 +26,6 @@ app.get('/api', async (req, res) => {
     res.send(result);
 });
 
-app.use(express.json());
 app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/register', require('./routes/register.js'));
 

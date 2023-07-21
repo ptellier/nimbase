@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUser} from "@fortawesome/free-regular-svg-icons";
+import {faCircleUser} from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
   const username = useSelector(usernameSelector);
@@ -31,7 +31,8 @@ const NavBar = () => {
         {username ?
           <div className="nav-bar-section">
             <>
-              <div className="nav-text">{username}</div><FontAwesomeIcon icon={faUser} size="xl"/>
+              <div className="nav-text">{username}</div>
+              <h1><FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser} size="xl"/></h1>
               <div className="nav-item" onClick={onClickLogout}> Logout</div>
             </>
           </div>
