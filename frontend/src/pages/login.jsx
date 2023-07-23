@@ -1,6 +1,6 @@
 import NavBar from "../components/NavBar";
 import '../styles/login.css';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Field from "../components/Field";
@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginErrorMessageSelector, login} from "../state/userSlice";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
+import {Button} from "@chakra-ui/react";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -46,10 +47,10 @@ const Login = () => {
                     <Field label="Password" type="password" name="loginPassword" value={password}
                            onChange={(e) => setPassword(e.target.value)} error={false} autoComplete="current-password"/>
                     <div id="login-button-box">
-                        <button id="login-button" type="submit">Log In</button>
-                        <button onClick={handleGithubLogin}>
+                        <Button variant="customDefault" utton id="login-button" type="submit">Log In</Button>
+                        <Button variant="customDefault"  onClick={handleGithubLogin}>
                             <FontAwesomeIcon icon={faGithub}/> Log in with GitHub
-                        </button>
+                        </Button>
                     </div>
                 </form>
                 <p>

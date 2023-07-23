@@ -3,12 +3,16 @@ import '../styles/projectDashboard.css';
 import Query from "../components/Query";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPenToSquare, faSquarePlus} from "@fortawesome/free-regular-svg-icons";
+import {faPenToSquare} from "@fortawesome/free-regular-svg-icons";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import {Link, useNavigate} from "react-router-dom";
 import {accessTokenSelector, usernameSelector} from "../state/userSlice";
 import {useSelector} from "react-redux";
+import ProjectStatus from "../components/ProjectStatus";
+import {deployState} from "../components/deployEnums";
+import {Button} from "@chakra-ui/react";
 
 const query = new Query();
 
@@ -86,7 +90,7 @@ const ProjectDashboard = () => {
           <div style={{display:"flex", justifyContent:"flex-start", alignSelf:"flex-start"}}>
             <div style={{width: "300px"}}>
               <Link to={"/projectNew"} style={{textDecoration: "none"}}>
-                <h2 className="create-project-link"><FontAwesomeIcon icon={faSquarePlus}/> Add Project</h2>
+                <h2 className="create-project-link"><FontAwesomeIcon icon={faPlus}/> Add Project</h2>
               </Link>
             </div>
           </div>
@@ -102,11 +106,14 @@ const ProjectDashboard = () => {
                   </div>
                   <div>
                     <div className="dashboard-text-container">
-                      <h3>{project.name}</h3>
+                      <div className="dashboard-project-title-and-icon">
+                        <h3>{project.name}</h3>
+                        <ProjectStatus status={deployState.NOT_CLONED}/>
+                      </div>
                       <p>{project.description}</p>
                       <div className="dashboard-project-buttons">
-                        <button onClick={() => {handleClickEdit(project._id)}}>Edit <FontAwesomeIcon icon={faPenToSquare}/></button>
-                        <button onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></button>
+                        <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>
+                        <Button variant="customDefault" onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></Button>
                       </div>
                     </div>
                   </div>
