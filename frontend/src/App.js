@@ -12,6 +12,7 @@ import {Provider, useDispatch} from "react-redux";
 import {persistor, store} from "./store";
 import {refresh} from "./state/userSlice";
 import {PersistGate} from "redux-persist/integration/react";
+import Teams from "./pages/teams";
 
 const InitComponent = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const App = () => {
           <Route exact path="/projectDashboard" element={<ProjectDashboard/>}/>
           <Route exact path="/projectNew" element={<ProjectEdit/>}/>
           <Route exact path="/projectEdit/:id" element={<ProjectEdit/>}/>
+            <Route exact path="/teams" element={<Teams/>}/>
           <Route exact path="/api-test-page" element={<ApiTestPage/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Routes>

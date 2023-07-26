@@ -120,6 +120,64 @@ class Query {
       throw new Error(err.message);
     }
   }
+
+  // TEAMS
+  async createTeam(teamName, description, owner, accessToken) {
+    return await axiosInstance.post(BASE_URL + '/api/team', {
+      name: teamName,
+      description: description,
+      owner: owner,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
+
+  async deleteTeam(teamName, accessToken) {
+    return await axiosInstance.delete(BASE_URL + `/api/team/${teamName}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+  }
+
+
+  async getTeam(teamName, accessToken) {
+    return await axiosInstance.get(BASE_URL + `/api/team/${teamName}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+  }
+
+  async addTeamMember(teamName, username, accessToken) {
+    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/addMember`, {
+      username: username,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
+
+  async removeTeamMember(teamName, username, accessToken) {
+    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeMember`, {
+      username: username,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
+
+  async addTeamProject(teamName, project_id, accessToken) {
+    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/addProject`, {
+      project_id: project_id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
+
+  async removeTeamProject(teamName, project_id, accessToken) {
+    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeProject`, {
+      project_id: project_id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
 }
 
 export default Query;
