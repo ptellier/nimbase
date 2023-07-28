@@ -1,5 +1,4 @@
 import axios from "axios";
-import {createAsyncThunk} from "@reduxjs/toolkit";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 
@@ -104,10 +103,6 @@ class Query {
     });
   }
 
-  // TODO: perform gitHub action on project '/api/project/deploy'
-
-  // TODO: implement backend and remove mock
-
   async getAllProjects() {
     return mockProjects;
   }
@@ -119,6 +114,44 @@ class Query {
       console.log(err);
       throw new Error(err.message);
     }
+  }
+
+  async devOpsClone(github_url, name, env_variables, entry_port, _id, accessToken) {
+    const response = await axiosInstance.post(BASE_URL + '/api/devops/clone', {
+      github_url: github_url,
+      name: name,
+      env_vars: env_variables,
+      entry_port: entry_port,
+      _id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      validateStatus: (status) => (status === 200 || status === 500)
+    });
+    return (response.status === 200) ? {success: true} : {success: false, error: response.data};
+  }
+
+  async devOpsDeploy(_id, accessToken) {
+    return await axiosInstance.post(BASE_URL + '/api/devops/deploy', {
+      id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+  }
+
+  async devOpsStop(_id, accessToken) {
+    return await axiosInstance.post(BASE_URL + '/api/devops/stop', {
+      id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+  }
+
+  async devOpsRemove(_id, accessToken) {
+    return await axiosInstance.post(BASE_URL + '/api/devops/remove', {
+      id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
   }
 }
 
@@ -133,7 +166,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
       const originalRequest = error.config;
 
-      if (error.response.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
+      if (error.response?.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
         try {
           const newAccessToken = await q.refreshAccessToken();
 

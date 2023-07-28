@@ -19,6 +19,7 @@ const query = new Query();
 const ProjectDashboard = () => {
 
   const [projects, setProjects] = useState([]);
+  const [projectImageError, setProjectImageError] = useState([]);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [deletePopupId, setDeletePopupId] = useState(null);
   const [deletePopupIndex, setDeletePopupIndex] = useState(null);
@@ -41,6 +42,7 @@ const ProjectDashboard = () => {
               .then((responses) => {
                 console.log(responses.map((resp) => resp.data));
                 setProjects(responses.map((resp) => resp.data));
+                setProjectImageError(responses.map(() => false));
               })
           })
           .catch((err) => {console.error(err);});
@@ -97,28 +99,37 @@ const ProjectDashboard = () => {
 
           {(projects) ?
             projects.map((project, i) => (
-              <>
-                <div className="dashboard-project" key={project._id + "project"}>
-                  <div>
-                    <div className="dashboard-image-container">
-                      <img width="100%" src={project.image} alt={project.name} className="dashboard-image"/>
-                    </div>
+              <div className="dashboard-project" key={project._id + "project"}>
+                <div>
+                  <div className="dashboard-image-container">
+                    {(projectImageError[i]) ?
+                      <div className="dashboard-image-error"/>
+                      :
+                      <img
+                        width="100%" src={project.image} alt={project.name} className="dashboard-image"
+                        onError={() => {setProjectImageError((prev) => {
+                          const newArr = [...prev];
+                          newArr[i] = true;
+                          return newArr;
+                        })}}
+                      />
+                    }
                   </div>
-                  <div>
-                    <div className="dashboard-text-container">
-                      <div className="dashboard-project-title-and-icon">
-                        <h3>{project.name}</h3>
-                        <ProjectStatus status={deployState.NOT_CLONED}/>
-                      </div>
-                      <p>{project.description}</p>
-                      <div className="dashboard-project-buttons">
-                        <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>
-                        <Button variant="customDefault" onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></Button>
-                      </div>
+                </div>
+                <div>
+                  <div className="dashboard-text-container">
+                    <div className="dashboard-project-title-and-icon">
+                      <h3>{project.name}</h3>
+                      <ProjectStatus project={project} status={deployState.NOT_CLONED}/>
+                    </div>
+                    <p>{project.description}</p>
+                    <div className="dashboard-project-buttons">
+                      <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>
+                      <Button variant="customDefault" onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></Button>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
           ))
           :
             <div className="dashboard-project"></div>

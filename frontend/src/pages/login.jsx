@@ -47,8 +47,8 @@ const Login = () => {
                     <Field label="Password" type="password" name="loginPassword" value={password}
                            onChange={(e) => setPassword(e.target.value)} error={false} autoComplete="current-password"/>
                     <div id="login-button-box">
-                        <Button variant="customDefault" utton id="login-button" type="submit">Log In</Button>
-                        <Button variant="customDefault"  onClick={handleGithubLogin}>
+                        <Button variant="customDefault" id="login-button" type="submit">Log In</Button>
+                        <Button variant="customDefault" onClick={handleGithubLogin}>
                             <FontAwesomeIcon icon={faGithub}/> Log in with GitHub
                         </Button>
                     </div>

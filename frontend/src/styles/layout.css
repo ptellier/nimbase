@@ -129,6 +129,15 @@ input, textarea {
     }
 }
 
+.dashboard-image-error {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    background-color: lightgrey;
+    /* grey to lighter grey off centre radial gradient */
+    background-image: radial-gradient(circle at 60% 60%, #c3e2f3, #d7d7d7);
+}
+
 /***** FIELD ******/
 
 .field-with-error input, .field-with-error textarea{
