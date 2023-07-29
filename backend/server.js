@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors')
 const verifyJWT = require("./middleware/verifyJWT");
 const cookieParser = require("cookie-parser");
-const port = 8081;
+const port = 8080;
 const app = express();
 
 let CORS_OPTIONS = {
