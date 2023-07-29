@@ -15,9 +15,9 @@ const ObjectId = require("mongodb").ObjectId;
 
 const YAML = require('yaml');
 
-DOMAIN_NAME = "localhost";
+DOMAIN_NAME = "bhairawaryan.com";
 DEFAULT_EXPOSED_PORT = 3000;
-REPO_BASE_URL = "devOps/repos";
+REPO_BASE_URL = "repos";
 
 function spawnPromise(command, args, options) {
     return new Promise((resolve, reject) => {
@@ -131,6 +131,8 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
             doc.services[service].labels = [
                 "traefik.enable=true",
                 `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
+                `traefik.http.routers.${service}.entrypoints=https`,
+                `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`
             ];
         }
         //find the server service
@@ -140,6 +142,15 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
                 `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
                 `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
                 `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
+                `traefik.http.routers.${service}.entrypoints=https`,
+                `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`
+            ];
+        }
+        else {
+            doc.services[service].labels = [
+                "traefik.enable=true",
+                `traefik.http.routers.${service}.entrypoints=https`,
+                `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`
             ];
         }
     }
@@ -150,10 +161,13 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
         {
             external:
             {
-                name: "traefik_default"
+                name: "t2_proxy"
             }
         }
     };
+
+    // add certresolver
+
 
 
     // write the docker-compose file

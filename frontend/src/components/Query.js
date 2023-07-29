@@ -3,7 +3,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 
-const BASE_URL = 'http://localhost:8080';
+
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 class Query {
 
   async createUser(firstName, lastName, username, password, email) {
-    return await axiosInstance.post(BASE_URL + '/api/register', {
+    return await axiosInstance.post(process.env.REACT_APP_BASE_URL + '/api/register', {
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -25,14 +25,14 @@ class Query {
 
   // Get all projects (ids) of a user
   async getUserProjects(username, accessToken) {
-    return await axiosInstance.get(BASE_URL + `/api/user/${username}/projects`, {
+    return await axiosInstance.get(process.env.REACT_APP_BASE_URL + `/api/user/${username}/projects`, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }
 
   // Authenticate/ login user
   async loginUser(username, password){
-    return await axiosInstance.post(BASE_URL + '/api/auth/login', {
+    return await axiosInstance.post(process.env.REACT_APP_BASE_URL + '/api/auth/login', {
       username: username,
       password: password,
     }, {
@@ -44,7 +44,7 @@ class Query {
   // logout user
   async logoutUser() {
     try {
-      return await axios.post(BASE_URL + '/api/auth/logout', {});
+      return await axios.post(process.env.REACT_APP_BASE_URL + '/api/auth/logout', {});
     } catch (e) {
       console.log("error logging out user ");
     }
@@ -52,7 +52,7 @@ class Query {
 
   // create a new project
   async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.post(BASE_URL + '/api/project', {
+    return await axiosInstance.post(process.env.REACT_APP_BASE_URL + '/api/project', {
       owner: owner,
       name: name,
       description: description,
@@ -69,7 +69,7 @@ class Query {
   }
 
   async getProject(project_id, accessToken) {
-    return await axiosInstance.get(BASE_URL + `/api/project/${project_id}`,
+    return await axiosInstance.get(process.env.REACT_APP_BASE_URL + `/api/project/${project_id}`,
       {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
@@ -77,7 +77,7 @@ class Query {
 
   // returns {success: true} if successful, {success: false, message: true} if not
   async deleteProject(project_id, accessToken) {
-    const response = await axiosInstance.delete(BASE_URL + `/api/project/${project_id}`,
+    const response = await axiosInstance.delete(process.env.REACT_APP_BASE_URL + `/api/project/${project_id}`,
       {
         headers: {Authorization: `Bearer ${accessToken}`},
         validateStatus: (status) => (status === 200 || status === 400 || status === 404)
@@ -87,7 +87,7 @@ class Query {
 
   // set an existing project's fields (all of them except _id which must match an existing project)
   async updateProject(_id, owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.put(BASE_URL + '/api/project', {
+    return await axiosInstance.put(process.env.REACT_APP_BASE_URL + '/api/project', {
       _id: _id,
       owner: owner,
       name: name,
@@ -113,7 +113,7 @@ class Query {
   }
   async refreshAccessToken() {
     try {
-      const response = await axiosInstance.post(BASE_URL + '/api/auth/refresh');
+      const response = await axiosInstance.post(process.env.REACT_APP_BASE_URL + '/api/auth/refresh');
       return response.data.accessToken;
     } catch (err) {
       console.log(err);
@@ -133,7 +133,7 @@ axiosInstance.interceptors.response.use(
     async (error) => {
       const originalRequest = error.config;
 
-      if (error.response.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
+      if (error.response.status === 401 && originalRequest.url !== process.env.REACT_APP_BASE_URL + '/api/auth/refresh') {
         try {
           const newAccessToken = await q.refreshAccessToken();
 
