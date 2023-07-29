@@ -10,6 +10,10 @@
 
 ## Project Description
 
+Nimbase is a web application that lets anyone host any application that can be containerized with a docker file.
+Simply create an account, give Nimbase a link to your GitHub repository and upload a docker file.
+Then Nimbase will build your app, host it, and make it available from anywhere on the internet.
+
 ### Who is NimBase for?
 
 Anyone who wants to host a web application that can be containerized with a docker file, 
