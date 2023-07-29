@@ -3,10 +3,11 @@ import '../styles/signup.css';
 import {useEffect, useState} from "react";
 import Field from "../components/Field";
 import {useDispatch, useSelector} from "react-redux";
-import {signup, signupErrorMessageSelector, signupSuccessSelector} from "../state/userSlice";
+import {signup, signupErrorMessageSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
+import {Button} from "@chakra-ui/react";
 
 // REFERENCE: regex for password/email validation generated with chatGPT
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -129,7 +130,7 @@ const Signup = () => {
 
                     <div>
                         <div style={{width:"max-content", marginLeft:"auto", marginRight:"auto", marginTop:"20px"}}>
-                            <button type={"submit"}>Sign Up</button>
+                            <Button variant="customDefault"  type={"submit"}>Sign Up</Button>
                         </div>
                     </div>
                 </form>

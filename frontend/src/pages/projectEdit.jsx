@@ -10,6 +10,7 @@ import Query from "../components/Query";
 import FieldArea from "../components/FieldArea";
 import ImageUploader from "../components/ImageUploader";
 import {useParams} from "react-router-dom";
+import {Button} from "@chakra-ui/react";
 
 const FIELD_WIDTH = "20rem";
 const query = new Query();
@@ -164,7 +165,7 @@ const ProjectEdit = () => {
           <FieldArea label="Environment Variables" name="env_vars" value={formData.env_vars}
                   onChange={handleInputChange} error={envVarError} cols={45} rows={4}/>
           <div className="submit-button-container">
-            <button>Submit <FontAwesomeIcon icon={faWandMagicSparkles}/></button>
+            <Button variant="customDefault" >Submit <FontAwesomeIcon icon={faWandMagicSparkles}/></Button>
           </div>
 
         </div>

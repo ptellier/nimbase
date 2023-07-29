@@ -13,10 +13,7 @@ const { platform } = require("os");
 const { spawn } = require('child_process');
 const ObjectId = require("mongodb").ObjectId;
 
-
-
-
-DEFAULT_EXPOSED_PORT = 3000;
+DEFAULT_EXPOSED_PORT = 3003;
 REPO_BASE_URL = "devOps/repos";
 
 function spawnPromise(command, args, options) {
@@ -67,17 +64,16 @@ async function cloneRepo(link, name, env_variables) {
             }
         );
         console.log("Repo cloned/pulled with env variables init");
-        return name;
     } catch (error) {
         console.error(`exec error: ${error}`);
         throw error;
     }
 }
 
-async function buildDocker(repoPath, imagename) {
+async function buildDocker(repoPath, imageName) {
     console.log("Building docker image");
     try {
-        const dockerBuild = await spawnPromise("docker", ["build", "-t", imagename, repoPath]);
+        const dockerBuild = await spawnPromise("docker", ["build", "-t", imageName, repoPath]);
         console.log(dockerBuild);
         console.log("Docker image built");
         return {status: "success", message: "Docker image built"};
@@ -86,11 +82,9 @@ async function buildDocker(repoPath, imagename) {
         console.error(`exec error: ${error}`);
         return {status: "error", message: error};
     }
-
-
 }
 
-async function runDocker(imagename,user_port) {
+async function runDocker(imageName, user_port) {
     console.log("Running docker image");
     let check = DEFAULT_EXPOSED_PORT;
     if (process.platform === "win32") {
@@ -124,16 +118,16 @@ async function runDocker(imagename,user_port) {
             console.log("port already in use : ", port);
         }
     }
-    await exec(`docker run -d -p ${check}:${user_port} ${imagename}`);
+    await exec(`docker run -d -p ${check}:${user_port} ${imageName}`);
     console.log("Docker image running");
     return check;
 }
 
-async function stopDocker(imagename) {
+async function stopDocker(imageName) {
     let containerId = "";
     if(process.platform === "win32" || process.platform === "linux"){
         const { stdout, stderr } = await exec(
-            `docker ps --filter ancestor=${imagename} --format "{{.ID}}"`
+            `docker ps --filter ancestor=${imageName} --format "{{.ID}}"`
         );
         containerId = stdout.trim();
         console.log("stderr:", stderr);
@@ -157,75 +151,48 @@ async function stopDocker(imagename) {
 }
 
 router.post("/clone", async (req, res) => {
-    let { link, name, env_variables, entrypoint } = req.body;
-    link = link.trim();
-    console.log(link + "::" + name + "::" + env_variables + "::" + entrypoint);
-    const repos = db.collection("repos");
-    const foundRepo = await repos.findOne({ link: link });
-    let repoId;
-    if (foundRepo) {
-        const result = await repos.updateOne(
-            { link: link },
-            {
-                $set: {
-                    name: name,
-                    env_variables: env_variables,
-                    entrypoint: entrypoint,
-                },
-            }
-        );
-        repoId = foundRepo._id;
-    } else {
-        const result = await repos.insertOne({
-            link: link,
-            name: name,
-            env_variables: env_variables,
-            entrypoint: entrypoint,
-        });
-        repoId = result.insertedId;
-    }
+    let { github_url, name, env_vars, entry_port, _id } = req.body;
+    github_url = github_url.trim();
+    console.log(github_url + "::" + name + "::" + env_vars + "::" + entry_port);
     try {
-        console.log(repoId);
-        const name = await cloneRepo(link, repoId, env_variables);
-        return res.status(200).json({ name: name });
+        console.log(`Cloning project ${name}`);
+        await cloneRepo(github_url, _id, env_vars);
+        return res.status(200).json(
+          {status: "success", message: `successfully cloned project ${name}`, details: req.body}
+          );
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: error });
+        return res.status(500).json({status: "error", message: error});
     }
 });
 
 router.post("/deploy", async (req, res) => {
     const { id } = req.body;
-    const repos = db.collection("repos");
-    const foundRepo = await repos.findOne({ _id: new ObjectId(id) });
-    if (!foundRepo) {
-        return res.sendStatus(403); 
-    }
-    console.log(foundRepo);
+    const projects = db.collection("projects");
+    const foundProject = await projects.findOne({_id: new ObjectId(id)});
+    if (!foundProject) {return res.sendStatus(404);}
+    console.log(foundProject);
     const repoPath = `${REPO_BASE_URL}/${id}`;
-    const imagename = id;
+    const imageName = id;
 
-    if(fs.existsSync(`${repoPath}/docker-compose.yml`)){
+    if (fs.existsSync(`${repoPath}/docker-compose.yml`)) {
         console.log("docker-compose file exists");
         const result = await spawnPromise("docker-compose", ["up", "-d"], {cwd: repoPath});
         console.log(result);
-        if(result.status === "success"){
-            return res.json({ status: result.status, message: result.message }).status(200);
+        if (result.status === "success") {
+            return res.status(200).json({ status: "success", message: result.message })
+        } else {
+            return res.status(500).json({ status: "error", message: result.message })
         }
-        else{
-            return res.json({ status: result.status, message: result.message }).status(500);
-        }
-    }
-    else{
+    } else {
         console.log("docker-compose file does not exist");
-        const build = await buildDocker(repoPath, imagename);
-        const port = await runDocker(imagename, foundRepo.entrypoint);
+        const build = await buildDocker(repoPath, imageName);
+        const port = await runDocker(imageName, foundProject.entry_port);
 
         if (build.status === "success") {
-            res.json({ status: build.status, message: build.message, port: port });
-        }
-        else{
-            res.json({ status: build.status, message: build.message });
+            res.status(200).json({ status: "success", message: build.message, port: port });
+        } else {
+            res.status(500).json({ status: "error", message: build.message });
         }
     }
 });
@@ -238,8 +205,8 @@ router.post("/stop", async (req, res) => {
     if (!foundRepo) {
         return res.sendStatus(403);
     }
-    const imagename = foundRepo.name;
-    const result = await stopDocker(imagename);
+    const imageName = foundRepo.name;
+    const result = await stopDocker(imageName);
     return res.json({ status: result.status, message: result.message }).status(200);
 });
 
@@ -265,9 +232,9 @@ router.post("/remove", async (req, res) => {
         console.error(error);
         return res.sendStatus(500);
     }
-    const imagename = foundRepo.name;
+    const imageName = foundRepo.name;
     
-    const { stdout, stderr } = await exec(`docker rm ${imagename}`);
+    const { stdout, stderr } = await exec(`docker rm ${imageName}`);
     console.log("stderr:", stderr);
     console.log("stdout:", stdout);
     res.sendStatus(200);
