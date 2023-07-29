@@ -48,16 +48,16 @@ const ProjectStatus = ({project}) => {
         console.log(result);
          if (result.success) {
             setStatus(deployState.CLONED);
-            FUNCTION_MAP[deployState.CLONED]();
+            setTimeout(FUNCTION_MAP[deployState.CLONED], 2000);
          } else {
             setStatus(deployState.CLONE_FAILED);
             console.error(result.error);
          }
       },
     [deployState.CLONING]: () => {},
-    [deployState.CLONED]: () => {
+    [deployState.CLONED]: async () => {
       setStatus(deployState.DEPLOYING);
-      const result = query.devOpsDeploy(project._id, accessToken);
+      const result = await query.devOpsDeploy(project._id, accessToken);
       if (result.success) {
         setStatus(deployState.DEPLOYED);
       } else {

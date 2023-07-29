@@ -13,7 +13,7 @@ const { platform } = require("os");
 const { spawn } = require('child_process');
 const ObjectId = require("mongodb").ObjectId;
 
-DEFAULT_EXPOSED_PORT = 3000;
+DEFAULT_EXPOSED_PORT = 3003;
 REPO_BASE_URL = "devOps/repos";
 
 function spawnPromise(command, args, options) {
@@ -82,8 +82,6 @@ async function buildDocker(repoPath, imageName) {
         console.error(`exec error: ${error}`);
         return {status: "error", message: error};
     }
-
-
 }
 
 async function runDocker(imageName, user_port) {
@@ -181,10 +179,10 @@ router.post("/deploy", async (req, res) => {
         console.log("docker-compose file exists");
         const result = await spawnPromise("docker-compose", ["up", "-d"], {cwd: repoPath});
         console.log(result);
-        if(result.status === "success") {
-            return res.json({ status: result.status, message: result.message }).status(200);
+        if (result.status === "success") {
+            return res.status(200).json({ status: "success", message: result.message })
         } else {
-            return res.json({ status: result.status, message: result.message }).status(500);
+            return res.status(500).json({ status: "error", message: result.message })
         }
     } else {
         console.log("docker-compose file does not exist");
@@ -192,10 +190,9 @@ router.post("/deploy", async (req, res) => {
         const port = await runDocker(imageName, foundProject.entry_port);
 
         if (build.status === "success") {
-            res.json({ status: build.status, message: build.message, port: port });
-        }
-        else{
-            res.json({ status: build.status, message: build.message });
+            res.status(200).json({ status: "success", message: build.message, port: port });
+        } else {
+            res.status(500).json({ status: "error", message: build.message });
         }
     }
 });

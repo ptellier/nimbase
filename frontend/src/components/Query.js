@@ -131,11 +131,13 @@ class Query {
   }
 
   async devOpsDeploy(_id, accessToken) {
-    return await axiosInstance.post(BASE_URL + '/api/devops/deploy', {
+    const response = await axiosInstance.post(BASE_URL + '/api/devops/deploy', {
       id: _id,
     }, {
-      headers: { Authorization: `Bearer ${accessToken}` }
+      headers: { Authorization: `Bearer ${accessToken}` },
+      validateStatus: (status) => (status === 200 || status === 500)
     })
+    return (response.status === 200) ? {success: true} : {success: false, error: response.data};
   }
 
   async devOpsStop(_id, accessToken) {
