@@ -2,7 +2,7 @@ import axios from "axios";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -167,6 +167,7 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
       const originalRequest = error.config;
+
 
       if (error.response?.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
         try {
