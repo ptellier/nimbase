@@ -1,6 +1,7 @@
 import {useRef} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUpFromBracket, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
+import {Button} from "@chakra-ui/react";
 
 const ImageUploader = ({error, image, setImage}) => {
   const imageInput = useRef(null);
@@ -30,10 +31,10 @@ const ImageUploader = ({error, image, setImage}) => {
         ref={imageInput}
         onChange={handleFileChange}
       />
-      <button type="button" onClick={() => {imageInput.current.click()}} style={{marginTop:"1em"}}>
+      <Button variant="customDefault"  type="button" onClick={() => {imageInput.current.click()}} style={{marginTop:"1em"}}>
         Upload
         <FontAwesomeIcon icon={faArrowUpFromBracket} style={{marginLeft:"0.5em"}}/>
-      </button>
+      </Button>
     </div>
   )
 }
