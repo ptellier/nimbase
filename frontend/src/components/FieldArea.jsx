@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 
-const Field = ({ label, name, value, onChange, required, autoComplete, error, cols, rows}) => {
+const FieldArea = ({ label, name, value, onChange, required, autoComplete, error, cols, rows, monospace}) => {
   return (
     <div className={(error) ? "field-with-error field-div" : "field-div"}>
       <span style={{ display: "inline-block", width: "0.5em" }} />
@@ -12,6 +12,7 @@ const Field = ({ label, name, value, onChange, required, autoComplete, error, co
         null}
       </label>
       <textarea
+        fontFamily={(monospace) ? "monospace" : "inherit"}
         id={name+"field"}
         name={name}
         value={value}
@@ -26,4 +27,4 @@ const Field = ({ label, name, value, onChange, required, autoComplete, error, co
   )
 }
 
-export default Field;
+export default FieldArea;

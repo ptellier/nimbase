@@ -20,6 +20,7 @@ const customTheme = extendTheme({
           padding: "10px 20px",
           border: "none",
           fontSize: "1.0rem",
+          fontWeight: "medium",
           borderRadius: "2px",
           fontFamily: "inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
             "'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
