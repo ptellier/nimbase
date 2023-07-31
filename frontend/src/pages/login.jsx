@@ -20,7 +20,7 @@ const Login = () => {
         e.preventDefault();
         dispatch(login({username, password})).then((res) => {
             if (res.payload) {
-                navigate("/projectDashboard");
+                navigate("/project/dashboard");
             }
         });
     };

@@ -1,0 +1,13 @@
+
+.title-404 {
+    text-align: center;
+    font-size: 2em;
+    font-weight: normal;
+}
+
+.center-in-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

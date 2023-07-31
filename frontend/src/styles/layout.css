@@ -217,5 +217,16 @@ input, textarea {
     background: #ac7b7b;
 }
 
+/************ ALERTS ************/
+
+.alert-footers {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    background: #999;
+}
+
 
 

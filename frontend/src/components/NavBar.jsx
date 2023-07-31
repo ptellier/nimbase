@@ -20,7 +20,7 @@ const NavBar = () => {
           <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo"/></Link>
           <Link to={"/explore"} className="nav-item">Explore</Link>
           {username ?
-            <Link to={"/projectDashboard"} className="nav-item">Projects</Link>
+            <Link to={"/project/dashboard"} className="nav-item">Projects</Link>
             :
             <>
               <Link to={"/signup"} className="nav-item">Sign-up</Link>
