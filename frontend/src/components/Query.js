@@ -51,7 +51,7 @@ class Query {
 
   // create a new project
   async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.post(BASE_URL + '/api/project', {
+    const response = await axiosInstance.post(BASE_URL + '/api/project', {
       owner: owner,
       name: name,
       description: description,
@@ -65,6 +65,7 @@ class Query {
     }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
+    return (response.status === 200) ? {success: true} : {success: false, message: response.data};
   }
 
   async getProject(project_id, accessToken) {
@@ -86,7 +87,7 @@ class Query {
 
   // set an existing project's fields (all of them except _id which must match an existing project)
   async updateProject(_id, owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.put(BASE_URL + '/api/project', {
+       const response = await axiosInstance.put(BASE_URL + '/api/project', {
       _id: _id,
       owner: owner,
       name: name,
@@ -101,6 +102,7 @@ class Query {
     },{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
+    return (response.status === 200) ? {success: true} : {success: false, message: response.data};
   }
 
   async getAllProjects() {

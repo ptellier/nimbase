@@ -15,7 +15,7 @@
     justify-content: center;
     row-gap: 2em;
     width: min-content;
-    margin: auto;
+    margin: 0 auto 2em auto;
 }
 
 .dashboard-project h3 {

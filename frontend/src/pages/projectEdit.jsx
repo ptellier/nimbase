@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar";
 import '../styles/projectEdit.css';
 import Field from "../components/Field";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {accessTokenSelector, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -9,11 +9,23 @@ import {faWandMagicSparkles} from "@fortawesome/free-solid-svg-icons";
 import Query from "../components/Query";
 import FieldArea from "../components/FieldArea";
 import ImageUploader from "../components/ImageUploader";
-import {useParams} from "react-router-dom";
-import {Button} from "@chakra-ui/react";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button, Checkbox} from "@chakra-ui/react";
+import {AlertsContext} from "../components/ProjectAlerts";
 
 const FIELD_WIDTH = "20rem";
 const query = new Query();
+
+const ALERT_SUCCESS = {
+  status: "success",
+  alertText: "Project Uploaded to server!",
+}
+
+const ALERT_ERROR = {
+  status: "error",
+  alertText: "Error uploading project to server!",
+}
+
 
 const ProjectEdit = () => {
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -26,10 +38,13 @@ const ProjectEdit = () => {
   const [envVarError, setEnvVarError] = useState(false);
   const [entryPortError, setEntryPortError] = useState(false);
 
+  const {createAlert} = useContext(AlertsContext);
+
   const username = useSelector(usernameSelector);
   const accessToken = useSelector(accessTokenSelector);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState(   {
     owner: username,
@@ -73,15 +88,23 @@ const ProjectEdit = () => {
     }));
   }
 
+  const handleCheckboxChange = (e) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      public: e.target.checked,
+    }));
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setSubmitAttempted(true);
     const isValid = validateFormData();
     if (!isValid) {return;}
+    console.log("Creating/updating project");
+    let response;
     try {
-      console.log("Creating/updating project");
       if (id) {
-        await query.updateProject(
+        response = await query.updateProject(
           id,
           formData.owner,
           formData.name,
@@ -96,7 +119,7 @@ const ProjectEdit = () => {
           accessToken
         );
       } else {
-        await query.createProject(
+        response = await query.createProject(
           formData.owner,
           formData.name,
           formData.description,
@@ -110,7 +133,10 @@ const ProjectEdit = () => {
           accessToken
         );
       }
+      createAlert(ALERT_SUCCESS);
+      navigate("/project/dashboard");
     } catch (error) {
+      createAlert(ALERT_ERROR);
       console.error("Error creating/updating project:", error);
     }
     console.log("Form submitted");
@@ -139,38 +165,51 @@ const ProjectEdit = () => {
     }
   }, [formData]);
 
-  return (
-    <div className="background-image">
-      <NavBar/>
-      <h1 className="red-brick-gradient-text title">Create/Edit Project</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="project-edit-container">
-          <Field label="Project Name" type="text" name="name" value={formData.name}
-                 onChange={handleInputChange} error={projectNameError} width={FIELD_WIDTH}/>
-          <div className="image-and-desc-container">
-            <ImageUploader image={formData.image} setImage={setImage} error={projectImageError}/>
-            <FieldArea label="Project Description" name="description" value={formData.description}
-                  onChange={handleInputChange} error={projectDescError} width={FIELD_WIDTH} cols={45} rows={10}/>
-          </div>
-          <Field label="Dockerfile" type="text" name="dockerfile" value={formData.dockerfile}
-                 onChange={handleInputChange} error={dockerfileError} width={FIELD_WIDTH}/>
-          <div className="github-fields-container">
-            <Field label="Github Link" type="text" name="github_url" value={formData.github_url}
-                    onChange={handleInputChange} error={githubLinkError} width={FIELD_WIDTH}/>
-            <Field label="Github Auth Token" type="text" name="github_auth_tokens" value={formData.github_auth_tokens}
-                    onChange={handleInputChange} error={githubAuthTokenError} width={FIELD_WIDTH}/>
-          </div>
-          <Field label="Entry Port" type="number" name="entry_port" value={formData.entry_port}
-                  onChange={handleInputChangeParseInt} error={entryPortError} width={FIELD_WIDTH}/>
-          <FieldArea label="Environment Variables" name="env_vars" value={formData.env_vars}
-                  onChange={handleInputChange} error={envVarError} cols={45} rows={4}/>
-          <div className="submit-button-container">
-            <Button variant="customDefault" >Submit <FontAwesomeIcon icon={faWandMagicSparkles}/></Button>
-          </div>
 
-        </div>
-      </form>
-    </div>
+
+
+  return (
+    <>
+      <div className="background-image">
+        <NavBar/>
+        <h1 className="red-brick-gradient-text title">Create/Edit Project</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="project-edit-container">
+            <div className="name-and-checkbox-container">
+              <Field label="Project Name" type="text" name="name" value={formData.name}
+                     onChange={handleInputChange} error={projectNameError} width={FIELD_WIDTH}/>
+              <div>
+                <label htmlFor="is-public-checkbox" style={{lineHeight: "2.5em"}}>Host Publicly:</label>
+                <div><Checkbox id="is-public-checkbox" size="lg" colorScheme="pink" defaultChecked
+                               onChange={handleCheckboxChange} sx={{borderColor: "#ccc"}}/></div>
+              </div>
+            </div>
+            <div className="image-and-desc-container">
+              <ImageUploader image={formData.image} setImage={setImage} error={projectImageError}/>
+              <FieldArea label="Project Description" name="description" value={formData.description}
+                    onChange={handleInputChange} error={projectDescError} width={FIELD_WIDTH} cols={45} rows={10}/>
+            </div>
+            <Field label="Dockerfile" type="text" name="dockerfile" value={formData.dockerfile}
+                   onChange={handleInputChange} error={dockerfileError} width={FIELD_WIDTH}/>
+            <div className="github-fields-container">
+              <Field label="Github Link" type="text" name="github_url" value={formData.github_url}
+                      onChange={handleInputChange} error={githubLinkError} width={FIELD_WIDTH}/>
+              <Field label="Github Auth Token" type="text" name="github_auth_tokens" value={formData.github_auth_tokens}
+                      onChange={handleInputChange} error={githubAuthTokenError} width={FIELD_WIDTH}/>
+            </div>
+            <Field label="Entry Port" type="number" name="entry_port" value={formData.entry_port}
+                    onChange={handleInputChangeParseInt} error={entryPortError} width={FIELD_WIDTH}/>
+            <FieldArea label="Environment Variables" name="env_vars" value={formData.env_vars} monospace
+                    onChange={handleInputChange} error={envVarError} cols={45} rows={4}/>
+            <div className="submit-button-container">
+              <Button variant="customDefault" onClick={handleSubmit}>Submit
+                <FontAwesomeIcon icon={faWandMagicSparkles} style={{marginLeft:"0.5em"}}/>
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 

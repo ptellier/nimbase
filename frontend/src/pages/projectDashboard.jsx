@@ -4,7 +4,7 @@ import Query from "../components/Query";
 import {useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-regular-svg-icons";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faLock, faPlus, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import ConfirmationPopup from "../components/ConfirmationPopup";
 import {Link, useNavigate} from "react-router-dom";
@@ -12,7 +12,7 @@ import {accessTokenSelector, usernameSelector} from "../state/userSlice";
 import {useSelector} from "react-redux";
 import ProjectStatus from "../components/ProjectStatus";
 import {deployState} from "../components/deployEnums";
-import {Button} from "@chakra-ui/react";
+import {Button, Tooltip} from "@chakra-ui/react";
 
 const query = new Query();
 
@@ -66,7 +66,7 @@ const ProjectDashboard = () => {
   }
 
   const handleClickEdit = (_id) => {
-    navigate("/projectEdit/"+_id);
+    navigate("/project/edit/"+_id);
   }
 
   const onClickDeleteButton = (_id, index) => {
@@ -91,7 +91,7 @@ const ProjectDashboard = () => {
         <div className="projects-container">
           <div style={{display:"flex", justifyContent:"flex-start", alignSelf:"flex-start"}}>
             <div style={{width: "300px"}}>
-              <Link to={"/projectNew"} style={{textDecoration: "none"}}>
+              <Link to={"/project/new"} style={{textDecoration: "none"}}>
                 <h2 className="create-project-link"><FontAwesomeIcon icon={faPlus}/> Add Project</h2>
               </Link>
             </div>
@@ -120,6 +120,9 @@ const ProjectDashboard = () => {
                   <div className="dashboard-text-container">
                     <div className="dashboard-project-title-and-icon">
                       <h3>{project.name}</h3>
+                      <Tooltip label={(project.public) ? "Project is publicly hosted to internet" : "Project is private"}>
+                        <FontAwesomeIcon icon={(project.public) ? faUnlock : faLock} color={(project.public) ? "#456fb7" : "firebrick"}/>
+                      </Tooltip>
                       <ProjectStatus project={project} status={deployState.NOT_CLONED}/>
                     </div>
                     <p>{project.description}</p>
