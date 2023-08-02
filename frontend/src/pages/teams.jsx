@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import Query from "../components/Query";
 import NavBar from "../components/NavBar";
 import { useSelector, useDispatch } from "react-redux";
-import { createTeam } from "../state/userSlice";
+import {createTeam, fetchUserTeams} from "../state/userSlice";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
     const [description, setDescription] = useState("");
     const [owner, setOwner] = useState("");
+    // const [showTeams, setShowTeams] = useState(false);
 
-    const dispatch = useDispatch(); // get the dispatch function
+    const dispatch = useDispatch();
 
-    const accessToken = useSelector(state => state.user.accessToken); // access the token from the store
-
+    // const accessToken = useSelector(state => state.user.accessToken);
+    // const teams = useSelector(state => state.user.teams)
+    // const username = useSelector(state => state.user.username);
+    //
+    // const handleViewTeams = () => {
+    //     dispatch(fetchUserTeams({username, accessToken}));
+    //     setShowTeams(true);
+    // }
+    //
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        dispatch(createTeam({
-            teamName,
-            description,
-            owner,
-            accessToken
-        }));
+        //
+        // dispatch(createTeam({
+        //     teamName,
+        //     description,
+        //     owner,
+        //     accessToken
+        // }));
 
         setTeamName("");
         setDescription("");
@@ -41,6 +49,15 @@ const Teams = () => {
                         <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
                         <button type="submit">Add Team</button>
                     </form>
+                    {/*<button onClick={handleViewTeams}>View Teams</button>*/}
+                    {/*{showTeams && <h3> Your teams</h3>}*/}
+                    {/*{showTeams && teams && teams.map((team, index) => (*/}
+                    {/*    <div key={index}>*/}
+                    {/*        <h4>{team.name}</h4>*/}
+                    {/*        <p>{team.description}</p>*/}
+                    {/*        <p>{team.owner}</p>*/}
+                    {/*    </div>*/}
+                    {/*))}*/}
                 </div>
             </div>
         </div>

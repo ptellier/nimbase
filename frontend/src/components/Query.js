@@ -50,6 +50,12 @@ class Query {
     }
   }
 
+  async getUserTeams(username, accessToken) {
+    return await axiosInstance.get(BASE_URL + `/api/user/${username}/teams`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+  }
+
   // create a new project
   async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
     return await axiosInstance.post(BASE_URL + '/api/project', {
@@ -124,7 +130,7 @@ class Query {
   // TEAMS
   async createTeam(teamName, description, owner, accessToken) {
     return await axiosInstance.post(BASE_URL + '/api/team', {
-      name: teamName,
+      teamName: teamName,
       description: description,
       owner: owner,
     }, {

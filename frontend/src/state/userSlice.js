@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   username: undefined,
   email: undefined,
   signupError: undefined,
-  loginError: undefined,
+  loginError: undefined, teams: {},
 }
 
 const query = new Query();
@@ -45,6 +45,13 @@ export const logout = createAsyncThunk(
   }
 )
 
+export const fetchUserTeams = createAsyncThunk(
+    "user/fetchTeams",
+    async ({username, accessToken}) => {
+        const response = await query.getUserTeams(username, accessToken);
+        return response.data;
+    }
+)
 export const userSlice = createSlice({
   name: "user",
   initialState: INITIAL_STATE,
@@ -57,6 +64,10 @@ export const userSlice = createSlice({
         state.loginError = undefined;
         state.signupError = undefined;
       })
+        // .addCase(fetchUserTeams.fulfilled, (state, action) => {
+        //     state.teams[action.payload.username] = action.payload.teams;
+        //     state.accessToken = action.payload.accessToken;
+        // })
         .addCase(signup.fulfilled, (state, action) => {
             if(action.payload.accessToken){
                 state.username = action.payload.username;
@@ -106,6 +117,9 @@ export const userSlice = createSlice({
           state.email = action.payload.email;
           state.loginError = action.payload.loginError;
           state.signupError = action.payload.signupError;
+          // if(!state.teams[action.payload.username]){
+          //     state.teams[action.payload.username] = [];
+          // }
         })
         .addMatcher(isAnyOf(createTeam.rejected, getTeam.rejected, addTeamMember.rejected, removeTeamMember.rejected, addTeamProject.rejected, removeTeamProject.rejected),
           (state, action) => {
@@ -184,3 +198,4 @@ export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
 export const accessTokenSelector = (state) => state.user.accessToken;
+export const teamsSelector = (state) => state.user.teams;

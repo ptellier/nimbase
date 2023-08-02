@@ -1,14 +1,17 @@
-const dotenv = require("dotenv");
-const uri = dotenv.config().parsed.MONGODB_URI;
+//const dotenv = require("dotenv");
+require('dotenv').config();
+
+let MONGODB_URI = process.env.MONGODB_URI;
+//const uri = dotenv.config().parsed.MONGODB_URI;
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
+const client = new MongoClient(MONGODB_URI, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    },
 });
 
 let conn;

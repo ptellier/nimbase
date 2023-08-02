@@ -25,7 +25,7 @@ router.post('/', express.json(), async (req, res) => {
     }
 
     const existingTeam = await teams.findOne({teamName: teamName});
-    if(!existingTeam){
+    if(existingTeam){
         return res.status(400).send("Team name already exists");
     }
 
@@ -132,7 +132,7 @@ router.delete('/:teamName', express.json(), async (req, res) => {
     if(!team) {
         return res.status(404).send("Team not found");
     }
-    await teams.updateOne({teamName: teamName}, {$pull: {teamName: teamName}});
+    await teams.deleteOne({teamName: teamName});
     return res.status(200).send('Team deleted');
 });
 
