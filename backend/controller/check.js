@@ -34,32 +34,32 @@ function isNewUser(val) {
 }
 
 function isProject(val) {
-  return Object.keys(val).length === 10
+  return Object.keys(val).length === 7
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
     && (isString(val.image) || val.image === null)
     && isBoolean(val.public)
-    && isString(val.dockerfile)
+    // && isString(val.dockerfile)
     && isString(val.github_url)
-    && isString(val.github_auth_tokens)
+    // && isString(val.github_auth_tokens)
     && isString(val.env_vars)
-    && isNumber(val.entry_port)
+    // && isNumber(val.entry_port)
 }
 
 function isProjectPut(val) {
-  return Object.keys(val).length === 11
+  return Object.keys(val).length === 8
     && validator.isMongoId(val._id)
     && isString(val.owner)
     && isString(val.name)
     && isString(val.description)
     && (isString(val.image) || val.image === null)
     && isBoolean(val.public)
-    && isString(val.dockerfile)
+    // && isString(val.dockerfile)
     && isString(val.github_url)
-    && isString(val.github_auth_tokens)
+    // && isString(val.github_auth_tokens)
     && isString(val.env_vars)
-    && isNumber(val.entry_port)
+    // && isNumber(val.entry_port)
 }
 
 module.exports = {

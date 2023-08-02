@@ -29,7 +29,7 @@ app.get('/api', async (req, res) => {
 app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/register', require('./routes/register.js'));
 
-// app.use(verifyJWT);
+app.use(verifyJWT);
 
 app.use('/api/project', require('./routes/project.js'));
 app.use('/api/user', require('./routes/user.js'));
