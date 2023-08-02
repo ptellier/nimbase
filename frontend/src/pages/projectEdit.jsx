@@ -129,7 +129,7 @@ const ProjectEdit = () => {
                 );
             }
             console.log("Response:", response);
-            createAlert(ALERT_SUCCESS);
+            createAlert(ALERT_SUCCESS_CREATED);
             // clone the project
             setDndID(response.message.id);
 
@@ -144,43 +144,11 @@ const ProjectEdit = () => {
             setService(cloneResponse.data.services);
             // navigate("/project/dashboard");
         } catch (error) {
-            createAlert(ALERT_ERROR);
+            createAlert(ALERT_ERROR_CREATED);
             console.error("Error creating/updating project:", error);
         }
         console.log("Form submitted");
     }
-
-
-    // const ServiceComponent = ({ service }) => {
-    //     return (
-    //         <div className="service-component">
-    //             <div className="service-component-header">
-    //                 <h2>{service.name}</h2>
-    //                 <div className="service-component-header-buttons">
-    //                     <Button
-    //                         variant="customDefault"
-    //                         onClick={() => {
-    //                             navigate(`/project/edit/${service.id}`);
-    //                         }}
-    //                     >
-    //                         Edit
-    //                     </Button>
-    //                     <Button
-    //                         variant="customDefault"
-    //                         onClick={() => {
-    //                         }}
-    //                     >
-    //                         Delete
-    //                     </Button>
-    //                 </div>
-    //             </div>
-    //             <div className="service-component-body">
-                            
-    //             </div>  
-    //         </div>
-
-    //     )
-    // }
 
 
     const validateFormData = () => {
