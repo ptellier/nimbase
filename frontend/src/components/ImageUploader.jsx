@@ -21,7 +21,7 @@ const ImageUploader = ({error, image, setImage}) => {
         null
       }
       <div className="image-upload-image-container">
-        <img width="100%" src={image} alt={"uploaded image of project"}
+        <img width="100%" src={image || "https://returntofreedom.org/store/wp-content/uploads/default-placeholder.png" } alt={"uploaded image of project"}
              className="image-uploader-image" style={{textAlign:"center"}}/>
       </div>
       <input

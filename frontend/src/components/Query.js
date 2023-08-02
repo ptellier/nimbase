@@ -50,22 +50,22 @@ class Query {
   }
 
   // create a new project
-  async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
+  async createProject(owner, name, description, image, isPublic, github_url,  env_vars, accessToken) {
     const response = await axiosInstance.post(BASE_URL + '/api/project', {
       owner: owner,
       name: name,
       description: description,
       image: image,
       public: isPublic,
-      dockerfile: dockerfile,
+      
       github_url: github_url,
-      github_auth_tokens: github_auth_tokens,
+
       env_vars: env_vars,
-      entry_port: entry_port,
+
     }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
-    return (response.status === 200) ? {success: true} : {success: false, message: response.data};
+    return (response.status === 200) ? {success: true, message:response.data} : {success: false, message: response.data};
   }
 
   async getProject(project_id, accessToken) {
@@ -86,7 +86,7 @@ class Query {
   }
 
   // set an existing project's fields (all of them except _id which must match an existing project)
-  async updateProject(_id, owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
+  async updateProject(_id, owner, name, description, image, isPublic,  github_url,  env_vars,  accessToken) {
        const response = await axiosInstance.put(BASE_URL + '/api/project', {
       _id: _id,
       owner: owner,
@@ -94,11 +94,8 @@ class Query {
       description: description,
       image: image,
       public: isPublic,
-      dockerfile: dockerfile,
       github_url: github_url,
-      github_auth_tokens: github_auth_tokens,
       env_vars: env_vars,
-      entry_port: entry_port,
     },{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
@@ -118,36 +115,29 @@ class Query {
     }
   }
 
-  async devOpsClone(github_url, name, env_variables, entry_port, _id, accessToken) {
+  async devOpsClone(github_url, name, env_variables, _id, accessToken) {
     const response = await axiosInstance.post(BASE_URL + '/api/devops/clone', {
       github_url: github_url,
       name: name,
       env_vars: env_variables,
-      entry_port: entry_port,
       _id: _id,
     }, {
       headers: { Authorization: `Bearer ${accessToken}` },
       validateStatus: (status) => (status === 200 || status === 500)
     });
-    return (response.status === 200) ? {success: true} : {success: false, error: response.data};
+    console.log(response);
+    return (response.status === 200) ? {success: true, data : response.data} : {success: false, error: response.data};
   }
 
-  async devOpsDeploy(_id, accessToken) {
+  async devOpsDeploy(_id, accessToken, configs) {
     const response = await axiosInstance.post(BASE_URL + '/api/devops/deploy', {
       id: _id,
+      configs: configs,
     }, {
       headers: { Authorization: `Bearer ${accessToken}` },
       validateStatus: (status) => (status === 200 || status === 500)
     })
-    return (response.status === 200) ? {success: true} : {success: false, error: response.data};
-  }
-
-  async devOpsStop(_id, accessToken) {
-    return await axiosInstance.post(BASE_URL + '/api/devops/stop', {
-      id: _id,
-    }, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    })
+    return (response.status === 200) ? {success: true, data:response.data} : {success: false, error: response.data};
   }
 
   async devOpsRemove(_id, accessToken) {
