@@ -68,7 +68,7 @@ router.post('/logout', async (req, res) => {
   const users = db.collection("users");
   const foundUser = await users.findOne({refreshToken: refreshToken});
   if (foundUser) {
-    await users.updateOne({username: foundUser.username}, { $set: ''});
+    await users.updateOne({username: foundUser.username}, { $set: {refreshToken:''}});
   }
   res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
   res.sendStatus(204);
