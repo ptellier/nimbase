@@ -3,6 +3,7 @@ import axios from "axios";
 const mockProjects = require("../static/mockData/mock_projects.json");
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
+//const BASE_URL = "http://localhost:8080"
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -180,8 +181,8 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);
         } catch (err) {
+          window.location.href = '/login';
           console.log(err);
-          throw new Error(err.message);
         }
       }
 

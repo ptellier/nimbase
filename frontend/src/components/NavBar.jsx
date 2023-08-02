@@ -1,5 +1,5 @@
 import NimbaseIcon from "../static/svg/nimbase_icon.svg";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -8,9 +8,11 @@ import {faCircleUser} from "@fortawesome/free-solid-svg-icons";
 const NavBar = () => {
   const username = useSelector(usernameSelector);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onClickLogout = () => {
     dispatch(logout());
+    navigate("/");
   }
 
   return (
