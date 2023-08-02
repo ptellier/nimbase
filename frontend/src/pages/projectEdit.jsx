@@ -20,15 +20,26 @@ import Dustbin from '../components/DndComponent'
 const FIELD_WIDTH = "20rem";
 const query = new Query();
 
-const ALERT_SUCCESS = {
-    status: "success",
-    alertText: "Project Uploaded to server!",
-};
+const ALERT_SUCCESS_CREATED = {
+  status: "success",
+  alertText: "Project Uploaded to server!",
+}
 
-const ALERT_ERROR = {
-    status: "error",
-    alertText: "Error uploading project to server!",
-};
+const ALERT_ERROR_CREATED = {
+  status: "error",
+  alertText: "Error uploading project to server!",
+}
+
+const ALERT_SUCCESS_UPDATED = {
+  status: "success",
+  alertText: "Project successfully updated!",
+}
+
+const ALERT_ERROR_GETTING_PROJECT = {
+  status: "error",
+  alertText: "Error, could not get project from server!",
+}
+
 
 const ProjectEdit = () => {
     const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -200,13 +211,26 @@ const ProjectEdit = () => {
         }
         return valid;
     };
-
+    
     useEffect(() => {
         if (submitAttempted) {
             validateFormData();
         }
     }, [formData]);
-
+    
+    useEffect(() => {
+      if (id) {
+        query.getProject(id, accessToken)
+          .then((response) => {
+            if (response.success) {
+              setFormData(response.data);
+            } else {
+              createAlert(ALERT_ERROR_GETTING_PROJECT);
+              console.error("Error getting project:", response.error);
+            }
+          })
+      }
+    }, []);
 
 
     return (

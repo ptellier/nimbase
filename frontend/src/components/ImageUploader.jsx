@@ -1,17 +1,26 @@
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUpFromBracket, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {Button} from "@chakra-ui/react";
 
-const ImageUploader = ({error, image, setImage}) => {
+const ImageUploader = ({error, setImage}) => {
   const imageInput = useRef(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    console.log("file: ", file)
     if (file.type === "image/jpeg" || file.type === "image/png") {
-      setImage(URL.createObjectURL(event.target.files[0]));
+      setPreviewImage(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      }
+      reader.readAsDataURL(file);
     }
   }
+
+  // REFERENCE: PedroTech Firebase tutorial https://www.youtube.com/watch?v=YOAeBSCkArA&t=412s
 
   return (
     <div className="image-upload-container">
@@ -21,8 +30,12 @@ const ImageUploader = ({error, image, setImage}) => {
         null
       }
       <div className="image-upload-image-container">
-        <img width="100%" src={image || "https://returntofreedom.org/store/wp-content/uploads/default-placeholder.png" } alt={"uploaded image of project"}
-             className="image-uploader-image" style={{textAlign:"center"}}/>
+        {(previewImage) ?
+          <img width="100%" src={previewImage} alt={"uploaded image of project"}
+               className="image-uploader-image" style={{textAlign:"center"}}/>
+          :
+          <div className="dashboard-image-error"/>
+        }
       </div>
       <input
         style={{display:"none"}}
