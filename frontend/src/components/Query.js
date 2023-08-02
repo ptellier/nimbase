@@ -1,5 +1,4 @@
 import axios from "axios";
-import {createAsyncThunk} from "@reduxjs/toolkit";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 

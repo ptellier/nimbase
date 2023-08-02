@@ -23,6 +23,7 @@ router.post('/', express.json(), async (req, res) => {
     if(!teamName || !description || !owner) {
         return res.status(400).send("Missing required fields");
     }
+    console.log(req.body)
 
     const existingTeam = await teams.findOne({teamName: teamName});
     if(existingTeam){
@@ -33,8 +34,6 @@ router.post('/', express.json(), async (req, res) => {
     await teams.insertOne(newTeam);
     return res.status(201).json({ 'success': `New team ${teamName} created!` });
 });
-
-// get a specific team
 
 router.get('/:teamName', express.json(), async (req, res) => {
     const teams = db.collection('teams');

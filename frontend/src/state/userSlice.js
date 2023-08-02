@@ -44,14 +44,15 @@ export const logout = createAsyncThunk(
     return response.data;
   }
 )
-
 export const fetchUserTeams = createAsyncThunk(
     "user/fetchTeams",
-    async ({username, accessToken}) => {
+    async ({ username, accessToken }) => {
         const response = await query.getUserTeams(username, accessToken);
-        return response.data;
+        return {
+            teams: response.data
+        };
     }
-)
+);
 export const userSlice = createSlice({
   name: "user",
   initialState: INITIAL_STATE,
@@ -63,11 +64,12 @@ export const userSlice = createSlice({
         state.email = undefined;
         state.loginError = undefined;
         state.signupError = undefined;
+        state.teams = [];
       })
-        // .addCase(fetchUserTeams.fulfilled, (state, action) => {
-        //     state.teams[action.payload.username] = action.payload.teams;
-        //     state.accessToken = action.payload.accessToken;
-        // })
+        .addCase(fetchUserTeams.fulfilled, (state, action) => {
+            state.teams = action.payload.teams;
+            state.accessToken = action.payload.accessToken;
+        })
         .addCase(signup.fulfilled, (state, action) => {
             if(action.payload.accessToken){
                 state.username = action.payload.username;
@@ -117,13 +119,9 @@ export const userSlice = createSlice({
           state.email = action.payload.email;
           state.loginError = action.payload.loginError;
           state.signupError = action.payload.signupError;
-          // if(!state.teams[action.payload.username]){
-          //     state.teams[action.payload.username] = [];
-          // }
-        })
-        .addMatcher(isAnyOf(createTeam.rejected, getTeam.rejected, addTeamMember.rejected, removeTeamMember.rejected, addTeamProject.rejected, removeTeamProject.rejected),
-          (state, action) => {
-              console.log("error: thunk rejected; ", action.error.message);
+          if(!state.teams[action.payload.username]){
+              state.teams[action.payload.username] = [];
+          }
         })
       .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected),
         (state, action) => {
