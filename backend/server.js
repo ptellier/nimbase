@@ -2,6 +2,7 @@ const db  = require('./database/dbConn.js');
 const express = require('express');
 const cors = require('cors')
 const verifyJWT = require("./middleware/verifyJWT");
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const port = 8080;
 const app = express();
@@ -12,6 +13,8 @@ let CORS_OPTIONS = {
 }
 
 app.use(cors(CORS_OPTIONS));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -29,7 +32,7 @@ app.get('/api', async (req, res) => {
 app.use('/api/auth', require('./routes/auth.js'));
 app.use('/api/register', require('./routes/register.js'));
 
-// app.use(verifyJWT);
+app.use(verifyJWT);
 
 app.use('/api/project', require('./routes/project.js'));
 app.use('/api/user', require('./routes/user.js'));
