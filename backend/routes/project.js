@@ -30,7 +30,10 @@ const router = express.Router();
 // REQUIRES: JSON body matching project schema
 // REQUIRES: owner is the username of an existing user
 router.post('/', express.json(), async (req, res) => {
+  console.log(req.body);
+  console.log("creating new project");
   if (!check.isProject(req.body)) {
+    console.log("invalid project in request body (as json)");
     res.status(400).json({message: "invalid project in request body (as json)"});
     return;
   }
@@ -47,7 +50,7 @@ router.post('/', express.json(), async (req, res) => {
   if (!Array.isArray(ownerUser.project_ids)) {console.error("ownerUser.project_ids should br a string array");}
   ownerUser.project_ids.push(insertedId);
   const result2 = await users.updateOne({_id: ownerUser._id}, { $set: ownerUser});
-  res.status(200).send(result2);
+  res.status(200).send({message: "successfully created project", id: insertedId});
 });
 
 // get an existing project
