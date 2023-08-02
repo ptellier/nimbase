@@ -42,11 +42,7 @@ class Query {
 
   // logout user
   async logoutUser() {
-    try {
-      return await axios.post(BASE_URL + '/api/auth/logout', {});
-    } catch (e) {
-      console.log("error logging out user ");
-    }
+    return await axios.post(BASE_URL + '/api/auth/logout', {});
   }
 
   // create a new project
@@ -69,10 +65,12 @@ class Query {
   }
 
   async getProject(project_id, accessToken) {
-    return await axiosInstance.get(BASE_URL + `/api/project/${project_id}`,
+    const response = await axiosInstance.get(BASE_URL + `/api/project/${project_id}`,
       {
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${accessToken}` },
+        validateStatus: (status) => (status === 200)
       });
+    return (response.status === 200) ? {success: true, data: response.data} : {success: false, message: response.data.message};
   }
 
   // returns {success: true} if successful, {success: false, message: true} if not

@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar";
 import '../styles/projectDashboard.css';
 import Query from "../components/Query";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-regular-svg-icons";
 import {faLock, faPlus, faUnlock} from "@fortawesome/free-solid-svg-icons";
@@ -13,8 +13,19 @@ import {useSelector} from "react-redux";
 import ProjectStatus from "../components/ProjectStatus";
 import {deployState} from "../components/deployEnums";
 import {Button, Tooltip} from "@chakra-ui/react";
+import {AlertsContext} from "../components/ProjectAlerts";
 
 const query = new Query();
+
+const ALERT_DELETE_SUCCESS = {
+  status: "success",
+  alertText: "Project deleted from server!",
+}
+
+const ALERT_DELETE_ERROR = {
+  status: "error",
+  alertText: "Error deleting project from server!",
+}
 
 const ProjectDashboard = () => {
 
@@ -24,6 +35,8 @@ const ProjectDashboard = () => {
   const [deletePopupId, setDeletePopupId] = useState(null);
   const [deletePopupIndex, setDeletePopupIndex] = useState(null);
   const [deleteErrorText, setDeleteErrorText] = useState(null);
+
+  const {createAlert} = useContext(AlertsContext);
 
   const username = useSelector(usernameSelector);
   const accessToken = useSelector(accessTokenSelector);
@@ -57,11 +70,14 @@ const ProjectDashboard = () => {
         newProjects.splice(deletePopupIndex, 1);
         setProjects(newProjects);
         handleCloseDeletePopup();
-      } else if (result.success === false) {
+        createAlert(ALERT_DELETE_SUCCESS);
+      } else {
         setDeleteErrorText(result.message);
+        createAlert(ALERT_DELETE_ERROR);
       }
     } else {
       console.log("Still loading: id or index is null");
+      createAlert(ALERT_DELETE_ERROR);
     }
   }
 

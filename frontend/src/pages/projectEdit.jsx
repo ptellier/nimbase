@@ -16,14 +16,24 @@ import {AlertsContext} from "../components/ProjectAlerts";
 const FIELD_WIDTH = "20rem";
 const query = new Query();
 
-const ALERT_SUCCESS = {
+const ALERT_SUCCESS_CREATED = {
   status: "success",
   alertText: "Project Uploaded to server!",
 }
 
-const ALERT_ERROR = {
+const ALERT_ERROR_CREATED = {
   status: "error",
   alertText: "Error uploading project to server!",
+}
+
+const ALERT_SUCCESS_UPDATED = {
+  status: "success",
+  alertText: "Project successfully updated!",
+}
+
+const ALERT_ERROR_GETTING_PROJECT = {
+  status: "error",
+  alertText: "Error, could not get project from server!",
 }
 
 
@@ -118,6 +128,7 @@ const ProjectEdit = () => {
           formData.entry_port,
           accessToken
         );
+        createAlert(ALERT_SUCCESS_UPDATED);
       } else {
         response = await query.createProject(
           formData.owner,
@@ -132,11 +143,11 @@ const ProjectEdit = () => {
           formData.entry_port,
           accessToken
         );
+        createAlert(ALERT_SUCCESS_CREATED);
       }
-      createAlert(ALERT_SUCCESS);
       navigate("/project/dashboard");
     } catch (error) {
-      createAlert(ALERT_ERROR);
+      createAlert(ALERT_ERROR_CREATED);
       console.error("Error creating/updating project:", error);
     }
     console.log("Form submitted");
@@ -165,8 +176,19 @@ const ProjectEdit = () => {
     }
   }, [formData]);
 
-
-
+  useEffect(() => {
+    if (id) {
+      query.getProject(id, accessToken)
+        .then((response) => {
+          if (response.success) {
+            setFormData(response.data);
+          } else {
+            createAlert(ALERT_ERROR_GETTING_PROJECT);
+            console.error("Error getting project:", response.error);
+          }
+        })
+    }
+  }, []);
 
   return (
     <>
@@ -185,7 +207,7 @@ const ProjectEdit = () => {
               </div>
             </div>
             <div className="image-and-desc-container">
-              <ImageUploader image={formData.image} setImage={setImage} error={projectImageError}/>
+              <ImageUploader setImage={setImage} error={projectImageError}/>
               <FieldArea label="Project Description" name="description" value={formData.description}
                     onChange={handleInputChange} error={projectDescError} width={FIELD_WIDTH} cols={45} rows={10}/>
             </div>
