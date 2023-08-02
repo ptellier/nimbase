@@ -61,6 +61,12 @@ router.post('/:teamName/addMember', express.json (),async (req, res) => {
         return res.status(400).send("User already in team");
     }
 
+    const user = await db.collection('users').findOne({ username });
+
+    if (!user) {
+        return res.status(404).send("Username not found");
+    }
+
     await teams.updateOne({teamName: teamName}, {$push: {members: username}});
     return res.status(200).send("User added to team");
 });

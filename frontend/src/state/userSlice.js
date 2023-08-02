@@ -6,7 +6,8 @@ const INITIAL_STATE = {
   username: undefined,
   email: undefined,
   signupError: undefined,
-  loginError: undefined, teams: {},
+  loginError: undefined,
+    teams: [],
 }
 
 const query = new Query();
