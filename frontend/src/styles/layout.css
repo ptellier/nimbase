@@ -86,7 +86,7 @@ input, textarea {
 .explore-project p, .dashboard-project p {
     margin: 0;
     font-size: 0.9rem;
-    height: 4em;
+    height: 4.5em;
     text-align: left;
     color: dimgrey;
     display: -webkit-box;

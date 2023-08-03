@@ -114,7 +114,7 @@ const ProjectEdit = () => {
     let response;
     try {
       if (id) {
-        response = await query.updateProject(
+        await query.updateProject(
           id,
           formData.owner,
           formData.name,
@@ -130,7 +130,7 @@ const ProjectEdit = () => {
         );
         createAlert(ALERT_SUCCESS_UPDATED);
       } else {
-        response = await query.createProject(
+        await query.createProject(
           formData.owner,
           formData.name,
           formData.description,
@@ -202,7 +202,7 @@ const ProjectEdit = () => {
                      onChange={handleInputChange} error={projectNameError} width={FIELD_WIDTH}/>
               <div>
                 <label htmlFor="is-public-checkbox" style={{lineHeight: "2.5em"}}>Host Publicly:</label>
-                <div><Checkbox id="is-public-checkbox" size="lg" colorScheme="pink" defaultChecked
+                <div><Checkbox id="is-public-checkbox" isChecked={formData.public} size="lg" colorScheme="pink"
                                onChange={handleCheckboxChange} sx={{borderColor: "#ccc"}}/></div>
               </div>
             </div>

@@ -104,17 +104,4 @@ router.delete('/:id', express.json(), async (req, res) => {
   res.status(200).send(resultUpdate);
 });
 
-// get all existing projects
-router.get('/', express.json(), async (req, res) => {
-  const projects = db.collection("projects");
-  // TODO: create endpoint for all public projects (filter by field: public = true)
-  if (!projects ) {
-    res.status(404).send(projects);
-    return;
-  }
-  res.status(200).send(projects);
-});
-
-// TODO: perform gitHub action on project '/api/project/deploy'
-
 module.exports = router;
