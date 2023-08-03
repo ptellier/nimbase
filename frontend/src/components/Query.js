@@ -2,7 +2,7 @@ import axios from "axios";
 //REFERENCE: used chatGPT to help generate some fake data in the following file
 const mockProjects = require("../static/mockData/mock_projects.json");
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -42,11 +42,7 @@ class Query {
 
   // logout user
   async logoutUser() {
-    try {
-      return await axios.post(BASE_URL + '/api/auth/logout', {});
-    } catch (e) {
-      console.log("error logging out user ");
-    }
+    return await axios.post(BASE_URL + '/api/auth/logout', {});
   }
 
   async getUserTeams(username, accessToken) {
@@ -56,28 +52,31 @@ class Query {
   }
 
   // create a new project
-  async createProject(owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.post(BASE_URL + '/api/project', {
+  async createProject(owner, name, description, image, isPublic, github_url,  env_vars, accessToken) {
+    const response = await axiosInstance.post(BASE_URL + '/api/project', {
       owner: owner,
       name: name,
       description: description,
       image: image,
       public: isPublic,
-      dockerfile: dockerfile,
+
       github_url: github_url,
-      github_auth_tokens: github_auth_tokens,
+
       env_vars: env_vars,
-      entry_port: entry_port,
+
     }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
+    return (response.status === 200) ? {success: true, message:response.data} : {success: false, message: response.data};
   }
 
   async getProject(project_id, accessToken) {
-    return await axiosInstance.get(BASE_URL + `/api/project/${project_id}`,
+    const response = await axiosInstance.get(BASE_URL + `/api/project/${project_id}`,
       {
-        headers: { Authorization: `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${accessToken}` },
+        validateStatus: (status) => (status === 200)
       });
+    return (response.status === 200) ? {success: true, data: response.data} : {success: false, message: response.data.message};
   }
 
   // returns {success: true} if successful, {success: false, message: true} if not
@@ -91,27 +90,21 @@ class Query {
   }
 
   // set an existing project's fields (all of them except _id which must match an existing project)
-  async updateProject(_id, owner, name, description, image, isPublic, dockerfile, github_url, github_auth_tokens, env_vars, entry_port, accessToken) {
-    return await axiosInstance.put(BASE_URL + '/api/project', {
+  async updateProject(_id, owner, name, description, image, isPublic,  github_url,  env_vars,  accessToken) {
+       const response = await axiosInstance.put(BASE_URL + '/api/project', {
       _id: _id,
       owner: owner,
       name: name,
       description: description,
       image: image,
       public: isPublic,
-      dockerfile: dockerfile,
       github_url: github_url,
-      github_auth_tokens: github_auth_tokens,
       env_vars: env_vars,
-      entry_port: entry_port,
     },{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
+    return (response.status === 200) ? {success: true} : {success: false, message: response.data};
   }
-
-  // TODO: perform gitHub action on project '/api/project/deploy'
-
-  // TODO: implement backend and remove mock
 
   async getAllProjects() {
     return mockProjects;
@@ -124,6 +117,39 @@ class Query {
       console.log(err);
       throw new Error(err.message);
     }
+  }
+
+  async devOpsClone(github_url, name, env_variables, _id, accessToken) {
+    const response = await axiosInstance.post(BASE_URL + '/api/devops/clone', {
+      github_url: github_url,
+      name: name,
+      env_vars: env_variables,
+      _id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      validateStatus: (status) => (status === 200 || status === 500)
+    });
+    console.log(response);
+    return (response.status === 200) ? {success: true, data : response.data} : {success: false, error: response.data};
+  }
+
+  async devOpsDeploy(_id, accessToken, configs) {
+    const response = await axiosInstance.post(BASE_URL + '/api/devops/deploy', {
+      id: _id,
+      configs: configs,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      validateStatus: (status) => (status === 200 || status === 500)
+    })
+    return (response.status === 200) ? {success: true, data:response.data} : {success: false, error: response.data};
+  }
+
+  async devOpsRemove(_id, accessToken) {
+    return await axiosInstance.post(BASE_URL + '/api/devops/remove', {
+      id: _id,
+    }, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
   }
 
   // TEAMS
@@ -196,7 +222,8 @@ axiosInstance.interceptors.response.use(
     async (error) => {
       const originalRequest = error.config;
 
-      if (error.response.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
+
+      if (error.response?.status === 401 && originalRequest.url !== BASE_URL + '/api/auth/refresh') {
         try {
           const newAccessToken = await q.refreshAccessToken();
 

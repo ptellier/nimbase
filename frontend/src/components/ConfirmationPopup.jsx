@@ -2,6 +2,7 @@
 
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Button} from "@chakra-ui/react";
 
 const ConfirmationPopup = ({open, setClose, headerText, bodyText, errorText, cancelButtonText, onConfirm}) => {
 
@@ -14,8 +15,8 @@ const ConfirmationPopup = ({open, setClose, headerText, bodyText, errorText, can
             <h3>{headerText}</h3>
             <p>{bodyText}</p>
             <div style={{display:"flex", justifyContent: "flex-end", columnGap: "2em"}}>
-              <button onClick={setClose}>Cancel</button>
-              <button onClick={onConfirm}>{cancelButtonText}</button>
+              <Button variant="customDefault" onClick={setClose}>Cancel</Button>
+              <Button variant="customDefault"  onClick={onConfirm}>{cancelButtonText}</Button>
             </div>
             {(errorText) ?
               <p className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorText}</p>

@@ -2,6 +2,7 @@ import NavBar from "../components/NavBar";
 import '../styles/projectDashboard.css';
 import Query from "../components/Query";
 import {useRef} from "react";
+import {Button} from "@chakra-ui/react";
 
 const query = new Query()
 
@@ -75,15 +76,15 @@ const ApiTestPage = () => {
       <NavBar/>
       <div style={{height:"100%", width:"100%"}}>
         <div style={{display:"flex", gap:30, flexDirection:"column", margin:"auto", width:"max-content"}}>
-          <button onClick={sendRequest}>Send Request</button>
-          <button onClick={register}>Register</button>
-          <button onClick={login}>Login</button>
-          <button onClick={logout}>Logout</button>
+          <Button variant="customDefault"  onClick={sendRequest}>Send Request</Button>
+          <Button variant="customDefault"  onClick={register}>Register</Button>
+          <Button variant="customDefault"  onClick={login}>Login</Button>
+          <Button variant="customDefault"  onClick={logout}>Logout</Button>
 
-          <button onClick={getProjects}>Get Projects</button>
-          <button onClick={createProject}>Create Project</button>
+          <Button variant="customDefault"  onClick={getProjects}>Get Projects</Button>
+          <Button variant="customDefault"  onClick={createProject}>Create Project</Button>
           <div>
-            <button onClick={() => updateProject(projectId.current.value)} style={{marginBottom: "5px"}}>Update Project</button><br/>
+            <Button variant="customDefault"  onClick={() => updateProject(projectId.current.value)} style={{marginBottom: "5px"}}>Update Project</Button><br/>
             <label>
               project id:
               <input type="text" name="projectId" ref={projectId}></input>

@@ -21,14 +21,14 @@ const NavBar = () => {
           <Link to={"/explore"} className="nav-item">Explore</Link>
           {username ?
               <>
-                <Link to={"/projectDashboard"} className="nav-item">Projects</Link>
+            <Link to={"/project/dashboard"} className="nav-item">Projects</Link>
                 <Link to={"/teams"} className="nav-item">Teams</Link>
               </>
-              :
-              <>
-                <Link to={"/signup"} className="nav-item">Sign-up</Link>
-                <Link to={"/login"} className="nav-item">Login</Link>
-              </>
+            :
+            <>
+              <Link to={"/signup"} className="nav-item">Sign-up</Link>
+              <Link to={"/login"} className="nav-item">Login</Link>
+            </>
           }
         </div>
         {username ?

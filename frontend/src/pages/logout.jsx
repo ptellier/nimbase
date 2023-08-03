@@ -1,6 +1,7 @@
 import Query from "../components/Query";
 import NavBar from "../components/NavBar";
 import {useState} from "react";
+import {Button} from "@chakra-ui/react";
 
 const Logout = () => {
     const query = new Query();
@@ -23,7 +24,7 @@ const Logout = () => {
                 <div className="login-box">
                     <h2>Logout</h2>
                     <form onSubmit={handleLogout}>
-                        <button type="submit">Log Out</button>
+                        <Button variant="customDefault" type="submit">Log Out</Button>
                     </form>
                 </div>
             </div>
