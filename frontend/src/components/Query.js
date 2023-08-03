@@ -106,9 +106,11 @@ class Query {
     return (response.status === 200) ? {success: true} : {success: false, message: response.data};
   }
 
-  async getAllProjects() {
-    return mockProjects;
+  async getAllPublicProjects() {
+    const response = await axiosInstance.get(BASE_URL + '/api/project/');
+    return response.data;
   }
+
   async refreshAccessToken() {
     try {
       const response = await axiosInstance.post(BASE_URL + '/api/auth/refresh');
