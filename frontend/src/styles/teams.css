@@ -18,10 +18,78 @@
     position: relative;
 }
 
+.teams-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+}
+
+.teams-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .close {
     color: #aaaaaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.create-team-button,
+.view-teams-button,
+.add-member-button,
+.remove-member-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.team-members {
+    margin-top: 20px;
+}
+
+.team-members h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.team-members ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.team-members li {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.close-add-team-modal {
+    font-size: 16px;
+    color: red;
+    background-color: transparent;
+    margin-left: 40px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.blue-bold-heading {
+    font-size: 25px;
+    color: #3497d9;
+    font-weight: bold;
+}
+
+.your-teams-header {
+    margin-top: 20px;
 }

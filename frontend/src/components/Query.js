@@ -163,6 +163,12 @@ class Query {
     });
   }
 
+  // async getTeammates(teamName, accessToken) {
+  //   return await axiosInstance.get(BASE_URL + `/api/team/${teamName}/members`, {
+  //     headers: { Authorization: `Bearer ${accessToken}` }
+  //   });
+  // }
+
   async deleteTeam(teamName, accessToken) {
     return await axiosInstance.delete(BASE_URL + `/api/team/${teamName}`,
         {
@@ -240,5 +246,3 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 );
-
-

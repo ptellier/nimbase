@@ -46,10 +46,29 @@ router.get('/:teamName', express.json(), async (req, res) => {
     return res.status(200).json(team);
 });
 
+router.get('/:teamName/members', express.json(), async (req, res) => {
+    const teams = db.collection('teams');
+    const team = await teams.findOne({teamName: req.params.teamName});
+
+    if(!team) {
+        return res.status(404).send("Team not found");
+    }
+
+    console.log("inside teammates route - team: ", team);
+
+    console.log("inside teammates route - memebers: ", team.members);
+
+    return res.status(200).json(team.members);
+
+});
+
 router.post('/:teamName/addMember', express.json (),async (req, res) => {
     const teams = db.collection('teams');
     const {username} = req.body;
     const teamName = req.params.teamName;
+
+    console.log("inside add member route - username", username);
+    console.log("inside add member route - teamname", teamName);
 
     const team = await teams.findOne({teamName: teamName});
 
@@ -91,6 +110,7 @@ router.post('/:name/removeMember', express.json (),async (req, res) => {
 });
 
 router.post('/:teamName/addProject', express.json(), async (req, res) => {
+   console.log("inside add project route");
     const teams = db.collection('teams');
     const {projectName} = req.body;
     const teamName = req.params.teamName;

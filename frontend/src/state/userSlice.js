@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   signupError: undefined,
   loginError: undefined,
     teams: [],
+ //   members: [],
 }
 
 const query = new Query();
@@ -54,6 +55,16 @@ export const fetchUserTeams = createAsyncThunk(
         };
     }
 );
+
+// export const fetchTeammates = createAsyncThunk(
+//     "user/fetchTeammates",
+//     async ({ teamName, accessToken }) => {
+//         const response = await query.getTeammates(teamName, accessToken);
+//         return {
+//             members: response.data
+//         };
+//     }
+// );
 export const userSlice = createSlice({
   name: "user",
   initialState: INITIAL_STATE,
@@ -66,11 +77,16 @@ export const userSlice = createSlice({
         state.loginError = undefined;
         state.signupError = undefined;
         state.teams = [];
+       // state.members = [];
       })
         .addCase(fetchUserTeams.fulfilled, (state, action) => {
             state.teams = action.payload.teams;
             state.accessToken = action.payload.accessToken;
         })
+        // .addCase(fetchTeammates.fulfilled, (state, action) => {
+        //     state.members = action.payload.teams;
+        //     state.accessToken = action.payload.accessToken;
+        // })
         .addCase(signup.fulfilled, (state, action) => {
             if(action.payload.accessToken){
                 state.username = action.payload.username;
@@ -198,3 +214,5 @@ export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
 export const accessTokenSelector = (state) => state.user.accessToken;
 export const teamsSelector = (state) => state.user.teams;
+
+// export const membersSelector = (state) => state.user.members;

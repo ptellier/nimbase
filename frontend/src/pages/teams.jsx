@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import NavBar from "../components/NavBar";
 import { useSelector, useDispatch } from "react-redux";
-import {accessTokenSelector, createTeam, fetchUserTeams, teamsSelector, usernameSelector} from "../state/userSlice";
-
-
-/*
-3. be able to add members to the team
-4. be able to view the members of the team
- */
+import {
+    accessTokenSelector,
+    addTeamMember,
+    createTeam,
+    fetchUserTeams, removeTeamMember,
+    teamsSelector,
+    usernameSelector
+} from "../state/userSlice";
+import "../styles/teams.css";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
@@ -18,6 +20,14 @@ const Teams = () => {
     const [showTeamEditModal, setShowTeamEditModal] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState(null);
 
+    const [showAddMemberForm, setShowAddMemberForm] = useState(false);
+    const [showRemoveMemberForm, setShowRemoveMemberForm] = useState(false);
+
+    const [newMemberUsername, setNewMemberUsername] = useState("");
+    const [newMemberTeamName, setNewMemberTeamName] = useState("");
+
+    const [removedMemberUsername, setRemovedMemberUsername] = useState("");
+    const [removedMemberTeamName, setRemovedMemberTeamName] = useState("");
 
     const dispatch = useDispatch();
 
@@ -25,22 +35,63 @@ const Teams = () => {
     const teams = useSelector(teamsSelector);
     const username = useSelector(usernameSelector);
 
-    const handleAddMember = () => {
-        alert('Add member functionality goes here.');
+    const handleAddMemberButton = () => {
+        setShowAddMemberForm(true);
     };
+
+    const handleAddMemberInForm = (e) => {
+        e.preventDefault();
+
+        // Update the selected team's members with the new member
+        // const updatedTeam = {
+        //     ...selectedTeam,
+        //     members: [...selectedTeam.members, newMemberUsername]
+        // };
+
+        console.log('newMemberTeamName', newMemberTeamName);
+        console.log('newMemberUsername', newMemberUsername);
+
+        dispatch(addTeamMember({newMemberTeamName, newMemberUsername, accessToken}));
+
+        // Clear the form and hide it
+        setNewMemberUsername("");
+        setNewMemberTeamName("");
+        setShowAddMemberForm(false);
+    };
+
+    const handleRemoveMemberInForm = (e) => {
+        e.preventDefault();
+
+        // Update the selected team's members with the new member
+        // const updatedTeam = {
+        //     ...selectedTeam,
+        //     members: [...selectedTeam.members, newMemberUsername]
+        // };
+
+        dispatch(removeTeamMember({removedMemberTeamName, removedMemberUsername, accessToken}));
+
+        // Clear the form and hide it
+        setRemovedMemberUsername("");
+        setRemovedMemberTeamName("");
+        setShowRemoveMemberForm(false);
+    };
+
+
     const handleRemoveMember = () => {
-        alert('Add member functionality goes here.');
+        setShowRemoveMemberForm(true);
     };
 
     const handleViewTeams = () => {
-        setShowTeams(true);
+        setShowTeams(!showTeams);
         console.log('before teams in teams.jsx', teams)
         dispatch(fetchUserTeams({username, accessToken}));
     }
 
-    const handleEditTeamClick = (team) => {
+    const handleEditTeamClick = async (team) => {
         setSelectedTeam(team);
         setShowTeamEditModal(true);
+        setShowAddMemberForm(false);
+        setShowRemoveMemberForm(false);
     };
 
     const closeTeamEditModal = () => {
@@ -48,8 +99,12 @@ const Teams = () => {
         setShowTeamEditModal(false);
     };
     const handleCreateTeamClick = () => {
-        setShowModal(!showModal);
+        setShowModal(true);
     };
+
+    const handleCloseAddTeamModalClick = () => {
+        setShowModal(false);
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -64,16 +119,18 @@ const Teams = () => {
         setTeamName("");
         setDescription("");
         setOwner("");
-        setShowModal(false);
+      //  setShowModal(false);
     }
 
     return (
         <div className="background-image">
             <NavBar />
-            <div className="login-container">
-                <div className="login-box">
+            <div className="teams-container">
+                <div className="teams-box">
                     <h2>Teams</h2>
-                    <button onClick={handleCreateTeamClick}>Create Team</button>
+                    <button className="create-team-button" onClick={handleCreateTeamClick}>
+                        Create Team
+                    </button>
                     {showModal && (
                         <div className="modal">
                             <div className="modal-content">
@@ -82,12 +139,15 @@ const Teams = () => {
                                     <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
                                     <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
                                     <button type="submit">Add Team</button>
+                                    <button className="close-add-team-modal" onClick={handleCloseAddTeamModalClick}>
+                                        Close
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     )}
-                    <button onClick={handleViewTeams}>View Teams</button>
-                    {showTeams && <h3>Your teams</h3>}
+                    <button className="view-teams-button" onClick={handleViewTeams}>View Teams</button>
+                    {showTeams && <h3 className="your-teams-header">Your Teams</h3>}
                     {showTeams && (
                         <table>
                             <thead>
@@ -108,7 +168,7 @@ const Teams = () => {
                                     <td>{team.owner}</td>
                                     <td>{team.members.join(', ')}</td>
                                     <td>{team.projects.join(', ')}</td>
-                                    <td><button onClick={() => handleEditTeamClick(team)}>Edit</button></td>
+                                    <td><button className="edit-button" onClick={() => handleEditTeamClick(team)}>Edit</button></td>
                                 </tr>
                             ))}
                             </tbody>
@@ -121,9 +181,29 @@ const Teams = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={closeTeamEditModal}>&times;</span>
-                        <h3>{selectedTeam.teamName}</h3>
-                        <button onClick={() => handleAddMember()}>Add Member</button>
-                        <button onClick={() => handleRemoveMember()}>Remove Member</button>
+                        <h3 className="blue-bold-heading">{selectedTeam.teamName}</h3>
+                        <h4>Team Members:</h4>
+                        <ul>
+                            {teams.map((team, index) => (
+                                <li key={index}>{team.members}</li>
+                            ))}
+                        </ul>
+                        <button className="add-member-button" onClick={handleAddMemberButton}>Add Member</button>
+                        {showAddMemberForm && (
+                            <form onSubmit={handleAddMemberInForm}>
+                                <input type="text" placeholder="Team Name" value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
+                                <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
+                                <button type="submit">Add</button>
+                            </form>
+                        )}
+                        <button className="remove-member-button" onClick={handleRemoveMember}>Remove Member</button>
+                        {showRemoveMemberForm && (
+                            <form onSubmit={handleRemoveMemberInForm}>
+                                <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
+                                <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
+                                <button type="submit">Remove</button>
+                            </form>
+                        )}
                     </div>
                 </div>
             )}
