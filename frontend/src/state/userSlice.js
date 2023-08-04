@@ -105,12 +105,12 @@ export const userSlice = createSlice({
             state.owner = action.payload.owner;
             state.accessToken = action.payload.accessToken;
         })
-        .addCase(addTeamMember.fulfilled, (state, action) => {
-            state.members = action.payload.members;
-            state.accessToken = action.payload.accessToken;
-        })
+        // .addCase(addTeamMember.fulfilled, (state, action) => {
+        //    // state.members = action.payload.members;
+        //     state.accessToken = action.payload.accessToken;
+        // })
         .addCase(removeTeamMember.fulfilled, (state, action) => {
-            state.members = action.payload.members;
+          //  state.members = action.payload.members;
             state.accessToken = action.payload.accessToken;
         })
         .addCase(addTeamProject.fulfilled, (state, action) => {
@@ -125,7 +125,7 @@ export const userSlice = createSlice({
             state.teamName = action.payload.teamName;
             state.description = action.payload.description;
             state.owner = action.payload.owner;
-            state.members = action.payload.members;
+           // state.members = action.payload.members;
             state.projects = action.payload.projects;
             state.accessToken = action.payload.accessToken;
         })
@@ -136,9 +136,9 @@ export const userSlice = createSlice({
           state.email = action.payload.email;
           state.loginError = action.payload.loginError;
           state.signupError = action.payload.signupError;
-          if(!state.teams[action.payload.username]){
-              state.teams[action.payload.username] = [];
-          }
+          // if(!state.teams[action.payload.username]){
+          //     state.teams[action.payload.username] = []; // TODO this thing fucking sucks
+          // }
         })
       .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected),
         (state, action) => {
@@ -180,6 +180,10 @@ export const getTeam = createAsyncThunk(
 export const addTeamMember = createAsyncThunk(
     "team/addMember",
     async ({teamName, username, accessToken}) => {
+        console.log('inside addTeamMember thunk - team', teamName)
+        console.log('inside addTeamMember thunk - member', username)
+        console.log('inside addTeamMember thunk - token', accessToken)
+
         const response = await query.addTeamMember(teamName, username, accessToken);
         return response.data;
     }
@@ -188,6 +192,9 @@ export const addTeamMember = createAsyncThunk(
 export const removeTeamMember = createAsyncThunk(
     "team/removeMember",
     async ({teamName, username, accessToken}) => {
+        console.log('inside RemoveTeamMember thunk - team', teamName)
+        console.log('inside RemoveTeamMember thunk - member', username)
+        console.log('inside RemoveTeamMember thunk - token', accessToken)
         const response = await query.removeTeamMember(teamName, username, accessToken);
         return response.data;
     }

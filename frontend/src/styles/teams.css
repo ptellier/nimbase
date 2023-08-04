@@ -88,8 +88,23 @@
     font-size: 25px;
     color: #3497d9;
     font-weight: bold;
+
 }
 
 .your-teams-header {
     margin-top: 20px;
+}
+
+.team-members-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.team-members-list li {
+    display: flex;
+    align-items: center;
+}
+
+.team-members-list li span {
+    margin-right: 8px;
 }

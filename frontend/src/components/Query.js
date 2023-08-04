@@ -187,17 +187,13 @@ class Query {
   }
 
   async addTeamMember(teamName, username, accessToken) {
-    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/addMember`, {
-      username: username,
-    }, {
+    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/addMember/${username}`,  {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }
 
   async removeTeamMember(teamName, username, accessToken) {
-    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeMember`, {
-      username: username,
-    }, {
+    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeMember/${username}`,{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }

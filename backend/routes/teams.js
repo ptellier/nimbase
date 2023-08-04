@@ -62,13 +62,10 @@ router.get('/:teamName/members', express.json(), async (req, res) => {
 
 });
 
-router.post('/:teamName/addMember', express.json (),async (req, res) => {
+router.post('/:teamName/addMember/:username', express.json (),async (req, res) => {
     const teams = db.collection('teams');
-    const {username} = req.body;
+    const username = req.params.username;
     const teamName = req.params.teamName;
-
-    console.log("inside add member route - username", username);
-    console.log("inside add member route - teamname", teamName);
 
     const team = await teams.findOne({teamName: teamName});
 
@@ -90,9 +87,9 @@ router.post('/:teamName/addMember', express.json (),async (req, res) => {
     return res.status(200).send("User added to team");
 });
 
-router.post('/:name/removeMember', express.json (),async (req, res) => {
+router.post('/:teamName/removeMember/:username', express.json (),async (req, res) => {
     const teams = db.collection('teams');
-    const {username} = req.body;
+    const username= req.params.username;
     const teamName = req.params.teamName;
 
     const team = await teams.findOne({teamName: teamName});
@@ -100,6 +97,8 @@ router.post('/:name/removeMember', express.json (),async (req, res) => {
     if(!team) {
         return res.status(404).send("Team not found");
     }
+
+    console.log("inside remove member route - team: ", team);
 
     if(!team.members.includes(username)) {
         return res.status(400).send("User not in team");

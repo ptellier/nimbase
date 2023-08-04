@@ -32,6 +32,7 @@ const Teams = () => {
     const dispatch = useDispatch();
 
     const accessToken = useSelector(accessTokenSelector);
+    //const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlbmdhVGVzdCIsImlhdCI6MTY5MTE4NTEzMywiZXhwIjoxNjkxMjcxNTMzfQ.FPF9ejM24rhjQeUhNiT3u6nxmRPca20PxDdMcD7hkng';
     const teams = useSelector(teamsSelector);
     const username = useSelector(usernameSelector);
 
@@ -42,38 +43,25 @@ const Teams = () => {
     const handleAddMemberInForm = (e) => {
         e.preventDefault();
 
-        // Update the selected team's members with the new member
-        // const updatedTeam = {
-        //     ...selectedTeam,
-        //     members: [...selectedTeam.members, newMemberUsername]
-        // };
-
         console.log('newMemberTeamName', newMemberTeamName);
         console.log('newMemberUsername', newMemberUsername);
 
-        dispatch(addTeamMember({newMemberTeamName, newMemberUsername, accessToken}));
+        dispatch(addTeamMember({teamName: newMemberTeamName, username: newMemberUsername, accessToken: accessToken}));
 
-        // Clear the form and hide it
         setNewMemberUsername("");
         setNewMemberTeamName("");
-        setShowAddMemberForm(false);
     };
 
     const handleRemoveMemberInForm = (e) => {
         e.preventDefault();
 
-        // Update the selected team's members with the new member
-        // const updatedTeam = {
-        //     ...selectedTeam,
-        //     members: [...selectedTeam.members, newMemberUsername]
-        // };
+        console.log('removedMemberTeamName', removedMemberTeamName);
+        console.log('removedMemberUsername', removedMemberUsername);
 
-        dispatch(removeTeamMember({removedMemberTeamName, removedMemberUsername, accessToken}));
+        dispatch(removeTeamMember({teamName: removedMemberTeamName, username: removedMemberUsername, accessToken: accessToken}));
 
-        // Clear the form and hide it
         setRemovedMemberUsername("");
         setRemovedMemberTeamName("");
-        setShowRemoveMemberForm(false);
     };
 
 
@@ -105,6 +93,14 @@ const Teams = () => {
 
     const handleCloseAddTeamModalClick = () => {
         setShowModal(false);
+    }
+
+    const handleCloseAddMemberModalClick = () => {
+        setShowAddMemberForm(false);
+    }
+
+    const handleCloseRemoveMemberModalClick = () => {
+        setShowRemoveMemberForm(false);
     }
 
     const handleSubmit = (e) => {
@@ -183,17 +179,21 @@ const Teams = () => {
                         <span className="close" onClick={closeTeamEditModal}>&times;</span>
                         <h3 className="blue-bold-heading">{selectedTeam.teamName}</h3>
                         <h4>Team Members:</h4>
-                        <ul>
-                            {teams.map((team, index) => (
-                                <li key={index}>{team.members}</li>
+                        <ul className="team-members-list">
+                            {selectedTeam.members.map((member, index) => (
+                                <li key={index}><span>*</span> {member}</li>
                             ))}
                         </ul>
                         <button className="add-member-button" onClick={handleAddMemberButton}>Add Member</button>
                         {showAddMemberForm && (
                             <form onSubmit={handleAddMemberInForm}>
-                                <input type="text" placeholder="Team Name" value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
+                                {/*<input type="text" placeholder={`${selectedTeam.teamName}`} value={newMemberTeamName} onChange={handleNewMemberTeamNameChange} />*/}
+                                <input type="text" placeholder={"TeamName"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
                                 <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
                                 <button type="submit">Add</button>
+                                <button className="close-add-team-modal" onClick={handleCloseAddMemberModalClick}>
+                                    Close
+                                </button>
                             </form>
                         )}
                         <button className="remove-member-button" onClick={handleRemoveMember}>Remove Member</button>
@@ -202,6 +202,9 @@ const Teams = () => {
                                 <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
                                 <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
                                 <button type="submit">Remove</button>
+                                <button className="close-add-team-modal" onClick={handleCloseRemoveMemberModalClick}>
+                                    Close
+                                </button>
                             </form>
                         )}
                     </div>

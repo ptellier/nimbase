@@ -16,32 +16,32 @@ router.get('/:username/projects', express.json(), async (req, res) => {
   res.status(200).send(result);
 });
 router.get('/:username/teams', express.json(), async (req, res) => {
-  // const username = req.params.username;
-  // console.log("username: ", username);
-  // const teams = db.collection('teams');
-  // const createdTeam = await teams.find({owner: username}).toArray();
-  // if(createdTeam.length === 0) {
-  //   return res.status(404).send("No teams found");
-  // }
+  const username = req.params.username;
+  console.log("username: ", username);
+  const teams = db.collection('teams');
+  const usersTeams = await teams.find({owner: username}).toArray();
+  if(usersTeams.length === 0) {
+    return res.status(404).send("No teams found");
+  }
 
-  const tezz = [
-    {
-      teamName: 'Team A',
-      description: 'Sample description for Team A',
-      owner: 'John Doe',
-      members: ['Alice', 'Bob', 'Charlie'],
-      projects: ['Project 1', 'Project 2'],
-    },
-    {
-      teamName: 'Team B',
-      description: 'Sample description for Team B',
-      owner: 'Jane Smith',
-      members: ['Eve', 'Frank', 'Grace'],
-      projects: ['Project X', 'Project Y'],
-    },
-  ];
-    return res.status(200).json(tezz);
-  //res.status(200).json(createdTeam);
+  // const tezz = [
+  //   {
+  //     teamName: 'Team A',
+  //     description: 'Sample description for Team A',
+  //     owner: 'John Doe',
+  //     members: ['Alice', 'Bob', 'Charlie'],
+  //     projects: ['Project 1', 'Project 2'],
+  //   },
+  //   {
+  //     teamName: 'Team B',
+  //     description: 'Sample description for Team B',
+  //     owner: 'Jane Smith',
+  //     members: ['Eve', 'Frank', 'Grace'],
+  //     projects: ['Project X', 'Project Y'],
+  //   },
+  // ];
+  //   return res.status(200).json(tezz);
+  res.status(200).json(usersTeams);
 });
 
 module.exports = router;
