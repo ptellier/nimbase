@@ -50,6 +50,7 @@ export const fetchUserTeams = createAsyncThunk(
     "user/fetchTeams",
     async ({ username, accessToken }) => {
         const response = await query.getUserTeams(username, accessToken);
+        console.log('inside fetch', response)
         return {
             teams: response.data
         };
@@ -77,7 +78,6 @@ export const userSlice = createSlice({
         state.loginError = undefined;
         state.signupError = undefined;
         state.teams = [];
-       // state.members = [];
       })
         .addCase(fetchUserTeams.fulfilled, (state, action) => {
             state.teams = action.payload.teams;

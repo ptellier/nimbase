@@ -85,6 +85,7 @@ const Teams = () => {
         setShowTeams(!showTeams);
         console.log('before teams in teams.jsx', teams)
         dispatch(fetchUserTeams({username, accessToken}));
+        console.log('after teams in teams.jsx', teams)
     }
 
     const handleEditTeamClick = async (team) => {
@@ -157,7 +158,6 @@ const Teams = () => {
                                 <th>Owner</th>
                                 <th>Members</th>
                                 <th>Projects</th>
-                                <th>Edit</th>
                             </tr>
                             </thead>
                             <tbody>
