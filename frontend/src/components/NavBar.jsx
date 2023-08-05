@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {emailSelector, logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleUser} from "@fortawesome/free-solid-svg-icons";
-import {GoogleLogout} from "react-google-login";
+import {GoogleLogout} from "@leecheuk/react-google-login";
 const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
 
 const NavBar = () => {
