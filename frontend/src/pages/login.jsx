@@ -9,7 +9,7 @@ import {loginErrorMessageSelector, login, googleLogin} from "../state/userSlice"
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {Button} from "@chakra-ui/react";
-import {GoogleLogin} from "react-google-login";
+import {GoogleLogin} from "@leecheuk/react-google-login";
 const CLIENT_ID= "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
 const Login = () => {
     const [username, setUsername] = useState("");
