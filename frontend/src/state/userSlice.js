@@ -11,11 +11,12 @@ import {
     addTeamMember,
     removeTeamMember,
     addTeamProject,
-    removeTeamProject, fetchUserTeams,
+    removeTeamProject,
+    fetchUserTeams,
 } from "./teamThunks";
 import Query from "../components/Query";
 export {refresh, logout, login, googleLogin, signup} from "./userThunks";
-export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam} from "./teamThunks"
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks"
 
 export let INITIAL_STATE = {
     accessToken: "",

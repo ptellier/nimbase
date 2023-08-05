@@ -3,16 +3,18 @@ import NavBar from "../components/NavBar";
 import { useSelector, useDispatch } from "react-redux";
 import {
     accessTokenSelector,
+    addTeamProject,
+    removeTeamProject,
     addTeamMember,
     removeTeamMember,
     createTeam,
     fetchUserTeams,
-    addTeamProject,
-    removeTeamProject,
     teamsSelector,
     usernameSelector
 } from "../state/userSlice";
 import "../styles/teams.css";
+
+//import   { addTeamProject, removeTeamProject } from "../state/teamThunks";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
@@ -90,8 +92,8 @@ const Teams = () => {
     const handleAddProjectInForm = (e) => {
         e.preventDefault();
 
-        // console.log('added project - name', newProjectName);
-        // console.log('added project -  team name', newProjectTeamName);
+        console.log('added project - name', newProjectName);
+        console.log('added project -  team name', newProjectTeamName);
 
         dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken}));
 
@@ -102,8 +104,8 @@ const Teams = () => {
     const handleRemoveProjectInForm = (e) => {
         e.preventDefault();
 
-        // console.log('removed project - name', removedProjectName);
-        // console.log('removed project -  team name', removedProjectTeamName);
+        console.log('removed project - name', removedProjectName);
+        console.log('removed project -  team name', removedProjectTeamName);
 
         dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken}));
 
