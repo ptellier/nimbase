@@ -1,5 +1,6 @@
 import '../styles/home.css';
 import NavBar from "../components/NavBar";
+import {Heading} from "@chakra-ui/react";
 
 const Home = () => {
   return (
@@ -11,13 +12,18 @@ const Home = () => {
           backgroundImage: `url(${process.env.PUBLIC_URL + '/img/unsplash_cloud_background.jpg'})`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
+          backgroundPosition: "center bottom",
         }}>
           <NavBar />
           <div style={{margin:"auto", width: "100%"}}>
-            <h1 id="title" className="red-brick-gradient-text"> Nimbase </h1>
-            <h1 id="subtitle">Your base in the Cloud</h1>
-            <h3 id="subsubtitle">No hassle serverless hosting of</h3>
-            <h3 id="subsubtitle">your containerized web application</h3>
+            <Heading as="h1" id="title" className="red-brick-gradient-text"
+                     fontSize={{base: '48px', sm: '56px', md: '64px'}}> Nimbase </Heading>
+            <Heading as="h2" id="subtitle"
+                     fontSize={{base: '24px', sm: '32px', md: '48px'}}>Your base in the Cloud</Heading>
+            <Heading as="h3" id="subsubtitle"
+                     fontSize={{base: '16px', sm: '18px', md: '24px'}}>No hassle serverless hosting of</Heading>
+            <Heading as="h3" id="subsubtitle"
+                     fontSize={{base: '16px', sm: '18px', md: '24px'}}>your containerized web application</Heading>
           </div>
         </div>
       </header>

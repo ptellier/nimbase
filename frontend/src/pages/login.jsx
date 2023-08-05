@@ -1,16 +1,17 @@
 import NavBar from "../components/NavBar";
 import '../styles/login.css';
 import {useState} from "react";
-import {faGoogle} from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Field from "../components/Field";
 import {useDispatch, useSelector} from "react-redux";
 import {loginErrorMessageSelector, login, googleLogin} from "../state/userSlice";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
-import {Button} from "@chakra-ui/react";
+import {Button, Heading} from "@chakra-ui/react";
 import {GoogleLogin} from "@leecheuk/react-google-login";
+
 const CLIENT_ID= "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -38,7 +39,7 @@ const Login = () => {
         });
     }
 
-    const onFailure = (res) => {
+    const onFailure = () => {
         console.log("login failed");
         navigate("/");
     }
@@ -48,7 +49,7 @@ const Login = () => {
       <NavBar/>
         <div className="login-container">
             <div className="login-box">
-                <h2>Login</h2>
+                <Heading as="h1" fontSize="32px" fontWeight={500}>Login</Heading>
                 {(errorMessage) ?
                   <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>
                   :
