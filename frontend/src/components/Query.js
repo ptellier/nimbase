@@ -114,6 +114,12 @@ class Query {
       throw new Error(err.message);
     }
   }
+  
+  async googleLogin(tokenId){
+    return await axiosInstance.post(BASE_URL + '/api/auth/google/login', {
+      tokenId: tokenId
+    }).catch((err) => { console.log(err) });
+  }
 
   async devOpsClone(github_url, name, env_variables, _id, accessToken) {
     const response = await axiosInstance.post(BASE_URL + '/api/devops/clone', {
@@ -170,13 +176,12 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);
         } catch (err) {
+          window.location.href = '/login';
           console.log(err);
-          throw new Error(err.message);
         }
       }
 
       return Promise.reject(error);
     }
 );
-
 

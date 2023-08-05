@@ -69,7 +69,7 @@ export const userSlice = createSlice({
         .addCase(refresh.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
         })
-      .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled),
+      .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled, googleLogin.fulfilled),
         (state, action) => {
           state.accessToken = action.payload.accessToken;
           state.username = action.payload.username;
@@ -98,7 +98,16 @@ export const refresh = createAsyncThunk(
     }
 );
 
+export const googleLogin = createAsyncThunk(
+    "user/googleLogin",
+    async (data) => {
+        const response = await query.googleLogin(data.tokenId);
+        return response.data;
+    }
+)
+
 export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
+export const emailSelector = (state) => state.user.email;
 export const accessTokenSelector = (state) => state.user.accessToken;
