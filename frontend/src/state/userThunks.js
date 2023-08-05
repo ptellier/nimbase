@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {INITIAL_STATE, query} from "./initialState";
+import {INITIAL_STATE, query} from "./userSlice";
 
 
 export const login = createAsyncThunk(

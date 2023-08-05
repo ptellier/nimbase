@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {query} from "./initialState";
+import {query} from "./userSlice";
 
 export const fetchUserTeams = createAsyncThunk(
     "user/fetchTeams",
@@ -63,13 +63,6 @@ export const removeTeamProject = createAsyncThunk(
     "team/removeProject",
     async ({teamName, projectName, accessToken}) => {
         const response = await query.removeTeamProject(teamName, projectName, accessToken);
-        return response.data;
-    }
-)
-export const googleLogin = createAsyncThunk(
-    "user/googleLogin",
-    async (data) => {
-        const response = await query.googleLogin(data.tokenId);
         return response.data;
     }
 )
