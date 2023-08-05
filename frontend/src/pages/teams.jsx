@@ -13,7 +13,7 @@ import {
     usernameSelector
 } from "../state/userSlice";
 import "../styles/teams.css";
-
+import "../styles/layout.css";
 //import   { addTeamProject, removeTeamProject } from "../state/teamThunks";
 
 const Teams = () => {
@@ -173,11 +173,11 @@ const Teams = () => {
     }
 
     return (
-        <div className="background-image">
+        <div className={"background-image"}>
             <NavBar />
-            <div className="teams-container">
-                <div className="teams-box">
-                    <h2>Teams</h2>
+            <h1 className={"teams-header"}>Teams</h1>
+            <div className={"teams-container"}>
+                <div className={"teams-box"}>
                     <button className="create-team-button" onClick={handleCreateTeamClick}>
                         Create Team
                     </button>
@@ -188,7 +188,7 @@ const Teams = () => {
                                     <input type="text" placeholder="Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                                     <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
                                     <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
-                                    <button type="submit">Add Team</button>
+                                    <button className="add-team-modal-button" type="submit">Add Team</button>
                                     <button className="close-add-team-modal" onClick={handleCloseAddTeamModalClick}>
                                         Close
                                     </button>
@@ -199,6 +199,7 @@ const Teams = () => {
                     <button className="view-teams-button" onClick={handleViewTeams}>View Teams</button>
                     {showTeams && <h3 className="your-teams-header">Your Teams</h3>}
                     {showTeams && (
+                        <div className="table-container">
                         <table>
                             <thead>
                             <tr>
@@ -222,6 +223,7 @@ const Teams = () => {
                             ))}
                             </tbody>
                         </table>
+                        </div>
                     )}
                 </div>
             </div>
@@ -234,7 +236,7 @@ const Teams = () => {
                         <h4>Team Members:</h4>
                         <ul className="team-members-list">
                             {selectedTeam.members.map((member, index) => (
-                                <li key={index}><span>*</span> {member}</li>
+                                <li key={index}><span></span> {member}</li>
                             ))}
                         </ul>
                         <button className="add-member-button" onClick={handleAddMemberButton}>Add Member</button>
