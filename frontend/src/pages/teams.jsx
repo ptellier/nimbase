@@ -4,8 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     accessTokenSelector,
     addTeamMember,
+    removeTeamMember,
     createTeam,
-    fetchUserTeams, removeTeamMember,
+    fetchUserTeams,
+    addTeamProject,
+    removeTeamProject,
     teamsSelector,
     usernameSelector
 } from "../state/userSlice";
@@ -22,12 +25,20 @@ const Teams = () => {
 
     const [showAddMemberForm, setShowAddMemberForm] = useState(false);
     const [showRemoveMemberForm, setShowRemoveMemberForm] = useState(false);
+    const [showAddProjectForm, setShowAddProjectForm] = useState(false);
+    const [showRemoveProjectForm, setShowRemoveProjectForm] = useState(false);
 
     const [newMemberUsername, setNewMemberUsername] = useState("");
     const [newMemberTeamName, setNewMemberTeamName] = useState("");
 
     const [removedMemberUsername, setRemovedMemberUsername] = useState("");
     const [removedMemberTeamName, setRemovedMemberTeamName] = useState("");
+
+    const [newProjectName, setNewProjectName] = useState("");
+    const [newProjectTeamName, setNewProjectTeamName] = useState("");
+
+    const [removedProjectName, setRemovedProjectName] = useState("");
+    const [removedProjectTeamName, setRemovedProjectTeamName] = useState("");
 
     const dispatch = useDispatch();
 
@@ -40,11 +51,23 @@ const Teams = () => {
         setShowAddMemberForm(true);
     };
 
+    const handleRemoveMember = () => {
+        setShowRemoveMemberForm(true);
+    };
+
+    const handleAddProjectButton = () => {
+        setShowAddProjectForm(true);
+    }
+
+    const handleRemoveProjectButton = () => {
+        setShowRemoveProjectForm(true);
+    }
+
     const handleAddMemberInForm = (e) => {
         e.preventDefault();
 
-        console.log('newMemberTeamName', newMemberTeamName);
-        console.log('newMemberUsername', newMemberUsername);
+        // console.log('newMemberTeamName', newMemberTeamName);
+        // console.log('newMemberUsername', newMemberUsername);
 
         dispatch(addTeamMember({teamName: newMemberTeamName, username: newMemberUsername, accessToken: accessToken}));
 
@@ -55,8 +78,8 @@ const Teams = () => {
     const handleRemoveMemberInForm = (e) => {
         e.preventDefault();
 
-        console.log('removedMemberTeamName', removedMemberTeamName);
-        console.log('removedMemberUsername', removedMemberUsername);
+        // console.log('removedMemberTeamName', removedMemberTeamName);
+        // console.log('removedMemberUsername', removedMemberUsername);
 
         dispatch(removeTeamMember({teamName: removedMemberTeamName, username: removedMemberUsername, accessToken: accessToken}));
 
@@ -64,10 +87,30 @@ const Teams = () => {
         setRemovedMemberTeamName("");
     };
 
+    const handleAddProjectInForm = (e) => {
+        e.preventDefault();
 
-    const handleRemoveMember = () => {
-        setShowRemoveMemberForm(true);
-    };
+        // console.log('added project - name', newProjectName);
+        // console.log('added project -  team name', newProjectTeamName);
+
+        dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken}));
+
+        setNewProjectName("");
+        setNewProjectTeamName("");
+    }
+
+    const handleRemoveProjectInForm = (e) => {
+        e.preventDefault();
+
+        // console.log('removed project - name', removedProjectName);
+        // console.log('removed project -  team name', removedProjectTeamName);
+
+        dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken}));
+
+        setRemovedProjectName("");
+        setRemovedProjectTeamName("");
+    }
+
 
     const handleViewTeams = () => {
         setShowTeams(!showTeams);
@@ -101,6 +144,14 @@ const Teams = () => {
 
     const handleCloseRemoveMemberModalClick = () => {
         setShowRemoveMemberForm(false);
+    }
+
+    const handleCloseAddProjectModalClick = () => {
+        setShowAddProjectForm(false);
+    }
+
+    const handleCloseRemoveProjectModalClick = () => {
+        setShowRemoveProjectForm(false);
     }
 
     const handleSubmit = (e) => {
@@ -188,7 +239,7 @@ const Teams = () => {
                         {showAddMemberForm && (
                             <form onSubmit={handleAddMemberInForm}>
                                 {/*<input type="text" placeholder={`${selectedTeam.teamName}`} value={newMemberTeamName} onChange={handleNewMemberTeamNameChange} />*/}
-                                <input type="text" placeholder={"TeamName"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
+                                <input type="text" placeholder={"Team Name"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
                                 <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
                                 <button type="submit">Add</button>
                                 <button className="close-add-team-modal" onClick={handleCloseAddMemberModalClick}>
@@ -203,6 +254,35 @@ const Teams = () => {
                                 <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
                                 <button type="submit">Remove</button>
                                 <button className="close-add-team-modal" onClick={handleCloseRemoveMemberModalClick}>
+                                    Close
+                                </button>
+                            </form>
+                        )}
+                        <h5>Team Projects:</h5>
+                        <ul className="team-members-list">
+                            {selectedTeam.projects.map((project, index) =>
+                                <li key={index}><span>*</span> {project}</li>
+                            )}
+                        </ul>
+                        <button className="add-member-button" onClick={handleAddProjectButton}>Add Project</button>
+                        {showAddProjectForm && (
+                            <form onSubmit={handleAddProjectInForm}>
+                                {/*<input type="text" placeholder={`${selectedTeam.teamName}`} value={newMemberTeamName} onChange={handleNewMemberTeamNameChange} />*/}
+                                <input type="text" placeholder={"TeamName"} value={newProjectTeamName} onChange={(e) => setNewProjectTeamName(e.target.value)} />
+                                <input type="text" placeholder="Project Name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)}/>
+                                <button type="submit">Add</button>
+                                <button className="close-add-team-modal" onClick={handleCloseAddProjectModalClick}>
+                                    Close
+                                </button>
+                            </form>
+                        )}
+                        <button className="remove-member-button" onClick={handleRemoveProjectButton}>Remove Project</button>
+                        {showRemoveProjectForm && (
+                            <form onSubmit={handleRemoveProjectInForm}>
+                                <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
+                                <input type="text" placeholder="Project Name" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
+                                <button type="submit">Remove</button>
+                                <button className="close-add-team-modal" onClick={handleCloseRemoveProjectModalClick}>
                                     Close
                                 </button>
                             </form>
