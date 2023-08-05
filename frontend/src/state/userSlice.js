@@ -1,11 +1,9 @@
 import {createSlice, isAnyOf} from "@reduxjs/toolkit";
-import {INITIAL_STATE} from "./initialState";
 import {
     login,
     logout,
     signup,
-    refresh,
-    googleLogin,
+    googleLogin, refresh,
 } from "./userThunks";
 import {
     createTeam,
@@ -15,7 +13,20 @@ import {
     addTeamProject,
     removeTeamProject, fetchUserTeams,
 } from "./teamThunks";
+import Query from "../components/Query";
+export {refresh, logout, login, googleLogin, signup} from "./userThunks";
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam} from "./teamThunks"
 
+export let INITIAL_STATE = {
+    accessToken: "",
+    username: undefined,
+    email: undefined,
+    signupError: undefined,
+    loginError: undefined,
+    teams: [],
+    //   members: [],
+}
+export const query = new Query();
 export const userSlice = createSlice({
   name: "user",
   initialState: INITIAL_STATE,
@@ -96,3 +107,10 @@ export const userSlice = createSlice({
       });
   }
 })
+
+export const loginErrorMessageSelector = (state) => state.user.loginError;
+export const signupErrorMessageSelector = (state) => state.user.signupError;
+export const usernameSelector = (state) => state.user.username;
+export const accessTokenSelector = (state) => state.user.accessToken;
+export const teamsSelector = (state) => state.user.teams;
+export const emailSelector = (state) => state.user.email;
