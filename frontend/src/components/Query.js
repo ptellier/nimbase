@@ -3,7 +3,6 @@ import axios from "axios";
 const mockProjects = require("../static/mockData/mock_projects.json");
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
-//const BASE_URL = "http://localhost:8080"
 
 const axiosInstance = axios.create({
   withCredentials: true,
@@ -116,6 +115,14 @@ class Query {
       throw new Error(err.message);
     }
   }
+
+  async googleLogin(tokenId){
+    return await axiosInstance.post(BASE_URL + '/api/auth/google/login', {
+      tokenId: tokenId
+    }).catch((err) => { console.log(err) });
+  }
+
+
 
   async devOpsClone(github_url, name, env_variables, entry_port, _id, accessToken) {
     const response = await axiosInstance.post(BASE_URL + '/api/devops/clone', {

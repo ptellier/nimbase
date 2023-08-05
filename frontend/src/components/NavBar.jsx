@@ -1,14 +1,17 @@
 import NimbaseIcon from "../static/svg/nimbase_icon.svg";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {logout, usernameSelector} from "../state/userSlice";
+import {emailSelector, logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleUser} from "@fortawesome/free-solid-svg-icons";
+import {GoogleLogout} from "react-google-login";
+const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
 
 const NavBar = () => {
   const username = useSelector(usernameSelector);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const email = useSelector(emailSelector);
 
   const onClickLogout = () => {
     dispatch(logout());
@@ -35,7 +38,12 @@ const NavBar = () => {
             <>
               <div className="nav-text">{username}</div>
               <h1><FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser} size="xl"/></h1>
-              <div className="nav-item" onClick={onClickLogout}> Logout</div>
+              {username !== email ? <div className="nav-item" onClick={onClickLogout}> Logout</div> :
+                  <GoogleLogout
+                        clientId={CLIENT_ID}
+                        buttonText="Logout"
+                        onLogoutSuccess={onClickLogout}
+                    />}
             </>
           </div>
           :
