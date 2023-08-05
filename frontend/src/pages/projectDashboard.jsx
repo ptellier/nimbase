@@ -66,6 +66,7 @@ const ProjectDashboard = () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
       const result = await query.deleteProject(deletePopupId, accessToken);
       if (result.success === true) {
+        const deldevops = await query.devOpsRemove(deletePopupId, accessToken);
         let newProjects = [...projects];
         newProjects.splice(deletePopupIndex, 1);
         setProjects(newProjects);
@@ -135,13 +136,25 @@ const ProjectDashboard = () => {
                 <div>
                   <div className="dashboard-text-container">
                     <div className="dashboard-project-title-and-icon">
-                      <h3>{project.name}</h3>
+                      <h3>
+                        {/* create a link to external site with project.url */}
+                          <a href= {project.url || "#"}
+                            style={{textDecoration: "none", color: "black"}}
+                            target="_blank"
+                            rel="noreferrer"
+                            >
+                            {project.name}
+                          </a>
+                        
+                      </h3>
                       <Tooltip label={(project.public) ? "Project is publicly hosted to internet" : "Project is private"}>
                         <FontAwesomeIcon icon={(project.public) ? faUnlock : faLock} color={(project.public) ? "#456fb7" : "firebrick"}/>
                       </Tooltip>
                       <ProjectStatus project={project} status={deployState.NOT_CLONED}/>
                     </div>
-                    <p>{project.description}</p>
+                    <Tooltip label={project.description} bg="white" color="black">
+                      <p>{project.description}</p>
+                    </Tooltip>
                     <div className="dashboard-project-buttons">
                       <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>
                       <Button variant="customDefault" onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></Button>
