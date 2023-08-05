@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db  = require('../database/dbConn.js');
 const router = express.Router();
+const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(CLIENT_ID);
 
 const MAX_AGE_OF_REFRESH_TOKEN_COOKIE = 24 * 60 * 60 * 1000; // 1 day (in milliseconds)
 const EXPIRY_TIME_OF_ACCESS_TOKEN = '1d';
@@ -111,4 +114,45 @@ router.post('/refresh', async (req, res) => {
   });
 });
 
+router.post('/google/login', async (req, res) => {
+  const {tokenId} = req.body;
+  const response = await client.verifyIdToken({idToken: tokenId, audience: CLIENT_ID});
+  const { email_verified, name, email } = response.getPayload();
+
+  if(email_verified) {
+    const users = db.collection("users");
+    let user = await users.findOne({email: email});
+    if (!user) {
+      user = {username: email, email: email, project_ids: []};
+      await users.insertOne(user);
+    }
+
+    const accessToken = jwt.sign(
+        {"username": user.username},
+        process.env.ACCESS_TOKEN_SECRET,
+        {expiresIn: EXPIRY_TIME_OF_ACCESS_TOKEN}
+    );
+
+    const refreshToken = jwt.sign(
+        { "username": user.username },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: EXPIRY_TIME_OF_REFRESH_TOKEN }
+    );
+
+    await users.updateOne({username: user.username}, { $set: {refreshToken: refreshToken}});
+
+    res.cookie('jwt', refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: MAX_AGE_OF_REFRESH_TOKEN_COOKIE
+    });
+    res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.json({ username: user.username, email: user.email, accessToken });
+  } else {
+    res.status(401).json({ 'message': 'Email not verified by Google'});
+  }
+});
 module.exports = router;

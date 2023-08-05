@@ -1,71 +1,21 @@
-import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
-import Query from "../components/Query";
+import {createSlice, isAnyOf} from "@reduxjs/toolkit";
+import {INITIAL_STATE} from "./initialState";
+import {
+    login,
+    logout,
+    signup,
+    refresh,
+    googleLogin,
+} from "./userThunks";
+import {
+    createTeam,
+    getTeam,
+    addTeamMember,
+    removeTeamMember,
+    addTeamProject,
+    removeTeamProject, fetchUserTeams,
+} from "./teamThunks";
 
-const INITIAL_STATE = {
-  accessToken: "",
-  username: undefined,
-  email: undefined,
-  signupError: undefined,
-  loginError: undefined,
-    teams: [],
- //   members: [],
-}
-
-const query = new Query();
-
-export const login = createAsyncThunk(
-  "user/login",
-  async (data) => {
-    const response = await query.loginUser(data.username, data.password);
-    const payload = response.data
-    payload.loginError = response.data.message;
-    console.log(payload);
-    return payload;
-  }
-)
-
-export const signup = createAsyncThunk(
-  "user/signup",
-  async (data) => {
-    const responseCreate = await query.createUser(data.firstName, data.lastName, data.username, data.password, data.email);
-    if (responseCreate.data.message) {
-      const payload = {...INITIAL_STATE};
-      payload.signupError = responseCreate.data.message;
-      return payload;
-    } else {
-      const responseLogin = await query.loginUser(data.username, data.password);
-      return responseLogin.data;
-    }
-  }
-)
-
-export const logout = createAsyncThunk(
-  "user/logout",
-  async () => {
-    const response = await query.logoutUser();
-    return response.data;
-  }
-)
-export const fetchUserTeams = createAsyncThunk(
-    "user/fetchTeams",
-    async ({ username, accessToken }) => {
-        const response = await query.getUserTeams(username, accessToken);
-        console.log('inside fetch', response)
-        return {
-            teams: response.data
-        };
-    }
-);
-
-// export const fetchTeammates = createAsyncThunk(
-//     "user/fetchTeammates",
-//     async ({ teamName, accessToken }) => {
-//         const response = await query.getTeammates(teamName, accessToken);
-//         return {
-//             members: response.data
-//         };
-//     }
-// );
 export const userSlice = createSlice({
   name: "user",
   initialState: INITIAL_STATE,
@@ -129,13 +79,13 @@ export const userSlice = createSlice({
             state.projects = action.payload.projects;
             state.accessToken = action.payload.accessToken;
         })
-      .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled),
-        (state, action) => {
-          state.accessToken = action.payload.accessToken;
-          state.username = action.payload.username;
-          state.email = action.payload.email;
-          state.loginError = action.payload.loginError;
-          state.signupError = action.payload.signupError;
+        .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled, googleLogin.fulfilled),
+            (state, action) => {
+                state.accessToken = action.payload.accessToken;
+                state.username = action.payload.username;
+                state.email = action.payload.email;
+                state.loginError = action.payload.loginError;
+                state.signupError = action.payload.signupError;
           // if(!state.teams[action.payload.username]){
           //     state.teams[action.payload.username] = []; // TODO this thing fucking sucks
           // }
@@ -143,83 +93,6 @@ export const userSlice = createSlice({
       .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected),
         (state, action) => {
         console.log("error: thunk rejected; ", action.error.message);
-      })
+      });
   }
 })
-// refresh async thunk here
-export const refresh = createAsyncThunk(
-    "user/refresh",
-    async (_, thunkAPI) => {
-        try {
-            const accessToken = await query.refreshAccessToken();
-            return { accessToken };
-        } catch (error) {
-            console.log(error);
-            thunkAPI.dispatch(logout());
-            return thunkAPI.rejectWithValue(error.message);
-        }
-    }
-);
-
-export const createTeam = createAsyncThunk(
-    "team/create",
-    async ({teamName, description, owner, accessToken}) => {
-        const response = await query.createTeam(teamName, description, owner, accessToken);
-        return response.data;
-    }
-)
-
-export const getTeam = createAsyncThunk(
-    "team/get",
-    async ({teamName, accessToken}) => {
-        const response = await query.getTeam(teamName, accessToken);
-        return response.data;
-    }
-)
-
-export const addTeamMember = createAsyncThunk(
-    "team/addMember",
-    async ({teamName, username, accessToken}) => {
-        console.log('inside addTeamMember thunk - team', teamName)
-        console.log('inside addTeamMember thunk - member', username)
-        console.log('inside addTeamMember thunk - token', accessToken)
-
-        const response = await query.addTeamMember(teamName, username, accessToken);
-        return response.data;
-    }
-)
-
-export const removeTeamMember = createAsyncThunk(
-    "team/removeMember",
-    async ({teamName, username, accessToken}) => {
-        console.log('inside RemoveTeamMember thunk - team', teamName)
-        console.log('inside RemoveTeamMember thunk - member', username)
-        console.log('inside RemoveTeamMember thunk - token', accessToken)
-        const response = await query.removeTeamMember(teamName, username, accessToken);
-        return response.data;
-    }
-)
-
-export const addTeamProject = createAsyncThunk(
-    "team/addProject",
-    async ({teamName, projectName, accessToken}) => {
-        const response = await query.addTeamProject(teamName, projectName, accessToken);
-        return response.data;
-    }
-)
-
-export const removeTeamProject = createAsyncThunk(
-    "team/removeProject",
-    async ({teamName, projectName, accessToken}) => {
-        const response = await query.removeTeamProject(teamName, projectName, accessToken);
-        return response.data;
-    }
-)
-
-export const loginErrorMessageSelector = (state) => state.user.loginError;
-export const signupErrorMessageSelector = (state) => state.user.signupError;
-export const usernameSelector = (state) => state.user.username;
-export const accessTokenSelector = (state) => state.user.accessToken;
-export const teamsSelector = (state) => state.user.teams;
-
-// export const membersSelector = (state) => state.user.members;
