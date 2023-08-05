@@ -7,7 +7,7 @@ import {signup, signupErrorMessageSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
-import {Button} from "@chakra-ui/react";
+import {Button, Heading} from "@chakra-ui/react";
 
 // REFERENCE: regex for password/email validation generated with chatGPT
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -108,7 +108,7 @@ const Signup = () => {
         <div className={"signup-container"}>
             <div className={"signup-box"}>
                 <form className={"signup-form"} onSubmit={handleSubmit}>
-                    <h2>Sign Up</h2>
+                    <Heading as="h1" fontSize="32px" fontWeight={500} mb="20px" align="center">Sign Up</Heading>
 
                     {(errorMessage) ?
                       <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>

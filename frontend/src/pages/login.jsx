@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginErrorMessageSelector, login} from "../state/userSlice";
 import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
-import {Button} from "@chakra-ui/react";
+import {Button, Heading} from "@chakra-ui/react";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -36,7 +36,7 @@ const Login = () => {
       <NavBar/>
         <div className="login-container">
             <div className="login-box">
-                <h2>Login</h2>
+                <Heading as="h1" fontSize="32px" fontWeight={500}>Login</Heading>
                 {(errorMessage) ?
                   <div className="error-text"><FontAwesomeIcon icon={faTriangleExclamation} /> {errorMessage}</div>
                   :
