@@ -111,7 +111,6 @@ router.post('/:teamName/removeMember/:username', express.json (),async (req, res
     return res.status(200).send("User removed from team");
 });
 
-// route to get all teams in mongodb database
 router.get('/getTeams', async (req, res) => {
     const projects = db.collection('projects');
     const allTeams = await projects.find().toArray();
@@ -123,9 +122,6 @@ router.post('/:teamName/addProject/:projectName', express.json(), async (req, re
     const projectName = req.params.projectName;
     const teamName = req.params.teamName;
     const {username} = req.body;
-
-    //console.log(req.body);
-    //console.log(projectName);
 
     const team = await teams.findOne({teamName: teamName});
 
@@ -142,8 +138,6 @@ router.post('/:teamName/addProject/:projectName', express.json(), async (req, re
     if (!project) {
         return res.status(404).send("Project does not exist");
     }
-
-    //console.log (project);
 
    if (project.owner !== username) {
        return res.status(401).send("You are not the owner of this project");
@@ -169,14 +163,12 @@ router.post('/:teamName/removeProject/:projectName', express.json(), async (req,
         return res.status(400).send("Project not in team");
     }
 
-    // if you want to remove a project from a team, you need to be the projects owner
+    //if you want to remove a project from a team, you need to be the projects owner
     const projects = db.collection("projects");
     const project = await projects.findOne({name: projectName});
     if (!project) {
         return res.status(404).send("Project does not exist");
     }
-
-    //console.log (project);
 
     if (project.owner !== username) {
         return res.status(401).send("You are not the owner of this project");
