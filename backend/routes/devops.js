@@ -18,334 +18,330 @@ const YAML = require("yaml");
 DOMAIN_NAME = process.env.HOSTNAME;
 DEFAULT_EXPOSED_PORT = 3000;
 REPO_BASE_URL = "repos";
-TRAEFIK_DOCKER_COMPOSE_FILE = "../../../docker-compose-traefik-inner.yml"
+TRAEFIK_DOCKER_COMPOSE_FILE = "../../../docker-compose-traefik-inner.yml";
 
 async function cloneRepo(link, name, env_variables) {
-    try {
-        if (fs.existsSync(`${REPO_BASE_URL}/${name}`)) {
-            if (process.platform === "win32") {
-                console.log("repo already exists, overwriting");
-                await exec(`rmdir "${REPO_BASE_URL}/${name}" /s /q`);
-            } else if (process.platform === "linux") {
-                console.log("repo already exists, overwriting");
-                await exec(`rm -rf "${REPO_BASE_URL}/${name}"`);
-            }
-        }
-        const { stdout, stderr } = await exec(
-            `git clone ${link} ${REPO_BASE_URL}/${name}`
-        );
-        console.log("stderr:", stderr);
-        fs.writeFileSync(
-            `${REPO_BASE_URL}/${name}/.env`,
-            env_variables,
-            function (err) {
-                if (err) throw err;
-                console.log("Environment file is created successfully.");
-            }
-        );
-        console.log("Repo cloned/pulled with env variables init");
-
-        // check if docker-compose file exists
-        const fileExists = fs.existsSync(
-            `${REPO_BASE_URL}/${name}/docker-compose.yml`
-        );
-        if (!fileExists) {
-            console.log("docker-compose file does not exist");
-            return {
-                status: "error",
-                message: "docker-compose file does not exist",
-            };
-        }
-
-        //read and parse the docker-compose file
-        const dockercompose = fs.readFileSync(
-            `${REPO_BASE_URL}/${name}/docker-compose.yml`,
-            "utf8"
-        );
-        const doc = YAML.parse(dockercompose);
-        console.log(doc);
-        //get names of services
-        const services = Object.keys(doc.services);
-        console.log(services);
-        return services;
-    } catch (error) {
-        console.error(`exec error: ${error}`);
-        throw error;
+  try {
+    if (fs.existsSync(`${REPO_BASE_URL}/${name}`)) {
+      if (process.platform === "win32") {
+        console.log("repo already exists, overwriting");
+        await exec(`rmdir "${REPO_BASE_URL}/${name}" /s /q`);
+      } else if (process.platform === "linux") {
+        console.log("repo already exists, overwriting");
+        await exec(`rm -rf "${REPO_BASE_URL}/${name}"`);
+      }
     }
+    const { stdout, stderr } = await exec(
+      `git clone ${link} ${REPO_BASE_URL}/${name}`
+    );
+    console.log("stderr:", stderr);
+    fs.writeFileSync(
+      `${REPO_BASE_URL}/${name}/.env`,
+      env_variables,
+      function (err) {
+        if (err) throw err;
+        console.log("Environment file is created successfully.");
+      }
+    );
+    console.log("Repo cloned/pulled with env variables init");
+
+    // check if docker-compose file exists
+    const fileExists = fs.existsSync(
+      `${REPO_BASE_URL}/${name}/docker-compose.yml`
+    );
+    if (!fileExists) {
+      console.log("docker-compose file does not exist");
+      return {
+        status: "error",
+        message: "docker-compose file does not exist",
+      };
+    }
+
+    //read and parse the docker-compose file
+    const dockercompose = fs.readFileSync(
+      `${REPO_BASE_URL}/${name}/docker-compose.yml`,
+      "utf8"
+    );
+    const doc = YAML.parse(dockercompose);
+    console.log(doc);
+    //get names of services
+    const services = Object.keys(doc.services);
+    console.log(services);
+    return services;
+  } catch (error) {
+    console.error(`exec error: ${error}`);
+    throw error;
+  }
 }
 
 async function deployDocker(id, repoPath, connection_url, client, server) {
-    // get the docker-compose file
-    const dockercompose = fs.readFileSync(
-        `${repoPath}/docker-compose.yml`,
-        "utf8"
-    );
-    const doc = YAML.parse(dockercompose);
-    let services = Object.keys(doc.services);
-    // replace the service name with id_service
-    for (const service of services) {
-        if (service === client) {
-            doc.services[`${id}_${service}`] = doc.services[service];
-            delete doc.services[service];
-        }
+  // get the docker-compose file
+  const dockercompose = fs.readFileSync(
+    `${repoPath}/docker-compose.yml`,
+    "utf8"
+  );
+  const doc = YAML.parse(dockercompose);
+  let services = Object.keys(doc.services);
+  // replace the service name with id_service
+  for (const service of services) {
+    if (service === client) {
+      doc.services[`${id}_${service}`] = doc.services[service];
+      delete doc.services[service];
     }
-    services = Object.keys(doc.services);
-    // remove the ports
-    for (const service of services) {
-        delete doc.services[service].ports;
-    }
+  }
+  services = Object.keys(doc.services);
+  // remove the ports
+  for (const service of services) {
+    delete doc.services[service].ports;
+  }
 
-    for (const service of services) {
-        if (service === `${id}_${client}`) {
-            if (DOMAIN_NAME === "localhost") {
-                doc.services[service].labels = [
-                    "traefik.enable=true",
-                    "traefik.proxy=inner",
-                    `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
-                ];
-            } else {
-                doc.services[service].labels = [
-                    "traefik.enable=true",
-                    "traefik.proxy=inner",
-                    `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
-                    `traefik.http.routers.${service}.entrypoints=https`,
-                    `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
-                ];
-            }
-        }
-        //find the server service
-        else if (service === server) {
-            if (DOMAIN_NAME === "localhost") {
-                doc.services[service].labels = [
-                    "traefik.enable=true",
-                    "traefik.proxy=inner",
-                    `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
-                    `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
-                    `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
-                ];
-            } else {
-                doc.services[service].labels = [
-                    "traefik.enable=true",
-                    "traefik.proxy=inner",
-                    `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
-                    `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
-                    `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
-                    `traefik.http.routers.${service}.entrypoints=https`,
-                    `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
-                ];
-            }
-        } else {
-            if (DOMAIN_NAME === "localhost") {
-                doc.services[service].labels = ["traefik.enable=true"];
-            } else {
-                doc.services[service].labels = [
-                    "traefik.enable=true",
-                    "traefik.proxy=inner",
-                    `traefik.http.routers.${service}.entrypoints=https`,
-                    `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
-                ];
-            }
-        }
-    }
-
-    // add the traefik network
-    doc.networks = {
-        default: {
-            name: `${id}_traefik_proxy`,
-        },
-    };
-
-    // write the docker-compose file
-    const yamlString = YAML.stringify(doc);
-    // save the docker-compose file as docker-compose-traefik.yml
-    fs.writeFileSync(
-        `${repoPath}/docker-compose-traefik.yml`,
-        yamlString,
-        function (err) {
-            if (err) throw err;
-            console.log("docker-compose-traefik file is created successfully.");
-        }
-    );
-
-    const { stdout: stdout1, stderr: stderr1 } = await exec(
-        `docker-compose -f ${repoPath}/docker-compose-traefik.yml down`
-    );
-    const { stdout: stdout2, stderr: stderr2 } = await exec(
-        `docker-compose -f ${repoPath}/docker-compose-traefik.yml up -d --build`
-    );
-    const { stdout: stdout3, stderr: stderr3 } = await exec(
-        `docker system prune -f`
-    );
-
-    console.log("stderr:", stderr2);
-    console.log("stdout:", stdout2);
-
-
-      const traefikCompose = fs.readFileSync(
-        TRAEFIK_DOCKER_COMPOSE_FILE,
-        "utf8"
-      );
-      
-      const traefikDoc = YAML.parse(traefikCompose);
-      
-      if (traefikDoc.networks && traefikDoc.networks.hasOwnProperty(`${id}_traefik_proxy`)) {
-        delete traefikDoc.networks[`${id}_traefik_proxy`];
-      }
-      traefikDoc.networks = {
-        ...traefikDoc.networks,
-        [`${id}_traefik_proxy`]: {
-          external: true,
-        },
-      };
-      
-
-        // replace the proxy if it already exists in the networks list of the service
-        if (
-          Array.isArray(traefikDoc.services["traefik_inner"].networks) &&
-          traefikDoc.services["traefik_inner"].networks.includes(`${id}_traefik_proxy`)
-        ) {
-          traefikDoc.services["traefik_inner"].networks = traefikDoc.services[
-            "traefik_inner"
-          ].networks.filter((network) => network !== `${id}_traefik_proxy`);
-        }
-        traefikDoc.services["traefik_inner"].networks = [
-          ...(Array.isArray(traefikDoc.services["traefik_inner"].networks)
-            ? traefikDoc.services["traefik_inner"].networks
-            : []),
-          `${id}_traefik_proxy`,
+  for (const service of services) {
+    if (service === `${id}_${client}`) {
+      if (DOMAIN_NAME === "localhost") {
+        doc.services[service].labels = [
+          "traefik.enable=true",
+          "traefik.proxy=inner",
+          `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
         ];
-    //   } else {
-    //     if (
-    //       Array.isArray(traefikDoc.services["x-common-keys-core"].networks) &&
-    //       traefikDoc.services["x-common-keys-core"].networks.includes(
-    //         `${id}_traefik_proxy`
-    //       )
-    //     ) {
-    //       traefikDoc.services["x-common-keys-core"].networks = traefikDoc.services[
-    //         "x-common-keys-core"
-    //       ].networks.filter((network) => network !== `${id}_traefik_proxy`);
-    //     }
-    //     traefikDoc.services["x-common-keys-core"].networks = [
-    //       ...(Array.isArray(traefikDoc.services["x-common-keys-core"].networks)
-    //         ? traefikDoc.services["x-common-keys-core"].networks
-    //         : []),
-    //       `${id}_traefik_proxy`,
-    //     ];
-    //   }
+      } else {
+        doc.services[service].labels = [
+          "traefik.enable=true",
+          "traefik.proxy=inner",
+          `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
+          `traefik.http.routers.${service}.entrypoints=https`,
+          `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
+        ];
+      }
+    }
+    //find the server service
+    else if (service === server) {
+      if (DOMAIN_NAME === "localhost") {
+        doc.services[service].labels = [
+          "traefik.enable=true",
+          "traefik.proxy=inner",
+          `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
+          `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
+          `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
+        ];
+      } else {
+        doc.services[service].labels = [
+          "traefik.enable=true",
+          "traefik.proxy=inner",
+          `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
+          `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
+          `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
+          `traefik.http.routers.${service}.entrypoints=https`,
+          `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
+        ];
+      }
+    } else {
+      if (DOMAIN_NAME === "localhost") {
+        doc.services[service].labels = ["traefik.enable=true"];
+      } else {
+        doc.services[service].labels = [
+          "traefik.enable=true",
+          "traefik.proxy=inner",
+          `traefik.http.routers.${service}.entrypoints=https`,
+          `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
+        ];
+      }
+    }
+  }
 
-      
-      
+  // add the traefik network
+  doc.networks = {
+    default: {
+      name: `${id}_traefik_proxy`,
+    },
+  };
 
-    // write the traefik docker-compose file
-    const traefikYamlString = YAML.stringify(traefikDoc);
-    // save the docker-compose file as docker-compose-traefik.yml
-    fs.writeFileSync(
-        TRAEFIK_DOCKER_COMPOSE_FILE,
-        traefikYamlString,
-        function (err) {
-            if (err) throw err;
-            console.log("docker-compose-traefik file is created successfully.");
-        }
-    );
+  // write the docker-compose file
+  const yamlString = YAML.stringify(doc);
+  // save the docker-compose file as docker-compose-traefik.yml
+  fs.writeFileSync(
+    `${repoPath}/docker-compose-traefik.yml`,
+    yamlString,
+    function (err) {
+      if (err) throw err;
+      console.log("docker-compose-traefik file is created successfully.");
+    }
+  );
 
-    const { stdout: stdout4, stderr: stderr4 } = await exec(
-        `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down && docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
-    );
-    console.log("stderr:", stderr4);
+  const { stdout: stdout1, stderr: stderr1 } = await exec(
+    `docker-compose -f ${repoPath}/docker-compose-traefik.yml down`
+  );
+  const { stdout: stdout2, stderr: stderr2 } = await exec(
+    `docker-compose -f ${repoPath}/docker-compose-traefik.yml up -d --build`
+  );
+  const { stdout: stdout3, stderr: stderr3 } = await exec(
+    `docker system prune -f`
+  );
 
-    return {
-        status: "success",
-        message: "Docker image deployed",
-        url: `http://${id}.${DOMAIN_NAME}`,
-    };
+  console.log("stderr:", stderr2);
+  console.log("stdout:", stdout2);
+
+  const traefikCompose = fs.readFileSync(TRAEFIK_DOCKER_COMPOSE_FILE, "utf8");
+
+  const traefikDoc = YAML.parse(traefikCompose);
+
+  if (
+    traefikDoc.networks &&
+    traefikDoc.networks.hasOwnProperty(`${id}_traefik_proxy`)
+  ) {
+    delete traefikDoc.networks[`${id}_traefik_proxy`];
+  }
+  traefikDoc.networks = {
+    ...traefikDoc.networks,
+    [`${id}_traefik_proxy`]: {
+      external: true,
+    },
+  };
+
+  // replace the proxy if it already exists in the networks list of the service
+  if (
+    Array.isArray(traefikDoc.services["traefik_inner"].networks) &&
+    traefikDoc.services["traefik_inner"].networks.includes(
+      `${id}_traefik_proxy`
+    )
+  ) {
+    traefikDoc.services["traefik_inner"].networks = traefikDoc.services[
+      "traefik_inner"
+    ].networks.filter((network) => network !== `${id}_traefik_proxy`);
+  }
+  traefikDoc.services["traefik_inner"].networks = [
+    ...(Array.isArray(traefikDoc.services["traefik_inner"].networks)
+      ? traefikDoc.services["traefik_inner"].networks
+      : []),
+    `${id}_traefik_proxy`,
+  ];
+  //   } else {
+  //     if (
+  //       Array.isArray(traefikDoc.services["x-common-keys-core"].networks) &&
+  //       traefikDoc.services["x-common-keys-core"].networks.includes(
+  //         `${id}_traefik_proxy`
+  //       )
+  //     ) {
+  //       traefikDoc.services["x-common-keys-core"].networks = traefikDoc.services[
+  //         "x-common-keys-core"
+  //       ].networks.filter((network) => network !== `${id}_traefik_proxy`);
+  //     }
+  //     traefikDoc.services["x-common-keys-core"].networks = [
+  //       ...(Array.isArray(traefikDoc.services["x-common-keys-core"].networks)
+  //         ? traefikDoc.services["x-common-keys-core"].networks
+  //         : []),
+  //       `${id}_traefik_proxy`,
+  //     ];
+  //   }
+
+  // write the traefik docker-compose file
+  const traefikYamlString = YAML.stringify(traefikDoc);
+  // save the docker-compose file as docker-compose-traefik.yml
+  fs.writeFileSync(
+    TRAEFIK_DOCKER_COMPOSE_FILE,
+    traefikYamlString,
+    function (err) {
+      if (err) throw err;
+      console.log("docker-compose-traefik file is created successfully.");
+    }
+  );
+
+  const { stdout: stdout4, stderr: stderr4 } = await exec(
+    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down && docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
+  );
+  console.log("stderr:", stderr4);
+
+  return {
+    status: "success",
+    message: "Docker image deployed",
+    url: `http://${id}.${DOMAIN_NAME}`,
+  };
 }
 
 router.post("/clone", async (req, res) => {
-    console.log("Cloning repo");
-    let { github_url, name, env_vars, _id } = req.body;
-    github_url = github_url.trim();
-    try {
-        console.log(`Cloning project ${name}`);
-        const services = await cloneRepo(github_url, _id, env_vars);
-        return res.status(200).json({
-            status: "success",
-            message: `successfully cloned project ${name}`,
-            services: services,
-            id: _id,
-        });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: "error", message: error });
-    }
+  console.log("Cloning repo");
+  let { github_url, name, env_vars, _id } = req.body;
+  github_url = github_url.trim();
+  try {
+    console.log(`Cloning project ${name}`);
+    const services = await cloneRepo(github_url, _id, env_vars);
+    return res.status(200).json({
+      status: "success",
+      message: `successfully cloned project ${name}`,
+      services: services,
+      id: _id,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: error });
+  }
 });
 
 router.post("/deploy", async (req, res) => {
-    const { id, configs } = req.body;
-    const { connection_url, client, server } = configs;
-    const repos = db.collection("projects");
-    // append extra configs to mongodb
-    const foundRepo = await repos.findOneAndUpdate(
-        { _id: new ObjectId(id) },
-        {
-            $set: {
-                connection_url: connection_url,
-                client: client,
-                server: server,
-            },
-        },
-        { returnOriginal: false }
-    );
+  const { id, configs } = req.body;
+  const { connection_url, client, server } = configs;
+  const repos = db.collection("projects");
+  // append extra configs to mongodb
+  const foundRepo = await repos.findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    {
+      $set: {
+        connection_url: connection_url,
+        client: client,
+        server: server,
+      },
+    },
+    { returnOriginal: false }
+  );
 
-    const repoPath = `${REPO_BASE_URL}/${id}`;
-    try {
-        const result = await deployDocker(
-            id,
-            repoPath,
-            connection_url,
-            client,
-            server
-        );
-        const updateRepo = await repos.findOneAndUpdate(
-            { _id: new ObjectId(id) },
-            { $set: { url: result.url } },
-            { returnOriginal: false }
-        );
-        return res
-            .json({
-                status: "success",
-                message: result.message,
-                url: result.url,
-            })
-            .status(200);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: "error", message: error });
-    }
+  const repoPath = `${REPO_BASE_URL}/${id}`;
+  try {
+    const result = await deployDocker(
+      id,
+      repoPath,
+      connection_url,
+      client,
+      server
+    );
+    const updateRepo = await repos.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { url: result.url } },
+      { returnOriginal: false }
+    );
+    return res
+      .json({
+        status: "success",
+        message: result.message,
+        url: result.url,
+      })
+      .status(200);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: error });
+  }
 });
 
 router.post("/remove", async (req, res) => {
-    const { id } = req.body;
-    const dockercompose = `${REPO_BASE_URL}/${id}/docker-compose-traefik.yml`;
-    try {
-        const { stdout, stderr } = await exec(
-            `docker-compose -f ${dockercompose} stop && docker-compose -f ${dockercompose} rm -f`
-        );
-        console.log("stderr:", stderr);
-        console.log("stdout:", stdout);
+  const { id } = req.body;
+  const dockercompose = `${REPO_BASE_URL}/${id}/docker-compose-traefik.yml`;
+  try {
+    const { stdout, stderr } = await exec(
+      `docker-compose -f ${dockercompose} stop && docker-compose -f ${dockercompose} rm -f`
+    );
+    console.log("stderr:", stderr);
+    console.log("stdout:", stdout);
 
-
-        // clear the repo
-        fs.rmdirSync(`${REPO_BASE_URL}/${id}`, { recursive: true });
-        return res
-            .json({
-                status: "success",
-                message: "Docker image stopped and repo cleared",
-            })
-            .status(200);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ status: "error", message: error });
-    }
+    // clear the repo
+    fs.rmdirSync(`${REPO_BASE_URL}/${id}`, { recursive: true });
+    return res
+      .json({
+        status: "success",
+        message: "Docker image stopped and repo cleared",
+      })
+      .status(200);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: error });
+  }
 });
 
 module.exports = router;
