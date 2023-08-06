@@ -50,6 +50,7 @@ const ProjectDashboard = () => {
             const promises = [];
             for (const id of response.data.project_ids) {
               promises.push(query.getProject(id, accessToken));
+              // TODO add a section to get projects from teams users are part of
             }
             Promise.all(promises)
               .then((responses) => {

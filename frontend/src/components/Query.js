@@ -204,18 +204,19 @@ class Query {
     });
   }
 
-  async addTeamProject(teamName, project_id, accessToken) {
-    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/addProject`, {
-      project_id: project_id,
-    }, {
+  async addTeamProject(teamName, projectName, accessToken,userName) {
+    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/addProject/${projectName}`, {
+      username: userName,
+    },
+    {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }
 
-  async removeTeamProject(teamName, project_id, accessToken) {
-    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeProject`, {
-      project_id: project_id,
-    }, {
+  async removeTeamProject(teamName, projectName, accessToken, userName) {
+    return axiosInstance.post(BASE_URL + `/api/team/${teamName}/removeProject/${projectName}`,{
+          username: userName,
+        },{
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }

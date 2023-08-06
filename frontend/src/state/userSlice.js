@@ -43,7 +43,7 @@ export const userSlice = createSlice({
       })
         .addCase(fetchUserTeams.fulfilled, (state, action) => {
             state.teams = action.payload.teams;
-            state.accessToken = action.payload.accessToken;
+            // state.accessToken = action.payload.accessToken;
         })
         // .addCase(fetchTeammates.fulfilled, (state, action) => {
         //     state.members = action.payload.teams;

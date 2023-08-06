@@ -95,7 +95,7 @@ const Teams = () => {
         console.log('added project - name', newProjectName);
         console.log('added project -  team name', newProjectTeamName);
 
-        dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken}));
+        dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken, userName: username}));
 
         setNewProjectName("");
         setNewProjectTeamName("");
@@ -107,7 +107,7 @@ const Teams = () => {
         console.log('removed project - name', removedProjectName);
         console.log('removed project -  team name', removedProjectTeamName);
 
-        dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken}));
+        dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
 
         setRemovedProjectName("");
         setRemovedProjectTeamName("");
@@ -116,9 +116,8 @@ const Teams = () => {
 
     const handleViewTeams = () => {
         setShowTeams(!showTeams);
-        console.log('before teams in teams.jsx', teams)
+        console.log('accessToken', accessToken)
         dispatch(fetchUserTeams({username, accessToken}));
-        console.log('after teams in teams.jsx', teams)
     }
 
     const handleEditTeamClick = async (team) => {
@@ -281,8 +280,8 @@ const Teams = () => {
                         <button className="remove-member-button" onClick={handleRemoveProjectButton}>Remove Project</button>
                         {showRemoveProjectForm && (
                             <form onSubmit={handleRemoveProjectInForm}>
-                                <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
-                                <input type="text" placeholder="Project Name" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
+                                <input type="text" placeholder="Team Name" value={removedProjectTeamName} onChange={(e) => setRemovedProjectTeamName(e.target.value)} />
+                                <input type="text" placeholder="Project Name" value={removedProjectName} onChange={(e) => setRemovedProjectName(e.target.value)}/>
                                 <button type="submit">Remove</button>
                                 <button className="close-add-team-modal" onClick={handleCloseRemoveProjectModalClick}>
                                     Close

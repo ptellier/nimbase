@@ -5,7 +5,7 @@ export const fetchUserTeams = createAsyncThunk(
     "user/fetchTeams",
     async ({ username, accessToken }) => {
         const response = await query.getUserTeams(username, accessToken);
-        console.log('inside fetch', response)
+        //console.log('inside fetch', response)
         return {
             teams: response.data
         };
@@ -53,16 +53,16 @@ export const removeTeamMember = createAsyncThunk(
 
 export const addTeamProject = createAsyncThunk(
     "team/addProject",
-    async ({teamName, projectName, accessToken}) => {
-        const response = await query.addTeamProject(teamName, projectName, accessToken);
+    async ({teamName, projectName, accessToken, userName}) => {
+        const response = await query.addTeamProject(teamName, projectName, accessToken, userName);
         return response.data;
     }
 )
 
 export const removeTeamProject = createAsyncThunk(
     "team/removeProject",
-    async ({teamName, projectName, accessToken}) => {
-        const response = await query.removeTeamProject(teamName, projectName, accessToken);
+    async ({teamName, projectName, accessToken, userName}) => {
+        const response = await query.removeTeamProject(teamName, projectName, accessToken, userName);
         return response.data;
     }
 )
