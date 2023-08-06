@@ -12,7 +12,7 @@ import {accessTokenSelector, usernameSelector} from "../state/userSlice";
 import {useSelector} from "react-redux";
 import ProjectStatus from "../components/ProjectStatus";
 import {deployState} from "../components/deployEnums";
-import {Button, Tooltip} from "@chakra-ui/react";
+import {Button, Flex, Skeleton, SkeletonText, Tooltip} from "@chakra-ui/react";
 import {AlertsContext} from "../components/ProjectAlerts";
 
 const query = new Query();
@@ -29,7 +29,7 @@ const ALERT_DELETE_ERROR = {
 
 const ProjectDashboard = () => {
 
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(undefined);
   const [projectImageError, setProjectImageError] = useState([]);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [deletePopupId, setDeletePopupId] = useState(null);
@@ -53,7 +53,6 @@ const ProjectDashboard = () => {
             }
             Promise.all(promises)
               .then((responses) => {
-                console.log(responses.map((resp) => resp.data));
                 setProjects(responses.map((resp) => resp.data));
                 setProjectImageError(responses.map(() => false));
               })
@@ -66,7 +65,7 @@ const ProjectDashboard = () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
       const result = await query.deleteProject(deletePopupId, accessToken);
       if (result.success === true) {
-        const deldevops = await query.devOpsRemove(deletePopupId, accessToken);
+        await query.devOpsRemove(deletePopupId, accessToken);
         let newProjects = [...projects];
         newProjects.splice(deletePopupIndex, 1);
         setProjects(newProjects);
@@ -99,6 +98,9 @@ const ProjectDashboard = () => {
     setDeleteErrorText(null);
   }
 
+  const oneTwoThree = [1,2,3];
+  console.log(projects)
+
   return (
     <>
       <div className="background-image">
@@ -108,9 +110,13 @@ const ProjectDashboard = () => {
         <div className="projects-container">
           <div style={{display:"flex", justifyContent:"flex-start", alignSelf:"flex-start"}}>
             <div style={{width: "300px"}}>
-              <Link to={"/project/new"} style={{textDecoration: "none"}}>
-                <h2 className="create-project-link"><FontAwesomeIcon icon={faPlus}/> Add Project</h2>
-              </Link>
+              {(projects) ?
+                <Link to={"/project/new"} style={{textDecoration: "none"}}>
+                  <h2 className="create-project-link"><FontAwesomeIcon icon={faPlus}/> Add Project</h2>
+                </Link>
+                :
+                <Flex justify="center"><Skeleton height="10px" width="80px"/></Flex>
+              }
             </div>
           </div>
 
@@ -152,7 +158,9 @@ const ProjectDashboard = () => {
                       </Tooltip>
                       <ProjectStatus project={project} status={deployState.NOT_CLONED}/>
                     </div>
-                    <p>{project.description}</p>
+                    <Tooltip label={project.description} bg="white" color="black">
+                      <p>{project.description}</p>
+                    </Tooltip>
                     <div className="dashboard-project-buttons">
                       <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>
                       <Button variant="customDefault" onClick={() => {onClickDeleteButton(project._id, i)}}>Delete <FontAwesomeIcon icon={faTrashCan}/></Button>
@@ -162,7 +170,22 @@ const ProjectDashboard = () => {
               </div>
           ))
           :
-            <div className="dashboard-project"></div>
+          oneTwoThree.map((i) =>
+              <div className="dashboard-project" key={"skeleton" + i}>
+                <Skeleton height="180px" width="300px"/>
+                <div>
+                  <div className="dashboard-text-container">
+                    <div className="dashboard-project-title-and-icon">
+                      <SkeletonText width="200px" noOfLines={4} spacing="4"/>
+                    </div>
+                    <div className="dashboard-project-buttons">
+                      <Skeleton height="40px" width="100px"/>
+                      <Skeleton height="40px" width="100px"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
           }
         </div>
 

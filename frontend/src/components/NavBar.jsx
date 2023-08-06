@@ -1,41 +1,76 @@
 import NimbaseIcon from "../static/svg/nimbase_icon.svg";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {logout, usernameSelector} from "../state/userSlice";
+import {emailSelector, logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleUser} from "@fortawesome/free-solid-svg-icons";
+import {GoogleLogout} from "@leecheuk/react-google-login";
+import {faChevronDown, faCircleUser} from "@fortawesome/free-solid-svg-icons";
+import {Box, Hide, HStack, Menu, MenuButton, MenuItem, MenuList, Text} from "@chakra-ui/react";
+
+const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const FONT_SIZES = {base: '16px', sm: '18px', md: '24px'};
 
 const NavBar = () => {
   const username = useSelector(usernameSelector);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const email = useSelector(emailSelector);
 
   const onClickLogout = () => {
     dispatch(logout());
+    navigate("/");
   }
+
+  const isGoogleSSO = (username === email);
 
   return (
     <div className="nav-bar-container">
       <nav className="nav-bar">
-        <div className="nav-bar-section">
-          <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo"/></Link>
-          <Link to={"/explore"} className="nav-item">Explore</Link>
+        <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "30px"}}>
+          <Hide below="md">
+            <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo"/></Link>
+          </Hide>
+          <Link to={"/explore"} className="nav-item"><Text fontSize={FONT_SIZES}>Explore</Text></Link>
           {username ?
-            <Link to={"/project/dashboard"} className="nav-item">Projects</Link>
+            <Link to={"/project/dashboard"} className="nav-item"><Text fontSize={FONT_SIZES}>Projects</Text></Link>
             :
             <>
-              <Link to={"/signup"} className="nav-item">Sign-up</Link>
-              <Link to={"/login"} className="nav-item">Login</Link>
+              <Link to={"/signup"} className="nav-item"><Text fontSize={FONT_SIZES}>Sign-up</Text></Link>
+              <Link to={"/login"} className="nav-item"><Text fontSize={FONT_SIZES}>Login</Text></Link>
             </>
           }
-        </div>
+        </HStack>
         {username ?
-          <div className="nav-bar-section">
-            <>
-              <div className="nav-text">{username}</div>
-              <h1><FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser} size="xl"/></h1>
-              <div className="nav-item" onClick={onClickLogout}> Logout</div>
-            </>
-          </div>
+          <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "20px"}}>
+            <Box fontSize={{base: "24px", sm: "32px", md: "48px"}}>
+              <FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser}/>
+            </Box>
+            <Menu>
+              <MenuButton
+                transition='all 0.1s'
+                _hover={{color: 'firebrick'}}
+                _expanded={{color: 'slategrey'}}
+                _focus={{}}
+              >
+                <Text fontSize={FONT_SIZES} className="nav-item">{username} <FontAwesomeIcon icon={faChevronDown} size="xs"/></Text>
+              </MenuButton>
+              <MenuList>
+
+                <MenuItem onClick={(isGoogleSSO) ? undefined : onClickLogout}>
+                  Logout
+                  {(isGoogleSSO) ?
+                    <GoogleLogout
+                      clientId={CLIENT_ID}
+                      buttonText="Logout"
+                      onLogoutSuccess={onClickLogout}
+                    />
+                    :
+                    null
+                  }
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
           :
           null
         }

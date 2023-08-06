@@ -14,12 +14,22 @@ import {PersistGate} from "redux-persist/integration/react";
 import {ChakraBaseProvider} from "@chakra-ui/react";
 import customTheme from "./styles/customChakraTheme";
 import Page404 from "./pages/Page404";
-import ProjectAlerts from "./components/ProjectAlerts"
-
-  ;
+import ProjectAlerts from "./components/ProjectAlerts";
+import {gapi} from "gapi-script";
+const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
 
 const InitComponent = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        'clientId': CLIENT_ID,
+        'scope': ""
+      })
+    }
+    gapi.load('client:auth2', start);
+  });
 
   useEffect(() => {
     dispatch(refresh())

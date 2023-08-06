@@ -100,9 +100,11 @@ class Query {
     return (response.status === 200) ? {success: true} : {success: false, message: response.data};
   }
 
-  async getAllProjects() {
-    return mockProjects;
+  async getAllPublicProjects() {
+    const response = await axiosInstance.get(BASE_URL + '/api/project/');
+    return response.data;
   }
+
   async refreshAccessToken() {
     try {
       const response = await axiosInstance.post(BASE_URL + '/api/auth/refresh');
@@ -111,6 +113,12 @@ class Query {
       console.log(err);
       throw new Error(err.message);
     }
+  }
+  
+  async googleLogin(tokenId){
+    return await axiosInstance.post(BASE_URL + '/api/auth/google/login', {
+      tokenId: tokenId
+    }).catch((err) => { console.log(err) });
   }
 
   async devOpsClone(github_url, name, env_variables, _id, accessToken) {
@@ -168,13 +176,12 @@ axiosInstance.interceptors.response.use(
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);
         } catch (err) {
+          window.location.href = '/login';
           console.log(err);
-          throw new Error(err.message);
         }
       }
 
       return Promise.reject(error);
     }
 );
-
 

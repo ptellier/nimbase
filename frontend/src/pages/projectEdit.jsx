@@ -1,5 +1,5 @@
 import NavBar from "../components/NavBar";
-import "../styles/projectEdit.css";
+import '../styles/projectEdit.css';
 import Field from "../components/Field";
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -41,7 +41,7 @@ const ALERT_ERROR_GETTING_PROJECT = {
 }
 
 
-const ProjectEdit = () => {
+
     const [submitAttempted, setSubmitAttempted] = useState(false);
     const [projectNameError, setProjectNameError] = useState(false);
     const [projectDescError, setProjectDescError] = useState(false);
@@ -148,7 +148,7 @@ const ProjectEdit = () => {
             console.error("Error creating/updating project:", error);
         }
         console.log("Form submitted");
-    }
+  }
 
 
     const validateFormData = () => {
@@ -199,6 +199,7 @@ const ProjectEdit = () => {
           })
       }
     }, []);
+
 
 
     return (
@@ -298,10 +299,9 @@ const ProjectEdit = () => {
                               <DndProvider backend={HTML5Backend}>
                                 <Dustbin serviceList={service || []} id={dndID || ""} />
                               </DndProvider>
-                              {/* make a disabled button only when the service has atlaest one element */}
-                            
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </form>
