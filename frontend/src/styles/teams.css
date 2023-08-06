@@ -1,3 +1,54 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #DEF4F0;
+    font-family: Inika, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/*.teams-header {*/
+/*    text-align: center;*/
+/*    margin-top: 25px;  !* Adjust as needed *!*/
+/*    font-size: 2em;  !* Adjust as needed *!*/
+/*}*/
+
+.teams-header {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 4em;
+    background: -webkit-linear-gradient(#afa8a8, #a72a2a); /* Example gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.background-image {
+    background: #DEF4F0;
+    padding: 20px;
+}
+
+.teams-container {
+    width: 90%;
+    padding: 2.5rem;
+    margin: 0 auto;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column; /* Change from row to column for vertical layout */
+    align-items: center; /* Center align items */
+}
+
+.teams-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
 .modal {
     display: block;
     position: fixed;
@@ -7,29 +58,21 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
+    transition: all 0.3s ease;
 }
 
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: none;
+    border-radius: 5px;
     width: 30%;
     position: relative;
-}
-
-.teams-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 80px;
-}
-
-.teams-box {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-family: Roboto, sans-serif;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .close {
@@ -38,6 +81,11 @@
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: #D2BD96;
 }
 
 .create-team-button,
@@ -47,64 +95,141 @@
     display: inline-block;
     padding: 10px 20px;
     margin: 5px;
-    background-color: #3498db;
+    background-color: #795548;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-.team-members {
-    margin-top: 20px;
-}
-
-.team-members h4 {
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.team-members ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.team-members li {
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-.close-add-team-modal {
-    font-size: 16px;
-    color: red;
-    background-color: transparent;
-    margin-left: 40px;
-    cursor: pointer;
-    padding: 0;
+.create-team-button:hover,
+.view-teams-button:hover,
+.add-member-button:hover,
+.remove-member-button:hover {
+    background-color: #afa8a8;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .blue-bold-heading {
-    font-size: 25px;
-    color: #3497d9;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    background: -webkit-linear-gradient(#afa8a8, #D2BD96);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
 
+.table-container {
+    border-radius: 5px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin-top: 2rem;
+    background: #ffffff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #795548;
+    color: #fff;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    font-family: Roboto, sans-serif;
+}
+
+tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tr:last-child {
+    border-bottom: 0;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+thead tr:hover {
+    background-color: #92785f;
+}
+
+.edit-button {
+    background-color: #92785f;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+    background-color: #D2BD96;
+}
+button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px 0; /* Add some margin to the top and bottom of your buttons */
+    background: linear-gradient(to right, #795548, #D2BD96); /* Simple two-color gradient */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+     /* This will make the button take up the full width of its parent element */
+    text-align: center; /* This will center the text within the button */
+}
+
+button:hover {
+    background: linear-gradient(to right, #D2BD96, #795548); /* Reverse gradient on hover */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .your-teams-header {
-    margin-top: 20px;
-}
-
-.team-members-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-.team-members-list li {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    font-size: 30px;
+    background: -webkit-linear-gradient(#afa8a8, #D2BD96);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
 }
 
-.team-members-list li span {
-    margin-right: 8px;
+/* We separate the button styles for the Add Team and Close buttons */
+
+.create-team-button,
+.add-team-modal-button {
+    margin-top: 20px;
+    width: 80%;
+    background: linear-gradient(to right, #795548, #D2BD96);
+}
+
+.create-team-button:hover,
+.add-team-modal-button:hover {
+    background: linear-gradient(to right, #D2BD96, #795548);
+}
+
+.close-add-team-modal {
+    margin-top: 20px;
+    width: 80%;
+    background: linear-gradient(to right, #afa8a8, #795548);
+}
+
+.close-add-team-modal:hover {
+    background: linear-gradient(to right, #795548, #afa8a8);
 }

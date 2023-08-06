@@ -16,7 +16,7 @@ import {
 } from "./teamThunks";
 import Query from "../components/Query";
 export {refresh, logout, login, googleLogin, signup} from "./userThunks";
-export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks"
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks";
 
 export let INITIAL_STATE = {
     accessToken: "",
@@ -43,7 +43,6 @@ export const userSlice = createSlice({
       })
         .addCase(fetchUserTeams.fulfilled, (state, action) => {
             state.teams = action.payload.teams;
-            // state.accessToken = action.payload.accessToken;
         })
         // .addCase(fetchTeammates.fulfilled, (state, action) => {
         //     state.members = action.payload.teams;
