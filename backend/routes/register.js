@@ -47,7 +47,7 @@ router.post('/', express.json(), async (req, res) => {
     //encrypt the password
     const password_hash = await bcrypt.hash(password, 10);
     //store the new user
-    const newUser = { firstName: firstName, lastName: lastName, username: username, email: email, password_hash: password_hash , project_ids: [] };
+    const newUser = { firstName: firstName, lastName: lastName, username: username, email: email, password_hash: password_hash , project_ids: [], team_ids: [] };
     await users.insertOne(newUser);
     res.status(201).json({ 'success': `New user ${username} created!` });
   } catch (err) {

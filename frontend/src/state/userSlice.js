@@ -1,113 +1,199 @@
-import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
+import {createSlice, isAnyOf} from "@reduxjs/toolkit";
+import {
+    login,
+    logout,
+    signup,
+    googleLogin, refresh,
+} from "./userThunks";
+import {
+    createTeam,
+    getTeam,
+    addTeamMember,
+    removeTeamMember,
+    addTeamProject,
+    removeTeamProject,
+    fetchUserTeams,
+} from "./teamThunks";
 import Query from "../components/Query";
+export {refresh, logout, login, googleLogin, signup} from "./userThunks";
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks";
 
-const INITIAL_STATE = {
-  accessToken: "",
-  username: undefined,
-  email: undefined,
-  signupError: undefined,
-  loginError: undefined,
+export let INITIAL_STATE = {
+    accessToken: "",
+    username: undefined,
+    email: undefined,
+    signupError: undefined,
+    loginError: undefined,
+    teams: [],
+    //   members: [],
 }
-
-const query = new Query();
-
-export const login = createAsyncThunk(
-  "user/login",
-  async (data) => {
-    const response = await query.loginUser(data.username, data.password);
-    const payload = response.data
-    payload.loginError = response.data.message;
-    console.log(payload);
-    return payload;
-  }
-)
-
-export const signup = createAsyncThunk(
-  "user/signup",
-  async (data) => {
-    const responseCreate = await query.createUser(data.firstName, data.lastName, data.username, data.password, data.email);
-    if (responseCreate.data.message) {
-      const payload = {...INITIAL_STATE};
-      payload.signupError = responseCreate.data.message;
-      return payload;
-    } else {
-      const responseLogin = await query.loginUser(data.username, data.password);
-      return responseLogin.data;
-    }
-  }
-)
-
-export const logout = createAsyncThunk(
-  "user/logout",
-  async () => {
-    const response = await query.logoutUser();
-    return response.data;
-  }
-)
+export const query = new Query();
 
 export const userSlice = createSlice({
-  name: "user",
-  initialState: INITIAL_STATE,
-  extraReducers: (builder) => {
-    builder
-      .addCase(logout.fulfilled, (state) => {
-        state.accessToken = "";
-        state.username = undefined;
-        state.email = undefined;
-        state.loginError = undefined;
-        state.signupError = undefined;
-      })
-        .addCase(signup.fulfilled, (state, action) => {
-            if(action.payload.accessToken){
-                state.username = action.payload.username;
-                state.email = action.payload.email;
+    name: "user",
+    initialState: INITIAL_STATE,
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.fulfilled, (state, action) => {
+                if(action.payload.accessToken){
+                    state.username = action.payload.username;
+                    state.email = action.payload.email;
+                    state.accessToken = action.payload.accessToken;
+                } else {
+                    state.loginError = action.payload.loginError;
+                }
+            })
+            .addCase(signup.fulfilled, (state, action) => {
+                if(action.payload.accessToken){
+                    state.username = action.payload.username;
+                    state.email = action.payload.email;
+                    state.accessToken = action.payload.accessToken;
+                } else {
+                    state.signupError = action.payload.signupError;
+                }
+            })
+            .addCase(logout.fulfilled, (state) => {
+                return INITIAL_STATE;
+            })
+            .addCase(refresh.fulfilled, (state, action) => {
                 state.accessToken = action.payload.accessToken;
-            } else {
-                state.signupError = action.payload.signupError;
-            }
-        })
-        .addCase(refresh.fulfilled, (state, action) => {
-            state.accessToken = action.payload.accessToken;
-        })
-      .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled, googleLogin.fulfilled),
-        (state, action) => {
-          state.accessToken = action.payload.accessToken;
-          state.username = action.payload.username;
-          state.email = action.payload.email;
-          state.loginError = action.payload.loginError;
-          state.signupError = action.payload.signupError;
-        })
-      .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected),
-        (state, action) => {
-        console.log("error: thunk rejected; ", action.error.message);
-      });
-  }
+            })
+            .addCase(googleLogin.fulfilled, (state, action) => {
+                if(action.payload.accessToken){
+                    state.username = action.payload.username;
+                    state.email = action.payload.email;
+                    state.accessToken = action.payload.accessToken;
+                } else {
+                    state.loginError = action.payload.loginError;
+                }
+            })
+            .addCase(fetchUserTeams.fulfilled, (state, action) => {
+                state.teams = action.payload.teams;
+            })
+            .addCase(createTeam.fulfilled, (state, action) => {
+                state.teams.push({
+                    teamName: action.payload.teamName,
+                    description: action.payload.description,
+                    owner: action.payload.owner,
+                    members: [],
+                    projects: [],
+                });
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(getTeam.fulfilled, (state, action) => {
+                const team = state.teams.find(t => t.teamName === action.payload.teamName);
+                if (team) {
+                    team.description = action.payload.description;
+                    team.owner = action.payload.owner;
+                    team.projects = action.payload.projects;
+                }
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(addTeamMember.fulfilled, (state, action) => {
+                const team = state.teams.find(t => t.teamName === action.payload.teamName);
+                if (team) {
+                    team.members.push(action.payload.username);
+                }
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(removeTeamMember.fulfilled, (state, action) => {
+                const team = state.teams.find(t => t.teamName === action.payload.teamName);
+                if (team) {
+                    team.members = team.members.filter(m => m !== action.payload.username);
+                }
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(addTeamProject.fulfilled, (state, action) => {
+                const team = state.teams.find(t => t.teamName === action.payload.teamName);
+                if (team) {
+                    team.projects.push(action.payload.projectName);
+                }
+                state.accessToken = action.payload.accessToken;
+            })
+            .addCase(removeTeamProject.fulfilled, (state, action) => {
+                const team = state.teams.find(t => t.teamName === action.payload.teamName);
+                if (team) {
+                    team.projects = team.projects.filter(p => p !== action.payload.projectName);
+                }
+                state.accessToken = action.payload.accessToken;
+            })
+            .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected, googleLogin.rejected, refresh.rejected),
+                (state, action) => {
+                    console.log("error: thunk rejected; ", action.error.message);
+                });
+    }
 })
-// refresh async thunk here
-export const refresh = createAsyncThunk(
-    "user/refresh",
-    async (_, thunkAPI) => {
-        try {
-            const accessToken = await query.refreshAccessToken();
-            return { accessToken };
-        } catch (error) {
-            console.log(error);
-            thunkAPI.dispatch(logout());
-            return thunkAPI.rejectWithValue(error.message);
-        }
-    }
-);
 
-export const googleLogin = createAsyncThunk(
-    "user/googleLogin",
-    async (data) => {
-        const response = await query.googleLogin(data.tokenId);
-        return response.data;
-    }
-)
+// export const userSlice = createSlice({
+//     name: "user",
+//     initialState: INITIAL_STATE,
+//     extraReducers: (builder) => {
+//         builder
+//             .addCase(logout.fulfilled, (state) => {
+//                 state.accessToken = "";
+//                 state.username = undefined;
+//                 state.email = undefined;
+//                 state.loginError = undefined;
+//                 state.signupError = undefined;
+//                 state.teams = [];
+//             })
+//             .addCase(fetchUserTeams.fulfilled, (state, action) => {
+//                 state.teams = action.payload.teams;
+//             })
+//             .addCase(signup.fulfilled, (state, action) => {
+//                 if(action.payload.accessToken){
+//                     state.username = action.payload.username;
+//                     state.email = action.payload.email;
+//                     state.accessToken = action.payload.accessToken;
+//                 } else {
+//                     state.signupError = action.payload.signupError;
+//                 }
+//             })
+//             .addCase(refresh.fulfilled, (state, action) => {
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addCase(createTeam.fulfilled, (state, action) => {
+//                 state.teamName = action.payload.teamName;
+//                 state.description = action.payload.description;
+//                 state.owner = action.payload.owner;
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addCase(removeTeamMember.fulfilled, (state, action) => {
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addCase(addTeamProject.fulfilled, (state, action) => {
+//                 state.projects = action.payload.projects;
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addCase(removeTeamProject.fulfilled, (state, action) => {
+//                 state.projects = action.payload.projects;
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addCase(getTeam.fulfilled, (state, action) => {
+//                 state.teamName = action.payload.teamName;
+//                 state.description = action.payload.description;
+//                 state.owner = action.payload.owner;
+//                 state.projects = action.payload.projects;
+//                 state.accessToken = action.payload.accessToken;
+//             })
+//             .addMatcher(isAnyOf(login.fulfilled, logout.fulfilled, signup.fulfilled, googleLogin.fulfilled),
+//                 (state, action) => {
+//                     state.accessToken = action.payload.accessToken;
+//                     state.username = action.payload.username;
+//                     state.email = action.payload.email;
+//                     state.loginError = action.payload.loginError;
+//                     state.signupError = action.payload.signupError;
+//                 })
+//             .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected),
+//                 (state, action) => {
+//                     console.log("error: thunk rejected; ", action.error.message);
+//                 });
+//     }
+// })
 
 export const loginErrorMessageSelector = (state) => state.user.loginError;
 export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
+export const teamsSelector = (state) => state.user.teams;
 export const emailSelector = (state) => state.user.email;
 export const accessTokenSelector = (state) => state.user.accessToken;

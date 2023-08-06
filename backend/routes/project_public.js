@@ -8,6 +8,7 @@ router.get('/', express.json(), async (req, res) => {
   const projectsCollection = db.collection("projects");
   const projects = await projectsCollection.find({ public: true }).toArray();
   if (!projects ) {
+    console.log(projects);
     res.status(404).send(projects);
     return;
   }

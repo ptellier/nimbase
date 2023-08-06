@@ -9,9 +9,7 @@ import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {Button, Heading} from "@chakra-ui/react";
 import {GoogleLogin} from "@leecheuk/react-google-login";
-
 const CLIENT_ID= "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
-
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -39,7 +37,7 @@ const Login = () => {
         });
     }
 
-    const onFailure = () => {
+    const onFailure = (res) => {
         console.log("login failed");
         navigate("/");
     }

@@ -24,58 +24,60 @@ const NavBar = () => {
   const isGoogleSSO = (username === email);
 
   return (
-    <div className="nav-bar-container">
-      <nav className="nav-bar">
-        <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "30px"}}>
-          <Hide below="md">
-            <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo"/></Link>
-          </Hide>
-          <Link to={"/explore"} className="nav-item"><Text fontSize={FONT_SIZES}>Explore</Text></Link>
-          {username ?
-            <Link to={"/project/dashboard"} className="nav-item"><Text fontSize={FONT_SIZES}>Projects</Text></Link>
-            :
-            <>
-              <Link to={"/signup"} className="nav-item"><Text fontSize={FONT_SIZES}>Sign-up</Text></Link>
-              <Link to={"/login"} className="nav-item"><Text fontSize={FONT_SIZES}>Login</Text></Link>
-            </>
-          }
-        </HStack>
-        {username ?
-          <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "20px"}}>
-            <Box fontSize={{base: "24px", sm: "32px", md: "48px"}}>
-              <FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser}/>
-            </Box>
-            <Menu>
-              <MenuButton
-                transition='all 0.1s'
-                _hover={{color: 'firebrick'}}
-                _expanded={{color: 'slategrey'}}
-                _focus={{}}
-              >
-                <Text fontSize={FONT_SIZES} className="nav-item">{username} <FontAwesomeIcon icon={faChevronDown} size="xs"/></Text>
-              </MenuButton>
-              <MenuList>
-
-                <MenuItem onClick={(isGoogleSSO) ? undefined : onClickLogout}>
-                  Logout
-                  {(isGoogleSSO) ?
-                    <GoogleLogout
-                      clientId={CLIENT_ID}
-                      buttonText="Logout"
-                      onLogoutSuccess={onClickLogout}
-                    />
-                    :
-                    null
-                  }
-                </MenuItem>
-              </MenuList>
-            </Menu>
+      <div className="nav-bar-container">
+        <nav className="nav-bar">
+          <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "30px"}}>
+            <Hide below="md">
+              <Link to={"/"} className="nav-item"><img src={NimbaseIcon} className="nav-bar-logo" alt="logo"/></Link>
+            </Hide>
+            <Link to={"/explore"} className="nav-item"><Text fontSize={FONT_SIZES}>Explore</Text></Link>
+            {username ?
+                <>
+                  <Link to={"/project/dashboard"} className="nav-item"><Text fontSize={FONT_SIZES}>Projects</Text></Link>
+                  <Link to={"/teams"} className="nav-item"><Text fontSize={FONT_SIZES}>Teams</Text></Link>
+                </>
+                :
+                <>
+                  <Link to={"/signup"} className="nav-item"><Text fontSize={FONT_SIZES}>Sign-up</Text></Link>
+                  <Link to={"/login"} className="nav-item"><Text fontSize={FONT_SIZES}>Login</Text></Link>
+                </>
+            }
           </HStack>
-          :
-          null
-        }
-      </nav>
-    </div>
+          {username ?
+              <HStack align="center" justify="center" className="nav-bar-section" spacing={{base: "10px", sm: "20px"}}>
+                <Box fontSize={{base: "24px", sm: "32px", md: "48px"}}>
+                  <FontAwesomeIcon style={{color: "lightpink"}} icon={faCircleUser}/>
+                </Box>
+                <Menu>
+                  <MenuButton
+                      transition='all 0.1s'
+                      _hover={{color: 'firebrick'}}
+                      _expanded={{color: 'slategrey'}}
+                      _focus={{}}
+                  >
+                    <Text fontSize={FONT_SIZES} className="nav-item">{username} <FontAwesomeIcon icon={faChevronDown} size="xs"/></Text>
+                  </MenuButton>
+                  <MenuList>
+
+                    <MenuItem onClick={(isGoogleSSO) ? undefined : onClickLogout}>
+                      {(isGoogleSSO) ?
+                          <GoogleLogout
+                              clientId={CLIENT_ID}
+                              buttonText="Logout"
+                              onLogoutSuccess={onClickLogout}
+                          />
+                          :
+                          <Text fontSize={FONT_SIZES}>Logout</Text>
+                      }
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </HStack>
+              :
+              null
+          }
+        </nav>
+      </div>
   );
 }
 

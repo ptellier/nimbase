@@ -1,0 +1,226 @@
+
+.teams-container body {
+    margin: 0;
+    padding: 0;
+    background-color: #DEF4F0;
+    font-family: Inika, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.teams-header {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 4em;
+    background: -webkit-linear-gradient(#afa8a8, #a72a2a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.background-image {
+    background: #DEF4F0;
+    padding: 20px;
+}
+
+.teams-container {
+    width: 90%;
+    padding: 2.5rem;
+    margin: 0 auto;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teams-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: #6ed2d2;
+}
+
+.create-team-button,
+.view-teams-button,
+.add-member-button,
+.remove-member-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #39a896;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.create-team-button:hover,
+.view-teams-button:hover,
+.add-member-button:hover,
+.remove-member-button:hover {
+    background-color: #afa8a8;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.blue-bold-heading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    background: -webkit-linear-gradient(rgba(2, 2, 2, 0.7), #39a896);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.table-container {
+    border-radius: 5px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin-top: 2rem;
+    background: #ffffff;
+}
+
+.teams-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.teams-container thead {
+    background-color: #00203FFF;
+    color: #fff;
+}
+
+.teams-container th, td {
+    padding: 1rem;
+    text-align: left;
+    font-family: Roboto, sans-serif;
+}
+
+.teams-container tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.teams-container tr:last-child {
+    border-bottom: 0;
+}
+
+.teams-container tr:hover {
+    background-color: #f5f5f5;
+}
+
+.teams-container thead tr:hover {
+    background-color: #065c6e;
+}
+
+.edit-button {
+    background-color: #ADEFD1FF;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+    background-color: #61c4a6;
+}
+.teams-container button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px 0;
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.teams-container button:hover {
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.your-teams-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    background: -webkit-linear-gradient(rgba(2, 2, 2, 0.7), #39a896);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.create-team-button,
+.add-team-modal-button {
+    margin-top: 20px;
+    width: 80%;
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
+}
+
+.create-team-button:hover,
+.add-team-modal-button:hover {
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
+}
+
+.close-add-team-modal {
+    margin-top: 20px;
+    width: 80%;
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
+}
+
+.close-add-team-modal:hover {
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
+}

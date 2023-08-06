@@ -14,6 +14,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import {ChakraBaseProvider} from "@chakra-ui/react";
 import customTheme from "./styles/customChakraTheme";
 import Page404 from "./pages/Page404";
+import Teams from "./pages/teams";
 import ProjectAlerts from "./components/ProjectAlerts";
 import {gapi} from "gapi-script";
 const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
@@ -49,7 +50,8 @@ const App = () => {
             <Route exact path="/explore" element={<Explore/>}/>
             <Route exact path="/login" element={<Login/>}/>
             <Route exact path="/signup" element={<Signup/>}/>
-            <Route exact path="/project" element={<ProjectAlerts/>}>
+              <Route exact path="/teams" element={<Teams/>}/>
+              <Route exact path="/project" element={<ProjectAlerts/>}>
               <Route exact path="/project/dashboard" element={<ProjectDashboard/>}/>
               <Route exact path="/project/new" element={<ProjectEdit/>}/>
               <Route exact path="/project/edit/:id" element={<ProjectEdit/>}/>
