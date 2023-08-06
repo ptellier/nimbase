@@ -1,5 +1,5 @@
 
-body {
+.teams-container body {
     margin: 0;
     padding: 0;
     background-color: #DEF4F0;
@@ -8,17 +8,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/*.teams-header {*/
-/*    text-align: center;*/
-/*    margin-top: 25px;  !* Adjust as needed *!*/
-/*    font-size: 2em;  !* Adjust as needed *!*/
-/*}*/
-
 .teams-header {
     text-align: center;
     margin-top: 5px;
     font-size: 4em;
-    background: -webkit-linear-gradient(#afa8a8, #a72a2a); /* Example gradient */
+    background: -webkit-linear-gradient(#afa8a8, #a72a2a);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -34,8 +28,8 @@ body {
     margin: 0 auto;
     font-family: Roboto, sans-serif;
     display: flex;
-    flex-direction: column; /* Change from row to column for vertical layout */
-    align-items: center; /* Center align items */
+    flex-direction: column;
+    align-items: center;
 }
 
 .teams-box {
@@ -85,7 +79,7 @@ body {
 }
 
 .close:hover {
-    color: #D2BD96;
+    color: #6ed2d2;
 }
 
 .create-team-button,
@@ -95,7 +89,7 @@ body {
     display: inline-block;
     padding: 10px 20px;
     margin: 5px;
-    background-color: #795548;
+    background-color: #39a896;
     color: white;
     border: none;
     border-radius: 5px;
@@ -118,7 +112,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 30px;
-    background: -webkit-linear-gradient(#afa8a8, #D2BD96);
+    background: -webkit-linear-gradient(rgba(2, 2, 2, 0.7), #39a896);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 15px;
@@ -132,40 +126,40 @@ body {
     background: #ffffff;
 }
 
-table {
+.teams-container table {
     width: 100%;
     border-collapse: collapse;
 }
 
-thead {
-    background-color: #795548;
+.teams-container thead {
+    background-color: #00203FFF;
     color: #fff;
 }
 
-th, td {
+.teams-container th, td {
     padding: 1rem;
     text-align: left;
     font-family: Roboto, sans-serif;
 }
 
-tr {
+.teams-container tr {
     border-bottom: 1px solid #ddd;
 }
 
-tr:last-child {
+.teams-container tr:last-child {
     border-bottom: 0;
 }
 
-tr:hover {
+.teams-container tr:hover {
     background-color: #f5f5f5;
 }
 
-thead tr:hover {
-    background-color: #92785f;
+.teams-container thead tr:hover {
+    background-color: #065c6e;
 }
 
 .edit-button {
-    background-color: #92785f;
+    background-color: #ADEFD1FF;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -176,25 +170,24 @@ thead tr:hover {
 }
 
 .edit-button:hover {
-    background-color: #D2BD96;
+    background-color: #61c4a6;
 }
-button {
+.teams-container button {
     display: inline-block;
     padding: 15px 30px;
-    margin: 10px 0; /* Add some margin to the top and bottom of your buttons */
-    background: linear-gradient(to right, #795548, #D2BD96); /* Simple two-color gradient */
+    margin: 10px 0;
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 18px;
     transition: all 0.3s ease;
-     /* This will make the button take up the full width of its parent element */
-    text-align: center; /* This will center the text within the button */
+    text-align: center;
 }
 
-button:hover {
-    background: linear-gradient(to right, #D2BD96, #795548); /* Reverse gradient on hover */
+.teams-container button:hover {
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
@@ -204,32 +197,30 @@ button:hover {
     justify-content: center;
     align-items: center;
     font-size: 30px;
-    background: -webkit-linear-gradient(#afa8a8, #D2BD96);
+    background: -webkit-linear-gradient(rgba(2, 2, 2, 0.7), #39a896);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 15px;
 }
 
-/* We separate the button styles for the Add Team and Close buttons */
-
 .create-team-button,
 .add-team-modal-button {
     margin-top: 20px;
     width: 80%;
-    background: linear-gradient(to right, #795548, #D2BD96);
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
 }
 
 .create-team-button:hover,
 .add-team-modal-button:hover {
-    background: linear-gradient(to right, #D2BD96, #795548);
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
 }
 
 .close-add-team-modal {
     margin-top: 20px;
     width: 80%;
-    background: linear-gradient(to right, #afa8a8, #795548);
+    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
 }
 
 .close-add-team-modal:hover {
-    background: linear-gradient(to right, #795548, #afa8a8);
+    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
 }
