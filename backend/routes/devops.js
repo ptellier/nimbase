@@ -18,6 +18,7 @@ const YAML = require("yaml");
 DOMAIN_NAME = process.env.HOSTNAME;
 DEFAULT_EXPOSED_PORT = 3000;
 REPO_BASE_URL = "repos";
+TRAEFIK_DOCKER_COMPOSE_FILE = "../../../docker-compose-traefik-inner.yml"
 
 async function cloneRepo(link, name, env_variables) {
     try {
@@ -99,11 +100,13 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
             if (DOMAIN_NAME === "localhost") {
                 doc.services[service].labels = [
                     "traefik.enable=true",
+                    "traefik.proxy=inner",
                     `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
                 ];
             } else {
                 doc.services[service].labels = [
                     "traefik.enable=true",
+                    "traefik.proxy=inner",
                     `traefik.http.routers.${service}.rule=Host(\`${id}.${DOMAIN_NAME}\`)`,
                     `traefik.http.routers.${service}.entrypoints=https`,
                     `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
@@ -115,6 +118,7 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
             if (DOMAIN_NAME === "localhost") {
                 doc.services[service].labels = [
                     "traefik.enable=true",
+                    "traefik.proxy=inner",
                     `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
                     `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
                     `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
@@ -122,6 +126,7 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
             } else {
                 doc.services[service].labels = [
                     "traefik.enable=true",
+                    "traefik.proxy=inner",
                     `traefik.http.routers.${service}.rule=(Host(\`${id}.${DOMAIN_NAME}\`) && PathPrefix(\`${connection_url}\`))`,
                     `traefik.http.routers.${service}.middlewares=${service}-stripprefix`,
                     `traefik.http.middlewares.${service}-stripprefix.stripprefix.prefixes=${connection_url}`,
@@ -135,6 +140,7 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
             } else {
                 doc.services[service].labels = [
                     "traefik.enable=true",
+                    "traefik.proxy=inner",
                     `traefik.http.routers.${service}.entrypoints=https`,
                     `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
                 ];
@@ -174,9 +180,9 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
     console.log("stderr:", stderr2);
     console.log("stdout:", stdout2);
 
-      
+
       const traefikCompose = fs.readFileSync(
-        `../../docker-compose-traefik.yml`,
+        TRAEFIK_DOCKER_COMPOSE_FILE,
         "utf8"
       );
       
@@ -192,40 +198,40 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
         },
       };
       
-      if (DOMAIN_NAME === "localhost") {
+
         // replace the proxy if it already exists in the networks list of the service
         if (
-          Array.isArray(traefikDoc.services["traefik"].networks) &&
-          traefikDoc.services["traefik"].networks.includes(`${id}_traefik_proxy`)
+          Array.isArray(traefikDoc.services["traefik_inner"].networks) &&
+          traefikDoc.services["traefik_inner"].networks.includes(`${id}_traefik_proxy`)
         ) {
-          traefikDoc.services["traefik"].networks = traefikDoc.services[
-            "traefik"
+          traefikDoc.services["traefik_inner"].networks = traefikDoc.services[
+            "traefik_inner"
           ].networks.filter((network) => network !== `${id}_traefik_proxy`);
         }
-        traefikDoc.services["traefik"].networks = [
-          ...(Array.isArray(traefikDoc.services["traefik"].networks)
-            ? traefikDoc.services["traefik"].networks
+        traefikDoc.services["traefik_inner"].networks = [
+          ...(Array.isArray(traefikDoc.services["traefik_inner"].networks)
+            ? traefikDoc.services["traefik_inner"].networks
             : []),
           `${id}_traefik_proxy`,
         ];
-      } else {
-        if (
-          Array.isArray(traefikDoc.services["x-common-keys-core"].networks) &&
-          traefikDoc.services["x-common-keys-core"].networks.includes(
-            `${id}_traefik_proxy`
-          )
-        ) {
-          traefikDoc.services["x-common-keys-core"].networks = traefikDoc.services[
-            "x-common-keys-core"
-          ].networks.filter((network) => network !== `${id}_traefik_proxy`);
-        }
-        traefikDoc.services["x-common-keys-core"].networks = [
-          ...(Array.isArray(traefikDoc.services["x-common-keys-core"].networks)
-            ? traefikDoc.services["x-common-keys-core"].networks
-            : []),
-          `${id}_traefik_proxy`,
-        ];
-      }
+    //   } else {
+    //     if (
+    //       Array.isArray(traefikDoc.services["x-common-keys-core"].networks) &&
+    //       traefikDoc.services["x-common-keys-core"].networks.includes(
+    //         `${id}_traefik_proxy`
+    //       )
+    //     ) {
+    //       traefikDoc.services["x-common-keys-core"].networks = traefikDoc.services[
+    //         "x-common-keys-core"
+    //       ].networks.filter((network) => network !== `${id}_traefik_proxy`);
+    //     }
+    //     traefikDoc.services["x-common-keys-core"].networks = [
+    //       ...(Array.isArray(traefikDoc.services["x-common-keys-core"].networks)
+    //         ? traefikDoc.services["x-common-keys-core"].networks
+    //         : []),
+    //       `${id}_traefik_proxy`,
+    //     ];
+    //   }
 
       
       
@@ -234,7 +240,7 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
     const traefikYamlString = YAML.stringify(traefikDoc);
     // save the docker-compose file as docker-compose-traefik.yml
     fs.writeFileSync(
-        `../../docker-compose-traefik.yml`,
+        TRAEFIK_DOCKER_COMPOSE_FILE,
         traefikYamlString,
         function (err) {
             if (err) throw err;
@@ -243,8 +249,7 @@ async function deployDocker(id, repoPath, connection_url, client, server) {
     );
 
     const { stdout: stdout4, stderr: stderr4 } = await exec(
-        `docker-compose -f ../../docker-compose-traefik.yml down`
-        `docker-compose -f ../../docker-compose-traefik.yml up -d`
+        `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down && docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
     );
     console.log("stderr:", stderr4);
 
@@ -323,10 +328,11 @@ router.post("/remove", async (req, res) => {
     const dockercompose = `${REPO_BASE_URL}/${id}/docker-compose-traefik.yml`;
     try {
         const { stdout, stderr } = await exec(
-            `docker-compose -f ${dockercompose} down`
+            `docker-compose -f ${dockercompose} stop && docker-compose -f ${dockercompose} rm -f`
         );
         console.log("stderr:", stderr);
         console.log("stdout:", stdout);
+
 
         // clear the repo
         fs.rmdirSync(`${REPO_BASE_URL}/${id}`, { recursive: true });
