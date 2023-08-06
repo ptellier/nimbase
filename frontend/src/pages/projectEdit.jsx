@@ -40,7 +40,7 @@ const ALERT_ERROR_GETTING_PROJECT = {
   alertText: "Error, could not get project from server!",
 }
 
-
+const ProjectEdit = () => {
 
     const [submitAttempted, setSubmitAttempted] = useState(false);
     const [projectNameError, setProjectNameError] = useState(false);
