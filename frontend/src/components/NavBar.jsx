@@ -33,13 +33,13 @@ const NavBar = () => {
             <Link to={"/explore"} className="nav-item"><Text fontSize={FONT_SIZES}>Explore</Text></Link>
             {username ?
                 <>
-                  <Link to={"/project/dashboard"} className="nav-item">Projects</Link>
-                  <Link to={"/teams"} className="nav-item">Teams</Link>
+                  <Link to={"/project/dashboard"} className="nav-item"><Text fontSize={FONT_SIZES}>Projects</Text></Link>
+                  <Link to={"/teams"} className="nav-item"><Text fontSize={FONT_SIZES}>Teams</Text></Link>
                 </>
                 :
                 <>
-                  <Link to={"/signup"} className="nav-item">Sign-up</Link>
-                  <Link to={"/login"} className="nav-item">Login</Link>
+                  <Link to={"/signup"} className="nav-item"><Text fontSize={FONT_SIZES}>Sign-up</Text></Link>
+                  <Link to={"/login"} className="nav-item"><Text fontSize={FONT_SIZES}>Login</Text></Link>
                 </>
             }
           </HStack>
@@ -60,7 +60,6 @@ const NavBar = () => {
                   <MenuList>
 
                     <MenuItem onClick={(isGoogleSSO) ? undefined : onClickLogout}>
-                      Logout
                       {(isGoogleSSO) ?
                           <GoogleLogout
                               clientId={CLIENT_ID}
@@ -68,7 +67,7 @@ const NavBar = () => {
                               onLogoutSuccess={onClickLogout}
                           />
                           :
-                          null
+                          <Text fontSize={FONT_SIZES}>Logout</Text>
                       }
                     </MenuItem>
                   </MenuList>
