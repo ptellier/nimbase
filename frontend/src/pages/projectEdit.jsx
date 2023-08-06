@@ -41,209 +41,165 @@ const ALERT_ERROR_GETTING_PROJECT = {
 }
 
 
-const ProjectEdit = () => {
-  const [submitAttempted, setSubmitAttempted] = useState(false);
-  const [projectNameError, setProjectNameError] = useState(false);
-  const [projectDescError, setProjectDescError] = useState(false);
-  const [projectImageError, setProjectImageError] = useState(false);
-  const [githubLinkError, setGithubLinkError] = useState(false);
-  const [envVarError, setEnvVarError] = useState(false);
 
-  const { createAlert } = useContext(AlertsContext);
+    const [submitAttempted, setSubmitAttempted] = useState(false);
+    const [projectNameError, setProjectNameError] = useState(false);
+    const [projectDescError, setProjectDescError] = useState(false);
+    const [projectImageError, setProjectImageError] = useState(false);
+    const [githubLinkError, setGithubLinkError] = useState(false);
+    const [envVarError, setEnvVarError] = useState(false);
 
-  const username = useSelector(usernameSelector);
-  const accessToken = useSelector(accessTokenSelector);
+    const { createAlert } = useContext(AlertsContext);
 
-  const { id } = useParams();
-  const navigate = useNavigate();
+    const username = useSelector(usernameSelector);
+    const accessToken = useSelector(accessTokenSelector);
 
-  const [service, setService] = useState([]);
+    const { id } = useParams();
+    const navigate = useNavigate();
 
-  const [dndID, setDndID] = useState("");
+    const [service, setService] = useState([]);
 
-  const [formData, setFormData] = useState({
-    owner: username,
-    name: "",
-    description: "",
-    image: null,
-    public: true,
-    github_url: "",
-    env_vars: "",
-  });
+    const [dndID, setDndID] = useState("");
 
-  const setImage = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      image: value,
-    }));
+    const [formData, setFormData] = useState({
+        owner: username,
+        name: "",
+        description: "",
+        image: null,
+        public: true,
+        github_url: "",
+        env_vars: "",
+    });
+
+    const setImage = (value) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            image: value,
+        }));
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };
+
+    const handleCheckboxChange = (e) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            public: e.target.checked,
+        }));
+    };
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setSubmitAttempted(true);
+        const isValid = validateFormData();
+        if (!isValid) {
+            return;
+        }
+        console.log("Creating/updating project");
+        let response;
+        try {
+            if (id) {
+                response = await query.updateProject(
+                    id,
+                    formData.owner,
+                    formData.name,
+                    formData.description,
+                    formData.image,
+                    formData.public,
+                    formData.github_url,
+                    formData.env_vars,
+                    accessToken
+                );
+            } else {
+                console.log("Creating project");
+                response = await query.createProject(
+                    formData.owner,
+                    formData.name,
+                    formData.description,
+                    formData.image,
+                    formData.public,
+                    formData.github_url,
+                    formData.env_vars,
+                    accessToken
+                );
+            }
+            console.log("Response:", response);
+            createAlert(ALERT_SUCCESS_CREATED);
+            // clone the project
+            setDndID(response.message.id);
+
+            const cloneResponse = await query.devOpsClone(
+                formData.github_url,
+                formData.name,
+                formData.env_vars,
+                response.message.id,
+                accessToken
+            );
+            console.log("Clone response:", cloneResponse);
+            setService(cloneResponse.data.services);
+            // navigate("/project/dashboard");
+        } catch (error) {
+            createAlert(ALERT_ERROR_CREATED);
+            console.error("Error creating/updating project:", error);
+        }
+        console.log("Form submitted");
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }
 
-  const handleInputChangeParseInt = (e) => {
-    let value;
-    try {
-      value = (e.target.value === "") ? "" : parseInt(e.target.value);
-    } catch (error) {
-      console.error("Error parsing int when handling form input");
-      return;
-    }
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [e.target.name]: value,
-    }));
-  }
-
-  const handleCheckboxChange = (e) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      public: e.target.checked,
-    }));
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setSubmitAttempted(true);
-    const isValid = validateFormData();
-    if (!isValid) {return;}
-    console.log("Creating/updating project");
-    let response;
-    try {
+    const validateFormData = () => {
+        let valid = true;
+        if (formData.name === "") {
+            setProjectNameError("Cannot be blank");
+            valid = false;
+        } else {
+            setProjectNameError(false);
+        }
+        if (formData.description === "") {
+            setProjectDescError("Cannot be blank");
+            valid = false;
+        } else {
+            setProjectDescError(false);
+        }
+        if (formData.image === null) {
+            setProjectImageError("Must select an image");
+            valid = false;
+        } else {
+            setProjectImageError(false);
+        }
+        if (formData.github_url === "") {
+            setGithubLinkError("Cannot be blank");
+            valid = false;
+        } else {
+            setGithubLinkError(false);
+        }
+        return valid;
+    };
+    
+    useEffect(() => {
+        if (submitAttempted) {
+            validateFormData();
+        }
+    }, [formData]);
+    
+    useEffect(() => {
       if (id) {
-        response = await query.updateProject(
-          id,
-          formData.owner,
-          formData.name,
-          formData.description,
-          formData.image,
-          formData.public,
-          formData.github_url,
-          formData.env_vars,
-          accessToken
-        );
-        createAlert(ALERT_SUCCESS_UPDATED);
-      } else {
-        response = await query.createProject(
-          formData.owner,
-          formData.name,
-          formData.description,
-          formData.image,
-          formData.public,
-          formData.github_url,
-          formData.env_vars,
-          accessToken
-        );
-        createAlert(ALERT_SUCCESS_CREATED);
+        query.getProject(id, accessToken)
+          .then((response) => {
+            if (response.success) {
+              setFormData(response.data);
+            } else {
+              createAlert(ALERT_ERROR_GETTING_PROJECT);
+              console.error("Error getting project:", response.error);
+            }
+          })
       }
+    }, []);
 
-      // clone the project
-      setDndID(response.message.id);
-
-      const cloneResponse = await query.devOpsClone(
-        formData.github_url,
-        formData.name,
-        formData.env_vars,
-        response.message.id,
-        accessToken
-      );
-      console.log("Clone response:", cloneResponse);
-      setService(cloneResponse.data.services);
-      // navigate("/project/dashboard");
-
-    } catch (error) {
-      createAlert(ALERT_ERROR_CREATED);
-      console.error("Error creating/updating project:", error);
-    }
-    console.log("Form submitted");
-  }
-
-
-    // const ServiceComponent = ({ service }) => {
-    //     return (
-    //         <div className="service-component">
-    //             <div className="service-component-header">
-    //                 <h2>{service.name}</h2>
-    //                 <div className="service-component-header-buttons">
-    //                     <Button
-    //                         variant="customDefault"
-    //                         onClick={() => {
-    //                             navigate(`/project/edit/${service.id}`);
-    //                         }}
-    //                     >
-    //                         Edit
-    //                     </Button>
-    //                     <Button
-    //                         variant="customDefault"
-    //                         onClick={() => {
-    //                         }}
-    //                     >
-    //                         Delete
-    //                     </Button>
-    //                 </div>
-    //             </div>
-    //             <div className="service-component-body">
-
-    //             </div>
-    //         </div>
-
-    //     )
-    // }
-
-
-  const validateFormData = () => {
-    let valid = true;
-    if (formData.name === "") {
-      setProjectNameError("Cannot be blank");
-      valid = false;
-    } else {
-      setProjectNameError(false);
-    }
-    if (formData.description === "") {
-      setProjectDescError("Cannot be blank");
-      valid = false;
-    } else {
-      setProjectDescError(false);
-    }
-    if (formData.image === null) {
-      setProjectImageError("Must select an image");
-      valid = false;
-    } else {
-      setProjectImageError(false);
-    }
-    if (formData.github_url === "") {
-      setGithubLinkError("Cannot be blank");
-      valid = false;
-    } else {
-      setGithubLinkError(false);
-    }
-    return valid;
-  };
-
-  useEffect(() => {
-    if (submitAttempted) {
-      validateFormData();
-    }
-  }, [formData]);
-
-  useEffect(() => {
-    if (id) {
-      query.getProject(id, accessToken)
-        .then((response) => {
-          if (response.success) {
-            setFormData(response.data);
-          } else {
-            createAlert(ALERT_ERROR_GETTING_PROJECT);
-            console.error("Error getting project:", response.error);
-          }
-        })
-    }
-  }, []);
 
 
     return (
@@ -343,7 +299,6 @@ const ProjectEdit = () => {
                               <DndProvider backend={HTML5Backend}>
                                 <Dustbin serviceList={service || []} id={dndID || ""} />
                               </DndProvider>
-                              {/* make a disabled button only when the service has atlaest one element */}
 
                             </div>
 
