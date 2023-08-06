@@ -68,6 +68,18 @@ router.get('/:id', express.json(), async (req, res) => {
   res.status(200).send(result);
 });
 
+// get an existing project by project name
+router.get('/name/:project_name', express.json(), async (req, res) => {
+  const projectName = req.params.project_name;
+  const projects = db.collection("projects");
+  const result = await projects.findOne({name: projectName});
+  if (!result ) {
+    res.status(404).send(result);
+    return;
+  }
+  res.status(200).send(result);
+});
+
 // set an existing project's fields (all of them except _id)
 // REQUIRES: JSON body matching project schema and _id -> matching project to update
 router.put('/', express.json(), async (req, res) => {
