@@ -14,7 +14,6 @@ import {
 } from "../state/userSlice";
 import "../styles/teams.css";
 import "../styles/layout.css";
-//import   { addTeamProject, removeTeamProject } from "../state/teamThunks";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
@@ -45,7 +44,6 @@ const Teams = () => {
     const dispatch = useDispatch();
 
     const accessToken = useSelector(accessTokenSelector);
-    //const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxlbmdhVGVzdCIsImlhdCI6MTY5MTE4NTEzMywiZXhwIjoxNjkxMjcxNTMzfQ.FPF9ejM24rhjQeUhNiT3u6nxmRPca20PxDdMcD7hkng';
     const teams = useSelector(teamsSelector);
     const username = useSelector(usernameSelector);
 
@@ -68,9 +66,6 @@ const Teams = () => {
     const handleAddMemberInForm = (e) => {
         e.preventDefault();
 
-        // console.log('newMemberTeamName', newMemberTeamName);
-        // console.log('newMemberUsername', newMemberUsername);
-
         dispatch(addTeamMember({teamName: newMemberTeamName, username: newMemberUsername, accessToken: accessToken}));
 
         setNewMemberUsername("");
@@ -79,9 +74,6 @@ const Teams = () => {
 
     const handleRemoveMemberInForm = (e) => {
         e.preventDefault();
-
-        // console.log('removedMemberTeamName', removedMemberTeamName);
-        // console.log('removedMemberUsername', removedMemberUsername);
 
         dispatch(removeTeamMember({teamName: removedMemberTeamName, username: removedMemberUsername, accessToken: accessToken}));
 
@@ -168,7 +160,6 @@ const Teams = () => {
         setTeamName("");
         setDescription("");
         setOwner("");
-      //  setShowModal(false);
     }
 
     return (
@@ -241,10 +232,9 @@ const Teams = () => {
                         <button className="add-member-button" onClick={handleAddMemberButton}>Add Member</button>
                         {showAddMemberForm && (
                             <form onSubmit={handleAddMemberInForm}>
-                                {/*<input type="text" placeholder={`${selectedTeam.teamName}`} value={newMemberTeamName} onChange={handleNewMemberTeamNameChange} />*/}
                                 <input type="text" placeholder={"Team Name"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
                                 <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
-                                <button type="submit">Add</button>
+                                <button className="add-team-modal-button" type="submit">Add</button>
                                 <button className="close-add-team-modal" onClick={handleCloseAddMemberModalClick}>
                                     Close
                                 </button>
@@ -255,7 +245,7 @@ const Teams = () => {
                             <form onSubmit={handleRemoveMemberInForm}>
                                 <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
                                 <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
-                                <button type="submit">Remove</button>
+                                <button className="add-team-modal-button" type="submit">Remove</button>
                                 <button className="close-add-team-modal" onClick={handleCloseRemoveMemberModalClick}>
                                     Close
                                 </button>
@@ -270,7 +260,6 @@ const Teams = () => {
                         <button className="add-member-button" onClick={handleAddProjectButton}>Add Project</button>
                         {showAddProjectForm && (
                             <form onSubmit={handleAddProjectInForm}>
-                                {/*<input type="text" placeholder={`${selectedTeam.teamName}`} value={newMemberTeamName} onChange={handleNewMemberTeamNameChange} />*/}
                                 <input type="text" placeholder={"TeamName"} value={newProjectTeamName} onChange={(e) => setNewProjectTeamName(e.target.value)} />
                                 <input type="text" placeholder="Project Name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)}/>
                                 <button type="submit">Add</button>

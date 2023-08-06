@@ -48,9 +48,29 @@ const ProjectDashboard = () => {
         query.getUserProjects(username, accessToken)
           .then((response) => {
             const promises = [];
+
+            query.getUserTeams(username, accessToken)
+                .then((teams) => {
+                    let projects = [];
+                    for (const team of teams.data) {
+                        projects.push(...team.projects);
+                    }
+                    for (const project of projects) {
+                        promises.push(query.getProjectByName(project, accessToken));
+                        console.log('promises - lands', promises);
+                    }
+                    Promise.all(promises)
+                        .then((responses) => {
+                            setProjects(responses.map((resp) => resp.data));
+                            setProjectImageError(responses.map(() => false));
+                        })
+                })
+                .catch((err) => {console.error(err);});
+
             for (const id of response.data.project_ids) {
               promises.push(query.getProject(id, accessToken));
-              // TODO add a section to get projects from teams users are part of
+                console.log('promises - philip', promises);
+
             }
             Promise.all(promises)
               .then((responses) => {

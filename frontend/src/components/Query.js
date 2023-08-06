@@ -79,6 +79,15 @@ class Query {
     return (response.status === 200) ? {success: true, data: response.data} : {success: false, message: response.data.message};
   }
 
+    async getProjectByName(project_name, accessToken) {
+    const response = await axiosInstance.get(BASE_URL + `/api/project/name/${project_name}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        validateStatus: (status) => (status === 200)
+      });
+    return (response.status === 200) ? {success: true, data: response.data} : {success: false, message: response.data.message};
+    }
+
   // returns {success: true} if successful, {success: false, message: true} if not
   async deleteProject(project_id, accessToken) {
     const response = await axiosInstance.delete(BASE_URL + `/api/project/${project_id}`,
@@ -170,12 +179,6 @@ class Query {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }
-
-  // async getTeammates(teamName, accessToken) {
-  //   return await axiosInstance.get(BASE_URL + `/api/team/${teamName}/members`, {
-  //     headers: { Authorization: `Bearer ${accessToken}` }
-  //   });
-  // }
 
   async deleteTeam(teamName, accessToken) {
     return await axiosInstance.delete(BASE_URL + `/api/team/${teamName}`,
