@@ -111,6 +111,7 @@ router.post('/:teamName/removeMember/:username', express.json (),async (req, res
     return res.status(200).send("User removed from team");
 });
 
+//used for testing
 router.get('/getTeams', async (req, res) => {
     const projects = db.collection('projects');
     const allTeams = await projects.find().toArray();
