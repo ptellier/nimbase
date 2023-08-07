@@ -15,8 +15,6 @@ import {
     fetchUserTeams,
 } from "./teamThunks";
 import Query from "../components/Query";
-export {refresh, logout, login, googleLogin, signup} from "./userThunks";
-export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks";
 
 export let INITIAL_STATE = {
     accessToken: "",
@@ -197,3 +195,6 @@ export const usernameSelector = (state) => state.user.username;
 export const teamsSelector = (state) => state.user.teams;
 export const emailSelector = (state) => state.user.email;
 export const accessTokenSelector = (state) => state.user.accessToken;
+
+export {refresh, logout, login, googleLogin, signup} from "./userThunks";
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks";
