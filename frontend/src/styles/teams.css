@@ -219,3 +219,12 @@
 .close-add-team-modal:hover {
     background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
 }
+
+.delete-team-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}

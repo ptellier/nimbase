@@ -20,6 +20,14 @@ export const createTeam = createAsyncThunk(
     }
 )
 
+export const deleteTeam = createAsyncThunk(
+    "team/delete",
+    async ({teamName, accessToken, userName}) => {
+        const response = await query.deleteTeam(teamName, accessToken, userName);
+        return response.data;
+    }
+)
+
 export const getTeam = createAsyncThunk(
     "team/get",
     async ({teamName, accessToken}) => {
