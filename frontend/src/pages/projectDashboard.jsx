@@ -43,44 +43,33 @@ const ProjectDashboard = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (username && accessToken) {
-        query.getUserProjects(username, accessToken)
-          .then((response) => {
+    useEffect(() => {
+        if (username && accessToken) {
             const promises = [];
 
-            query.getUserTeams(username, accessToken)
+            promises.push(query.getUserProjects(username, accessToken)
+                .then((response) => {
+                    return Promise.all(response.data.project_ids.map(id => query.getProject(id, accessToken)))
+                })
+                .then((responses) => responses.map((resp) => resp.data)));
+
+            promises.push(query.getUserTeams(username, accessToken)
                 .then((teams) => {
-                    let projects = [];
-                    for (const team of teams.data) {
-                        projects.push(...team.projects);
-                    }
-                    for (const project of projects) {
-                        promises.push(query.getProjectByName(project, accessToken));
-                        console.log('promises - lands', promises);
-                    }
-                    Promise.all(promises)
-                        .then((responses) => {
-                            setProjects(responses.map((resp) => resp.data));
-                            setProjectImageError(responses.map(() => false));
-                        })
+                    const teamProjects = teams.data.flatMap(team => team.projects);
+                    return Promise.all(teamProjects.map(project => query.getProjectByName(project, accessToken)));
+                })
+                .then((responses) => responses.map((resp) => resp.data)));
+
+            Promise.all(promises)
+                .then(([userProjects, teamProjects]) => {
+                    const combinedProjects = [...userProjects, ...teamProjects];
+                    const uniqueProjects = Array.from(new Set(combinedProjects.map(p => p._id))).map(id => combinedProjects.find(p => p._id === id));
+                    setProjects(uniqueProjects);
+                    setProjectImageError(uniqueProjects.map(() => false));
                 })
                 .catch((err) => {console.error(err);});
-
-            for (const id of response.data.project_ids) {
-              promises.push(query.getProject(id, accessToken));
-                console.log('promises - philip', promises);
-
-            }
-            Promise.all(promises)
-              .then((responses) => {
-                setProjects(responses.map((resp) => resp.data));
-                setProjectImageError(responses.map(() => false));
-              })
-          })
-          .catch((err) => {console.error(err);});
-    }
-  }, [username, accessToken]);
+        }
+    }, [username, accessToken]);
 
   const handleConfirmDeleteProject = async () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
