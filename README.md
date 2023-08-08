@@ -80,3 +80,6 @@ to the internet.
 **Phillip Tellier**: Documentation of requirements, features, and use of technologies. Authentication/Authorization back-end
  end points and login and sign-in front-end pages. CRUD operation back-end end-points for user accounts and `project` collection.
 Pages to see all a user's projects, and to edit individual projects.
+
+**Landseer Enga**: Created initial 'explore' page, then primarily worked on the teams feature. Contributed to back-end routes
+for all things related to managing teams and their associated members/projects. Helped create front-end feature to allow users to manage teams.
