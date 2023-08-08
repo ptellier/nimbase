@@ -27,23 +27,14 @@ const Teams = () => {
     const [showModal, setShowModal] = useState(false);
     const [showTeamEditModal, setShowTeamEditModal] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState(null);
-
     const [showAddMemberForm, setShowAddMemberForm] = useState(false);
     const [showRemoveMemberForm, setShowRemoveMemberForm] = useState(false);
     const [showAddProjectForm, setShowAddProjectForm] = useState(false);
     const [showRemoveProjectForm, setShowRemoveProjectForm] = useState(false);
-
     const [newMemberUsername, setNewMemberUsername] = useState("");
-    const [newMemberTeamName, setNewMemberTeamName] = useState("");
-
     const [removedMemberUsername, setRemovedMemberUsername] = useState("");
-    const [removedMemberTeamName, setRemovedMemberTeamName] = useState("");
-
     const [newProjectName, setNewProjectName] = useState("");
-    const [newProjectTeamName, setNewProjectTeamName] = useState("");
-
     const [removedProjectName, setRemovedProjectName] = useState("");
-    const [removedProjectTeamName, setRemovedProjectTeamName] = useState("");
 
     const dispatch = useDispatch();
 
@@ -54,7 +45,7 @@ const Teams = () => {
     const handleDeleteTeamButton = (team) => {
         dispatch(deleteTeam({teamName: selectedTeam.teamName, accessToken: accessToken, userName: username}));
         setShowTeamEditModal(false);
-        // TODO - refresh teams list view
+        setShowTeams(false);
     }
 
     const handleAddMemberButton = () => {
@@ -76,39 +67,35 @@ const Teams = () => {
     const handleAddMemberInForm = (e) => {
         e.preventDefault();
 
-        dispatch(addTeamMember({teamName: newMemberTeamName, username: newMemberUsername, accessToken: accessToken}));
+        dispatch(addTeamMember({teamName: selectedTeam.teamName, username: newMemberUsername, accessToken: accessToken}));
 
         setNewMemberUsername("");
-        setNewMemberTeamName("");
     };
 
     const handleRemoveMemberInForm = (e) => {
         e.preventDefault();
 
-        dispatch(removeTeamMember({teamName: removedMemberTeamName, username: removedMemberUsername, accessToken: accessToken}));
+        dispatch(removeTeamMember({teamName: selectedTeam.teamName, username: removedMemberUsername, accessToken: accessToken}));
 
         setRemovedMemberUsername("");
-        setRemovedMemberTeamName("");
     };
 
     const handleAddProjectInForm = (e) => {
         e.preventDefault();
 
-        dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken, userName: username}));
+        dispatch(addTeamProject({teamName: selectedTeam.teamName, projectName: newProjectName, accessToken: accessToken, userName: username}));
 
         setNewProjectName("");
-        setNewProjectTeamName("");
     }
 
     const handleRemoveProjectInForm = (e) => {
         e.preventDefault();
         if (username === selectedTeam.owner) {
-            dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
+            dispatch(removeTeamProject({teamName: selectedTeam.teamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
         } else {
             alert("You are not the owner of this team. Only the owner can remove projects from the team.");
         }
         setRemovedProjectName("");
-        setRemovedProjectTeamName("");
     }
 
 
@@ -127,6 +114,7 @@ const Teams = () => {
     const closeTeamEditModal = () => {
         setSelectedTeam(null);
         setShowTeamEditModal(false);
+        setShowTeams(false);
     };
     const handleCreateTeamClick = () => {
         setShowModal(true);
@@ -158,13 +146,14 @@ const Teams = () => {
         dispatch(createTeam({
             teamName,
             description,
-            owner,
+            owner: username,
             accessToken
         }));
 
         setTeamName("");
         setDescription("");
-        setOwner("");
+        setShowTeams(false);
+        setShowModal(false);
     }
 
     return (
@@ -185,7 +174,6 @@ const Teams = () => {
                                         <VStack spacing={4}>
                                             <input type="text" placeholder="Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                                             <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                            <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
                                             <HStack spacing={5} justify="center">
                                                 <Button type="submit">Add Team</Button>
                                                 <Button onClick={handleCloseAddTeamModalClick}>Close</Button>
@@ -246,7 +234,6 @@ const Teams = () => {
                                 {showAddMemberForm && (
                                     <form onSubmit={handleAddMemberInForm}>
                                         <VStack spacing={2} className="med-grey-box">
-                                            <input type="text" placeholder={"Team Name"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
                                             <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
                                             <HStack spacing={4} justify="center">
                                                 <Button type="submit">Add</Button>
@@ -259,7 +246,6 @@ const Teams = () => {
                                 {showRemoveMemberForm && (
                                     <form onSubmit={handleRemoveMemberInForm}>
                                         <VStack spacing={2} className="med-grey-box">
-                                            <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
                                             <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
                                             <HStack spacing={4} justify="center">
                                                 <Button type="submit">Remove</Button>
@@ -281,7 +267,6 @@ const Teams = () => {
                             {showAddProjectForm && (
                                 <form onSubmit={handleAddProjectInForm}>
                                     <VStack spacing={2} className="med-grey-box">
-                                        <input type="text" placeholder={"Team Name"} value={newProjectTeamName} onChange={(e) => setNewProjectTeamName(e.target.value)} />
                                         <input type="text" placeholder="Project Name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)}/>
                                         <HStack spacing={4} justify="center">
                                             <Button type="submit">Add</Button>
@@ -294,7 +279,6 @@ const Teams = () => {
                             {showRemoveProjectForm && (
                                 <form onSubmit={handleRemoveProjectInForm}>
                                     <VStack spacing={2} className="med-grey-box">
-                                        <input type="text" placeholder="Team Name" value={removedProjectTeamName} onChange={(e) => setRemovedProjectTeamName(e.target.value)} />
                                         <input type="text" placeholder="Project Name" value={removedProjectName} onChange={(e) => setRemovedProjectName(e.target.value)}/>
                                         <HStack spacing={4} justify="center">
                                             <Button type="submit">Remove</Button>
@@ -314,6 +298,5 @@ const Teams = () => {
         </div>
     );
 };
-
 
 export default Teams;
