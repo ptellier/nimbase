@@ -146,34 +146,39 @@ router.post('/:teamName/addProject/:projectName', express.json(), async (req, re
 });
 
 router.post('/:teamName/removeProject/:projectName', express.json(), async (req, res) => {
-    const teams = db.collection('teams');
-    const projectName = req.params.projectName;
-    const teamName = req.params.teamName;
-    const {username} = req.body;
+    try {
+        const teams = db.collection('teams');
+        const projects = db.collection("projects");
 
-    const team = await teams.findOne({teamName: teamName});
+        const projectName = req.params.projectName;
+        const teamName = req.params.teamName;
+        const { username } = req.body;
 
-    if(!team) {
-        return res.status(404).send("Team not found");
-    }
+        const team = await teams.findOne({ teamName: teamName });
+        if (!team) {
+            return res.status(404).send("Team not found");
+        }
 
-    if(!team.projects.includes(projectName)) {
-        return res.status(400).send("Project not in team");
-    }
+        if (!team.projects.includes(projectName)) {
+            return res.status(400).send("Project not in team");
+        }
 
-    //if you want to remove a project from a team, you need to be the projects owner
-    const projects = db.collection("projects");
-    const project = await projects.findOne({name: projectName});
+        const project = await projects.findOne({ name: projectName });
+        if (!project) {
+            return res.status(404).send("Project not found");
+        }
 
-    // checks if project exists, if it does, checks if the user is the owner. If doesnt exist, just let users removes it
-    if (project) {
         if (project.owner !== username) {
             return res.status(401).send("You are not the owner of this project");
         }
-    }
 
-    await teams.updateOne({teamName: teamName}, {$pull: {projects: projectName}});
-    return res.status(200).send("Project removed from team");
+        await teams.updateOne({ teamName: teamName }, { $pull: { projects: projectName } });
+        return res.status(200).send("Project removed from team");
+
+    } catch (error) {
+        console.error("Error removing project:", error);
+        return res.status(500).send("Internal server error");
+    }
 });
 
 // changed from delete to post
