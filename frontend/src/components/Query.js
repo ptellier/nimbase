@@ -180,8 +180,10 @@ class Query {
     });
   }
 
-  async deleteTeam(teamName, accessToken) {
-    return await axiosInstance.delete(BASE_URL + `/api/team/${teamName}`,
+  async deleteTeam(teamName, accessToken, userName) {
+    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}`,{
+      username: userName,
+    },
         {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
