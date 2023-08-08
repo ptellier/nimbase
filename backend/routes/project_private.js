@@ -83,7 +83,7 @@ router.post("/update", async (req, res) => {
         client: req.body.client,
         connection_url: req.body.connection_url,
         server: req.body.server,
-        url: `${req.body._id}.${process.env.HOSTNAME}`,
+        url: `http://${req.body._id}.${process.env.HOSTNAME}`,
         services: req.body.services,
       },
     }
@@ -91,6 +91,26 @@ router.post("/update", async (req, res) => {
   return res.status(200).json({ message: "project updated" });
 });
 
+
+router.post("/deploy", async (req, res) => {
+  const projects = db.collection("projects");
+  const { _id } = req.body;
+  console.log("this is the id" , _id);
+  const project = await projects.findOne({ _id: new ObjectId(_id) });
+  if (!project) {
+    return res.status(400).json({ message: "project does not exist" });
+  }
+  const config_services = {
+    client: project.client,
+    server: project.server,
+    connection_url: project.connection_url
+  }
+  const result = await configureDockerComposeFiles(_id, config_services);
+  console.log(result);
+  const deployResult = await deployDocker(_id);
+  console.log(deployResult);
+  return res.status(200).json({ message: "project deployed" });
+});
 
 // create a project
 // router.post("/:id", async (req, res) => {
