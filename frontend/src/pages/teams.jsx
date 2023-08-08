@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import NavBar from "../components/NavBar";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,6 +15,9 @@ import {
 } from "../state/userSlice";
 import "../styles/teams.css";
 import "../styles/layout.css";
+import {Button, Flex, Heading, HStack, VStack} from "@chakra-ui/react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
@@ -167,29 +170,34 @@ const Teams = () => {
     return (
         <div className={"background-image"}>
             <NavBar />
-            <h1 className={"teams-header"}>Teams</h1>
+            <Heading as="h1" fontWeight={500} fontSize="48px" align={"center"}
+                     className="red-brick-gradient-text inika-font">
+                Teams
+            </Heading>
             <div className={"teams-container"}>
                 <div className={"teams-box"}>
-                    <button className="create-team-button" onClick={handleCreateTeamClick}>
-                        Create Team
-                    </button>
-                    {showModal && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <form onSubmit={handleSubmit}>
-                                    <input type="text" placeholder="Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-                                    <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                    <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
-                                    <button className="add-team-modal-button" type="submit">Add Team</button>
-                                    <button className="close-add-team-modal" onClick={handleCloseAddTeamModalClick}>
-                                        Close
-                                    </button>
-                                </form>
+                    <HStack spacing={5}>
+                        <Button onClick={handleCreateTeamClick}>Create Team</Button>
+                        {showModal && (
+                            <div className="modal">
+                                <div className="modal-content">
+                                    <form onSubmit={handleSubmit}>
+                                        <VStack spacing={4}>
+                                            <input type="text" placeholder="Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+                                            <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                            <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} />
+                                            <HStack spacing={5} justify="center">
+                                                <Button type="submit">Add Team</Button>
+                                                <Button onClick={handleCloseAddTeamModalClick}>Close</Button>
+                                            </HStack>
+                                        </VStack>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    <button className="view-teams-button" onClick={handleViewTeams}>View Teams</button>
-                    {showTeams && <h3 className="your-teams-header">Your Teams</h3>}
+                        )}
+                        <Button onClick={handleViewTeams}>View Teams</Button>
+                    </HStack>
+                    {showTeams && <Heading as="h2" fontWeight={500} fontSize="28px" className="your-teams-header inika-font">Your Teams</Heading>}
                     {showTeams && (
                         <div className="table-container">
                         <table>
@@ -200,6 +208,7 @@ const Teams = () => {
                                 <th>Owner</th>
                                 <th>Members</th>
                                 <th>Projects</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -210,7 +219,7 @@ const Teams = () => {
                                     <td>{team.owner}</td>
                                     <td>{team.members.join(', ')}</td>
                                     <td>{team.projects.join(', ')}</td>
-                                    <td><button className="edit-button" onClick={() => handleEditTeamClick(team)}>Edit</button></td>
+                                    <td><Button className="edit-button" onClick={() => handleEditTeamClick(team)}>Edit</Button></td>
                                 </tr>
                             ))}
                             </tbody>
@@ -222,67 +231,84 @@ const Teams = () => {
 
             {showTeamEditModal && selectedTeam && (
                 <div className="modal">
-                    <div className="modal-content">
-                        <span className="close" onClick={closeTeamEditModal}>&times;</span>
-                        <h3 className="blue-bold-heading">{selectedTeam.teamName}</h3>
-                        <h4>Team Members:</h4>
-                        <ul className="team-members-list">
-                            {selectedTeam.members.map((member, index) => (
-                                <li key={index}><span></span> {member}</li>
-                            ))}
-                        </ul>
-                        <button className="add-member-button" onClick={handleAddMemberButton}>Add Member</button>
-                        {showAddMemberForm && (
-                            <form onSubmit={handleAddMemberInForm}>
-                                <input type="text" placeholder={"Team Name"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
-                                <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
-                                <button className="add-team-modal-button" type="submit">Add</button>
-                                <button className="close-add-team-modal" onClick={handleCloseAddMemberModalClick}>
-                                    Close
-                                </button>
-                            </form>
-                        )}
-                        <button className="remove-member-button" onClick={handleRemoveMember}>Remove Member</button>
-                        {showRemoveMemberForm && (
-                            <form onSubmit={handleRemoveMemberInForm}>
-                                <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
-                                <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
-                                <button className="add-team-modal-button" type="submit">Remove</button>
-                                <button className="close-add-team-modal" onClick={handleCloseRemoveMemberModalClick}>
-                                    Close
-                                </button>
-                            </form>
-                        )}
-                        <h5>Team Projects:</h5>
-                        <ul className="team-members-list">
-                            {selectedTeam.projects.map((project, index) =>
-                                <li key={index}> {project}</li>
+                    <VStack className="modal-content" spacing={4} align="left">
+                        <Flex justifyContent="space-between">
+                            <span></span>
+                            <Heading as="h3" fontWeight={500} fontSize={"36px"} align="center">{selectedTeam.teamName}</Heading>
+                            <button className="close" onClick={closeTeamEditModal} style={{height: "20px"}}>&times;</button>
+                        </Flex>
+
+                        <HStack spacing={4} justify="center" align="flex-start" flexWrap="wrap">
+                            <VStack spacing={2} className="light-grey-box">
+                                <Heading as="h4" fontWeight={500} fontSize={"20px"} align="left">Team Members:</Heading>
+                                <p>{selectedTeam.members.join(', ')}</p>
+                                <Button onClick={handleAddMemberButton}>Add Member</Button>
+                                {showAddMemberForm && (
+                                    <form onSubmit={handleAddMemberInForm}>
+                                        <VStack spacing={2} className="med-grey-box">
+                                            <input type="text" placeholder={"Team Name"} value={newMemberTeamName} onChange={(e) => setNewMemberTeamName(e.target.value)} />
+                                            <input type="text" placeholder="username" value={newMemberUsername} onChange={(e) => setNewMemberUsername(e.target.value)}/>
+                                            <HStack spacing={4} justify="center">
+                                                <Button type="submit">Add</Button>
+                                                <Button onClick={handleCloseAddMemberModalClick}>Close</Button>
+                                            </HStack>
+                                        </VStack>
+                                    </form>
+                                )}
+                                <Button onClick={handleRemoveMember}>Remove Member</Button>
+                                {showRemoveMemberForm && (
+                                    <form onSubmit={handleRemoveMemberInForm}>
+                                        <VStack spacing={2} className="med-grey-box">
+                                            <input type="text" placeholder="Team Name" value={removedMemberTeamName} onChange={(e) => setRemovedMemberTeamName(e.target.value)} />
+                                            <input type="text" placeholder="username" value={removedMemberUsername} onChange={(e) => setRemovedMemberUsername(e.target.value)}/>
+                                            <HStack spacing={4} justify="center">
+                                                <Button type="submit">Remove</Button>
+                                                <Button onClick={handleCloseRemoveMemberModalClick}>Close</Button>
+                                            </HStack>
+                                        </VStack>
+                                    </form>
+                                )}
+                            </VStack>
+
+                            <VStack spacing={2} className="light-grey-box">
+                            <Heading as="h4" fontWeight={500} fontSize={"20px"} align="left">Team Projects:</Heading>
+                            <ul className="team-members-list">
+                                {selectedTeam.projects.map((project, index) =>
+                                    <li key={index}> {project}</li>
+                                )}
+                            </ul>
+                            <Button onClick={handleAddProjectButton}>Add Project</Button>
+                            {showAddProjectForm && (
+                                <form onSubmit={handleAddProjectInForm}>
+                                    <VStack spacing={2} className="med-grey-box">
+                                        <input type="text" placeholder={"Team Name"} value={newProjectTeamName} onChange={(e) => setNewProjectTeamName(e.target.value)} />
+                                        <input type="text" placeholder="Project Name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)}/>
+                                        <HStack spacing={4} justify="center">
+                                            <Button type="submit">Add</Button>
+                                            <Button onClick={handleCloseAddProjectModalClick}>Close</Button>
+                                        </HStack>
+                                    </VStack>
+                                </form>
                             )}
-                        </ul>
-                        <button className="add-member-button" onClick={handleAddProjectButton}>Add Project</button>
-                        {showAddProjectForm && (
-                            <form onSubmit={handleAddProjectInForm}>
-                                <input type="text" placeholder={"TeamName"} value={newProjectTeamName} onChange={(e) => setNewProjectTeamName(e.target.value)} />
-                                <input type="text" placeholder="Project Name" value={newProjectName} onChange={(e) => setNewProjectName(e.target.value)}/>
-                                <button type="submit">Add</button>
-                                <button className="close-add-team-modal" onClick={handleCloseAddProjectModalClick}>
-                                    Close
-                                </button>
-                            </form>
-                        )}
-                        <button className="remove-member-button" onClick={handleRemoveProjectButton}>Remove Project</button>
-                        {showRemoveProjectForm && (
-                            <form onSubmit={handleRemoveProjectInForm}>
-                                <input type="text" placeholder="Team Name" value={removedProjectTeamName} onChange={(e) => setRemovedProjectTeamName(e.target.value)} />
-                                <input type="text" placeholder="Project Name" value={removedProjectName} onChange={(e) => setRemovedProjectName(e.target.value)}/>
-                                <button type="submit">Remove</button>
-                                <button className="close-add-team-modal" onClick={handleCloseRemoveProjectModalClick}>
-                                    Close
-                                </button>
-                            </form>
-                        )}
-                        <button className="delete-team-button" onClick={handleDeleteTeamButton}>Delete Team</button>
-                    </div>
+                            <Button onClick={handleRemoveProjectButton}>Remove Project</Button>
+                            {showRemoveProjectForm && (
+                                <form onSubmit={handleRemoveProjectInForm}>
+                                    <VStack spacing={2} className="med-grey-box">
+                                        <input type="text" placeholder="Team Name" value={removedProjectTeamName} onChange={(e) => setRemovedProjectTeamName(e.target.value)} />
+                                        <input type="text" placeholder="Project Name" value={removedProjectName} onChange={(e) => setRemovedProjectName(e.target.value)}/>
+                                        <HStack spacing={4} justify="center">
+                                            <Button type="submit">Remove</Button>
+                                            <Button onClick={handleCloseRemoveProjectModalClick}>Close</Button>
+                                        </HStack>
+                                    </VStack>
+                                </form>
+                            )}
+                            </VStack>
+                        </HStack>
+                        <Flex justify={"center"}>
+                            <Button onClick={handleDeleteTeamButton} whiteSpace="pre">Delete Team <FontAwesomeIcon icon={faTrashCan}/></Button>
+                        </Flex>
+                    </VStack>
                 </div>
             )}
         </div>
