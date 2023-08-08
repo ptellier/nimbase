@@ -99,9 +99,11 @@ const Teams = () => {
 
     const handleRemoveProjectInForm = (e) => {
         e.preventDefault();
-
-        dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
-
+        if (username === selectedTeam.owner) {
+            dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
+        } else {
+            alert("You are not the owner of this team. Only the owner can remove projects from the team.");
+        }
         setRemovedProjectName("");
         setRemovedProjectTeamName("");
     }
