@@ -58,10 +58,11 @@ const App = () => {
             <Route exact path="/signup" element={<Signup/>}/>
             <Route element={<ProtectedRoutes/>}>
               <Route path="/teams" element={<Teams/>}/>
-              <Route path="/project" element={<ProjectAlerts />} />
-              <Route path="/project/dashboard" element={<ProjectDashboard />} />
-              <Route path="/project/new" element={<ProjectEdit />} />
-              <Route path="/project/edit/:id" element={<ProjectEdit />} />
+              <Route exact path="/project" element={<ProjectAlerts/>}>
+                <Route exact path="/project/dashboard" element={<ProjectDashboard/>}/>
+                <Route exact path="/project/new" element={<ProjectEdit/>}/>
+                <Route exact path="/project/edit/:id" element={<ProjectEdit/>}/>
+              </Route>
               <Route path="/api-test-page" element={<ApiTestPage/>}/>
             </Route>
             <Route exact path="*" element={<Page404/>}/>
