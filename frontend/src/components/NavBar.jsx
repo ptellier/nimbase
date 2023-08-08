@@ -21,6 +21,10 @@ const NavBar = () => {
     navigate("/");
   }
 
+  const handleTeamsItem = () => {
+    navigate("/teams");
+  }
+
   const isGoogleSSO = (username === email);
 
   return (
@@ -34,7 +38,6 @@ const NavBar = () => {
             {username ?
                 <>
                   <Link to={"/project/dashboard"} className="nav-item"><Text fontSize={FONT_SIZES}>Projects</Text></Link>
-                  <Link to={"/teams"} className="nav-item"><Text fontSize={FONT_SIZES}>Teams</Text></Link>
                 </>
                 :
                 <>
@@ -58,17 +61,19 @@ const NavBar = () => {
                     <Text fontSize={FONT_SIZES} className="nav-item">{username} <FontAwesomeIcon icon={faChevronDown} size="xs"/></Text>
                   </MenuButton>
                   <MenuList>
-
+                    <MenuItem onClick={handleTeamsItem}>
+                      <Text fontSize={FONT_SIZES}>Teams</Text>
+                    </MenuItem>
                     <MenuItem onClick={(isGoogleSSO) ? undefined : onClickLogout}>
-                      {(isGoogleSSO) ?
-                          <GoogleLogout
-                              clientId={CLIENT_ID}
-                              buttonText="Logout"
-                              onLogoutSuccess={onClickLogout}
-                          />
-                          :
-                          <Text fontSize={FONT_SIZES}>Logout</Text>
-                      }
+                        {(isGoogleSSO) ?
+                            <GoogleLogout
+                                clientId={CLIENT_ID}
+                                buttonText="Logout"
+                                onLogoutSuccess={onClickLogout}
+                            />
+                            :
+                            <Text fontSize={FONT_SIZES}>Logout</Text>
+                        }
                     </MenuItem>
                   </MenuList>
                 </Menu>

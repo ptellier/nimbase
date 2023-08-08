@@ -7,6 +7,7 @@ import {
 } from "./userThunks";
 import {
     createTeam,
+    deleteTeam,
     getTeam,
     addTeamMember,
     removeTeamMember,
@@ -15,8 +16,6 @@ import {
     fetchUserTeams,
 } from "./teamThunks";
 import Query from "../components/Query";
-export {refresh, logout, login, googleLogin, signup} from "./userThunks";
-export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, addTeamProject, removeTeamProject} from "./teamThunks";
 
 export let INITIAL_STATE = {
     accessToken: "",
@@ -25,7 +24,6 @@ export let INITIAL_STATE = {
     signupError: undefined,
     loginError: undefined,
     teams: [],
-    //   members: [],
 }
 export const query = new Query();
 
@@ -78,7 +76,11 @@ export const userSlice = createSlice({
                     members: [],
                     projects: [],
                 });
-                state.accessToken = action.payload.accessToken;
+                //state.accessToken = action.payload.accessToken;
+            })
+            // TODO - figure out how to update the state of the team after deleting a project
+            .addCase(deleteTeam.fulfilled, (state, action) => {
+                state.teams = state.teams.filter(t => t.teamName !== action.payload.teamName);
             })
             .addCase(getTeam.fulfilled, (state, action) => {
                 const team = state.teams.find(t => t.teamName === action.payload.teamName);
@@ -87,35 +89,35 @@ export const userSlice = createSlice({
                     team.owner = action.payload.owner;
                     team.projects = action.payload.projects;
                 }
-                state.accessToken = action.payload.accessToken;
+               // state.accessToken = action.payload.accessToken;
             })
             .addCase(addTeamMember.fulfilled, (state, action) => {
                 const team = state.teams.find(t => t.teamName === action.payload.teamName);
                 if (team) {
                     team.members.push(action.payload.username);
                 }
-                state.accessToken = action.payload.accessToken;
+                //state.accessToken = action.payload.accessToken;
             })
             .addCase(removeTeamMember.fulfilled, (state, action) => {
                 const team = state.teams.find(t => t.teamName === action.payload.teamName);
                 if (team) {
                     team.members = team.members.filter(m => m !== action.payload.username);
                 }
-                state.accessToken = action.payload.accessToken;
+                //state.accessToken = action.payload.accessToken;
             })
             .addCase(addTeamProject.fulfilled, (state, action) => {
                 const team = state.teams.find(t => t.teamName === action.payload.teamName);
                 if (team) {
                     team.projects.push(action.payload.projectName);
                 }
-                state.accessToken = action.payload.accessToken;
+                //state.accessToken = action.payload.accessToken;
             })
             .addCase(removeTeamProject.fulfilled, (state, action) => {
                 const team = state.teams.find(t => t.teamName === action.payload.teamName);
                 if (team) {
                     team.projects = team.projects.filter(p => p !== action.payload.projectName);
                 }
-                state.accessToken = action.payload.accessToken;
+                //state.accessToken = action.payload.accessToken;
             })
             .addMatcher(isAnyOf(login.rejected, logout.rejected, signup.rejected, googleLogin.rejected, refresh.rejected),
                 (state, action) => {
@@ -196,4 +198,7 @@ export const signupErrorMessageSelector = (state) => state.user.signupError;
 export const usernameSelector = (state) => state.user.username;
 export const teamsSelector = (state) => state.user.teams;
 export const emailSelector = (state) => state.user.email;
-export const accessTokenSelector = (state) => state.user.accessToken;
+export const accessTokenSelector = (state) => state?.user?.accessToken;
+
+export {refresh, logout, login, googleLogin, signup} from "./userThunks";
+export {addTeamMember, removeTeamMember, fetchUserTeams, createTeam, deleteTeam, addTeamProject, removeTeamProject} from "./teamThunks";

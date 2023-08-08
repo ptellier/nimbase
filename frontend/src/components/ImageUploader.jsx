@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUpFromBracket, faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {Button} from "@chakra-ui/react";
 
-const ImageUploader = ({error, setImage}) => {
+const ImageUploader = ({error, image, setImage}) => {
   const imageInput = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -30,8 +30,8 @@ const ImageUploader = ({error, setImage}) => {
         null
       }
       <div className="image-upload-image-container">
-        {(previewImage) ?
-          <img width="100%" src={previewImage} alt={"uploaded image of project"}
+        {(previewImage || image) ?
+          <img width="100%" src={(previewImage) ? previewImage : image} alt={"uploaded image of project"}
                className="image-uploader-image" style={{textAlign:"center"}}/>
           :
           <div className="dashboard-image-error"/>
