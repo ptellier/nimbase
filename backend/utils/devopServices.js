@@ -227,6 +227,10 @@ async function configureDockerComposeFiles(project_name, config_services) {
         console.log("docker-compose-traefik file is created successfully.");
       }
     );
+    return {
+      status: "success",
+      message: "Docker compose files configured successfully",
+    };
   } catch (error) {
     return {
       status: "error",
@@ -238,6 +242,11 @@ async function configureDockerComposeFiles(project_name, config_services) {
 // deploy docker compose file
 async function deployDocker(project_name) {
   //deploy project's docker-compose file
+  //deploy inner traefik's docker-compose file
+  const { stdout: stdout4, stderr: stderr4 } = await exec(
+    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down`
+  );
+
   const dockerComposeFile = `${REPO_BASE_URL}/${project_name}/docker-compose-traefik.yml`;
   const { stdout: stdout1, stderr: stderr1 } = await exec(
     `docker-compose -f ${dockerComposeFile} down`
@@ -249,10 +258,9 @@ async function deployDocker(project_name) {
     `docker system prune -f`
   );
 
-  //deploy inner traefik's docker-compose file
-  const { stdout: stdout4, stderr: stderr4 } = await exec(
-    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down && docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
-  );
+  const { stdout: stdout5, stderr: stderr5 } = await exec(
+    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`)
+
 
   return {
     status: "success",

@@ -76,7 +76,7 @@ class Query {
         name: project.name || "",
         description: project.description || "",
         image: project.image || "",
-        public: project.public || false,
+        public: project.public == null ? false : project.public,
         github_url: project.github_url || "",
         env_vars: project.env_vars || "",
         services: project.services || [],
@@ -123,7 +123,7 @@ class Query {
         name: project.name || "",
         description: project.description || "",
         image: project.image || "",
-        public: project.public || true,
+        public: project.public == null ? false : project.public,
         github_url: project.github_url || "",
         env_vars: project.env_vars || "",
         client: project.client || "",
@@ -141,6 +141,22 @@ class Query {
       : { success: false, message: response.data };
   }
 
+  async deployProject(_id, accessToken) {
+    const response = await axiosInstance.post(
+      BASE_URL + "/api/project/deploy",
+      {
+        _id: _id,
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+    console.log(response);
+    return response.status === 200
+      ? { success: true, message: response.data }
+      : { success: false, message: response.data };
+  }
+  
   async getProject(project_id, accessToken) {
     const response = await axiosInstance.get(
       BASE_URL + `/api/project/${project_id}`,

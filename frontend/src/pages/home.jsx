@@ -19,8 +19,8 @@ const Home = () => {
           backgroundPosition: "center bottom",
         }}>
           <NavBar />
-          <div style={{margin:"auto", width: "100%"}}>
-            <Heading as="h1" className="title red-brick-gradient-text" fontWeight={700}
+          <div style={{margin:"auto", width: "100%" , display: "flex", height: "60%", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                      <Heading as="h1" className="title red-brick-gradient-text" fontWeight={700}
                      fontSize={{base: '48px', sm: '56px', md: '64px'}}> Nimbase </Heading>
             <Heading as="h2" className="sub-title" fontWeight={400}
                      fontSize={{base: '24px', sm: '32px', md: '48px'}}>Your base in the Cloud</Heading>
