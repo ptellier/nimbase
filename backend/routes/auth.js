@@ -14,6 +14,7 @@ const EXPIRY_TIME_OF_ACCESS_TOKEN = '1d';
 const EXPIRY_TIME_OF_REFRESH_TOKEN = '7d';
 
 
+
 // authenticate/login user
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
