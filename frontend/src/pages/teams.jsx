@@ -8,6 +8,7 @@ import {
     addTeamMember,
     removeTeamMember,
     createTeam,
+    deleteTeam,
     fetchUserTeams,
     teamsSelector,
     usernameSelector
@@ -47,6 +48,12 @@ const Teams = () => {
     const teams = useSelector(teamsSelector);
     const username = useSelector(usernameSelector);
 
+    const handleDeleteTeamButton = (team) => {
+        dispatch(deleteTeam({teamName: selectedTeam.teamName, accessToken: accessToken, userName: username}));
+        setShowTeamEditModal(false);
+        // TODO - refresh teams list view
+    }
+
     const handleAddMemberButton = () => {
         setShowAddMemberForm(true);
     };
@@ -84,9 +91,6 @@ const Teams = () => {
     const handleAddProjectInForm = (e) => {
         e.preventDefault();
 
-        console.log('added project - name', newProjectName);
-        console.log('added project -  team name', newProjectTeamName);
-
         dispatch(addTeamProject({teamName: newProjectTeamName, projectName: newProjectName, accessToken: accessToken, userName: username}));
 
         setNewProjectName("");
@@ -95,9 +99,6 @@ const Teams = () => {
 
     const handleRemoveProjectInForm = (e) => {
         e.preventDefault();
-
-        console.log('removed project - name', removedProjectName);
-        console.log('removed project -  team name', removedProjectTeamName);
 
         dispatch(removeTeamProject({teamName: removedProjectTeamName, projectName: removedProjectName, accessToken: accessToken, userName: username}));
 
@@ -108,7 +109,6 @@ const Teams = () => {
 
     const handleViewTeams = () => {
         setShowTeams(!showTeams);
-        console.log('accessToken', accessToken)
         dispatch(fetchUserTeams({username, accessToken}));
     }
 
@@ -254,7 +254,7 @@ const Teams = () => {
                         <h5>Team Projects:</h5>
                         <ul className="team-members-list">
                             {selectedTeam.projects.map((project, index) =>
-                                <li key={index}><span>*</span> {project}</li>
+                                <li key={index}> {project}</li>
                             )}
                         </ul>
                         <button className="add-member-button" onClick={handleAddProjectButton}>Add Project</button>
@@ -279,6 +279,7 @@ const Teams = () => {
                                 </button>
                             </form>
                         )}
+                        <button className="delete-team-button" onClick={handleDeleteTeamButton}>Delete Team</button>
                     </div>
                 </div>
             )}
