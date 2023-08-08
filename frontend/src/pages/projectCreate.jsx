@@ -98,7 +98,7 @@ const ALERT_ERROR_GETTING_PROJECT = {
   alertText: "Error, could not get project from server!",
 };
 
-const ProjectEdit = () => {
+const ProjectCreate = () => {
   const dispatch = useDispatch();
   const project = useSelector(currentProjectSelector);
   const [show, setShow] = useState(false);
@@ -118,7 +118,6 @@ const ProjectEdit = () => {
   const accessToken = useSelector(accessTokenSelector);
   
   const { id } = useParams();
-  const query_id = id;
   const navigate = useNavigate();
 
   const [service, setService] = useState([]);
@@ -198,13 +197,13 @@ const ProjectEdit = () => {
     dispatch(initProject(formData)).then(async (res) => {
       console.log(res);
       // console.log(project);
-      // const response = await query.createProject(res.payload, accessToken);
-      // console.log("Response:", response);
-      
-      const response2 = await query.createProjectFiles(query_id, res.payload, accessToken);
+      const response = await query.createProject(res.payload, accessToken);
+      console.log("Response:", response);
+      const inserted_id = response.message._id;
+      const response2 = await query.createProjectFiles(inserted_id, res.payload, accessToken);
       const services = response2.message.services;
       //  update formdata with id and services
-      dispatch(initProject({ ...res.payload, services: services, _id: query_id })).then((res) => {
+      dispatch(initProject({ ...res.payload, services: services, _id: inserted_id })).then((res) => {
         handleShow();
       });
     });
@@ -293,20 +292,18 @@ const ProjectEdit = () => {
     }
   }, [formData]);
 
-  useEffect(() => {
-    console.log("Query id:", id);
-    if (query_id) {
-      query.getProject(query_id, accessToken).then((response) => {
-        if (response.success) {
-          console.log("Response:", response.data);
-          setFormData(response.data);
-        } else {
-          createAlert(ALERT_ERROR_GETTING_PROJECT);
-          console.error("Error getting project:", response.error);
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (id) {
+  //     query.getProject(id, accessToken).then((response) => {
+  //       if (response.success) {
+  //         setFormData(response.data);
+  //       } else {
+  //         createAlert(ALERT_ERROR_GETTING_PROJECT);
+  //         console.error("Error getting project:", response.error);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   return (
     <>
@@ -401,4 +398,4 @@ const ProjectEdit = () => {
   );
 };
 
-export default ProjectEdit;
+export default ProjectCreate;

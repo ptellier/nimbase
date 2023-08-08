@@ -6,6 +6,7 @@ import Explore from "./pages/explore";
 import Signup from "./pages/signup";
 import ProjectDashboard from "./pages/projectDashboard";
 import ProjectEdit from "./pages/projectEdit";
+import ProjectCreate from './pages/projectCreate';
 import ApiTestPage from "./pages/apiTestPage";
 import {Provider, useDispatch} from "react-redux";
 import {persistor, store} from "./store";
@@ -53,7 +54,7 @@ const App = () => {
               <Route exact path="/teams" element={<Teams/>}/>
               <Route exact path="/project" element={<ProjectAlerts/>}>
               <Route exact path="/project/dashboard" element={<ProjectDashboard/>}/>
-              <Route exact path="/project/new" element={<ProjectEdit/>}/>
+              <Route exact path="/project/new" element={<ProjectCreate/>}/>
               <Route exact path="/project/edit/:id" element={<ProjectEdit/>}/>
             </Route>
             <Route exact path="/api-test-page" element={<ApiTestPage/>}/>
