@@ -20,6 +20,7 @@ router.get('/:username/teams', express.json(), async (req, res) => {
   console.log("username: ", username);
   const teams = db.collection('teams');
   const usersTeams = await teams.find({owner: username}).toArray();
+  console.log("usersTeams: ", usersTeams);
   if(usersTeams.length === 0) {
     return res.status(404).send("No teams found");
   }
