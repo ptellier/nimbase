@@ -3,10 +3,12 @@ import { useDrag, useDrop } from 'react-dnd'
 import { Button } from "@chakra-ui/react";
 import Query from "./Query"
 import {accessTokenSelector} from "../state/userSlice";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { currentProjectSelector } from "../state/currentProjectSlice";
+import { initProject, resetProject } from "../state/currentProjectSlice";
 
 const query = new Query();
 
@@ -52,19 +54,32 @@ const containerStyle = {
   justifyContent: 'center'
 }
 
-const Dustbin =  ({serviceList, id}) => {
+const DndComponent =  () => {
+  const dispatch = useDispatch();
+  const project = useSelector(currentProjectSelector);
   const navigate = useNavigate();
   const accessToken = useSelector(accessTokenSelector);
   const [services, setServices] = useState({ client: '', server: '' })
   const [connectionUrl, setConnectionUrl] = useState("")
   
   const handleDeploy = async (connectionUrl, client, server) => {
-    console.log(id, connectionUrl, client, server)
-    const result = await query.devOpsDeploy(id, accessToken, {
-      "connection_url": connectionUrl, 
-      "client": client, 
+    console.log(project._id, connectionUrl, client, server)
+    // const result = await query.devOpsDeploy(project._id, accessToken, {
+    //   "connection_url": connectionUrl, 
+    //   "client": client, 
+    //   "server": server
+    // })
+    const result = await query.updateProject(project._id, {
+      ...project,
+      "connection_url": connectionUrl,
+      "client": client,
       "server": server
-    })
+      },
+      accessToken
+    )
+    // reset the redux store for current project to be the inital state
+    dispatch(resetProject());
+    console.log(result)
     navigate("/project/dashboard")
   }
 
@@ -164,7 +179,7 @@ const Dustbin =  ({serviceList, id}) => {
   return (
     <div style={containerStyle}>
       <div style={{ overflow: 'hidden', clear: 'both', minHeight:"5rem"}}>
-        {serviceList?.map((item) => (
+        {project.services?.map((item) => (
           <Box name={item} key={item} />
         ))}
       </div>
@@ -173,12 +188,12 @@ const Dustbin =  ({serviceList, id}) => {
         <input type="text" placeholder="connection url" style={{ ...style3 }} onChange={(e) => setConnectionUrl(e.target.value)} />
         <Server />
       </div>
-      <Button variant="customDefault" isDisabled={serviceList.length == 0 || serviceList.length == undefined || serviceList.length == null 
+      <Button variant="customDefault" isDisabled={project.services.length == 0 || project.services.length == undefined || project.services.length == null 
                             } onClick={() => {handleDeploy(connectionUrl, services.client, services.server)}}>
-                                Deploy
+                                Save
                             </Button>
     </div>
   )
 }
 
-export default Dustbin
+export default DndComponent
