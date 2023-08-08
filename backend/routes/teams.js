@@ -166,7 +166,7 @@ router.post('/:teamName/removeProject/:projectName', express.json(), async (req,
     const project = await projects.findOne({name: projectName});
 
     // checks if project exists, if it does, checks if the user is the owner. If doesnt exist, just let users removes it
-    if (projet) {
+    if (project) {
         if (project.owner !== username) {
             return res.status(401).send("You are not the owner of this project");
         }
