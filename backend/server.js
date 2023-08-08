@@ -37,7 +37,7 @@ app.use(verifyJWT);
 
 app.use('/api/project', require('./routes/project_private.js'));
 app.use('/api/user', require('./routes/user.js'));
-app.use('/api/devops', require('./routes/devops.js'));
+// app.use('/api/devops', require('./routes/devops.js'));
 app.use('/api/team', require('./routes/teams.js'));
 
 
