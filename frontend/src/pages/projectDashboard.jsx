@@ -44,34 +44,34 @@ const ProjectDashboard = () => {
   const navigate = useNavigate();
 
     useEffect(() => {
-        if (username && accessToken) {
-            const promises = [];
+        const fetchData = async () => {
+            if (username && accessToken) {
+                try {
+                    const userProjectsResponse = await query.getUserProjects(username, accessToken);
+                    const userProjectsPromises = userProjectsResponse.data.project_ids.map(id => query.getProject(id, accessToken));
+                    const userProjectsResponses = await Promise.all(userProjectsPromises);
+                    const userProjects = userProjectsResponses.map(resp => resp.data);
 
-            promises.push(query.getUserProjects(username, accessToken)
-                .then((response) => {
-                    return Promise.all(response.data.project_ids.map(id => query.getProject(id, accessToken)))
-                })
-                .then((responses) => responses.map((resp) => resp.data)));
+                    const teamsResponse = await query.getUserTeams(username, accessToken);
+                    const teamProjects = teamsResponse.data.flatMap(team => team.projects);
+                    const teamProjectsPromises = teamProjects.map(project => query.getProjectByName(project, accessToken));
+                    const teamProjectsResponses = await Promise.all(teamProjectsPromises);
+                    const fetchedTeamProjects = teamProjectsResponses.map(resp => resp.data);
 
-            promises.push(query.getUserTeams(username, accessToken)
-                .then((teams) => {
-                    const teamProjects = teams.data.flatMap(team => team.projects);
-                    return Promise.all(teamProjects.map(project => query.getProjectByName(project, accessToken)));
-                })
-                .then((responses) => responses.map((resp) => resp.data)));
-
-            Promise.all(promises)
-                .then(([userProjects, teamProjects]) => {
-                    const combinedProjects = [...userProjects, ...teamProjects];
+                    const combinedProjects = [...userProjects, ...fetchedTeamProjects];
                     const uniqueProjects = Array.from(new Set(combinedProjects.map(p => p._id))).map(id => combinedProjects.find(p => p._id === id));
+
                     setProjects(uniqueProjects);
                     setProjectImageError(uniqueProjects.map(() => false));
-                })
-                .catch((err) => {console.error(err);});
-        }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+        fetchData();
     }, [username, accessToken]);
 
-  const handleConfirmDeleteProject = async () => {
+    const handleConfirmDeleteProject = async () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
       const result = await query.deleteProject(deletePopupId, accessToken);
       if (result.success === true) {
