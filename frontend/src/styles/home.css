@@ -1,23 +1,31 @@
 
-#title {
+.title {
     font-weight: 700;
     text-align: center;
-    margin-top: 8rem;
+    margin-top: calc(200px - 15vw);
     margin-bottom: 0;
 }
 
-#subtitle {
-    font-weight: 400;
+.sub-title {
     color: black;
     text-align: center;
     margin-top: 0;
     margin-bottom: 1rem;
 }
 
-#subsubtitle {
-    font-weight: 400;
+.sub-sub-title {
     color: dimgrey;
     text-align: center;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+section {
+    padding: 2em;
+    background-color: white;
+    color: black;
+}
+
+.section-text {
+    color: #412525;
 }

@@ -16,7 +16,6 @@ const {ObjectId} = require("mongodb");
  */
 
 // creating a new team
-
 router.post('/', express.json(), async (req, res) => {
     const {teamName, description, owner} = req.body;
     const teams = db.collection('teams');
@@ -93,15 +92,11 @@ router.post('/:teamName/removeMember/:username', express.json (),async (req, res
     const username= req.params.username;
     const teamName = req.params.teamName;
 
-    console.log('MADE IS HERE');
-
     const team = await teams.findOne({teamName: teamName});
 
     if(!team) {
         return res.status(404).send("Team not found");
     }
-
-    console.log("inside remove member route - team: ", team);
 
     if(!team.members.includes(username)) {
         return res.status(400).send("User not in team");
@@ -111,6 +106,7 @@ router.post('/:teamName/removeMember/:username', express.json (),async (req, res
     return res.status(200).send("User removed from team");
 });
 
+//used for testing
 router.get('/getTeams', async (req, res) => {
     const projects = db.collection('projects');
     const allTeams = await projects.find().toArray();
@@ -135,10 +131,12 @@ router.post('/:teamName/addProject/:projectName', express.json(), async (req, re
 
     const projects = db.collection("projects");
     const project = await projects.findOne({name: projectName});
+
     if (!project) {
         return res.status(404).send("Project does not exist");
     }
 
+    // remove this if you want to add projects to teams for testing
    if (project.owner !== username) {
        return res.status(401).send("You are not the owner of this project");
     }
@@ -148,8 +146,44 @@ router.post('/:teamName/addProject/:projectName', express.json(), async (req, re
 });
 
 router.post('/:teamName/removeProject/:projectName', express.json(), async (req, res) => {
+    try {
+        const teams = db.collection('teams');
+        const projects = db.collection("projects");
+
+        const projectName = req.params.projectName;
+        const teamName = req.params.teamName;
+        const { username } = req.body;
+
+        const team = await teams.findOne({ teamName: teamName });
+        if (!team) {
+            return res.status(404).send("Team not found");
+        }
+
+        if (!team.projects.includes(projectName)) {
+            return res.status(400).send("Project not in team");
+        }
+
+        const project = await projects.findOne({ name: projectName });
+        if (!project) {
+            return res.status(404).send("Project not found");
+        }
+
+        if (project.owner !== username) {
+            return res.status(401).send("You are not the owner of this project");
+        }
+
+        await teams.updateOne({ teamName: teamName }, { $pull: { projects: projectName } });
+        return res.status(200).send("Project removed from team");
+
+    } catch (error) {
+        console.error("Error removing project:", error);
+        return res.status(500).send("Internal server error");
+    }
+});
+
+// changed from delete to post
+router.post('/:teamName', express.json(), async (req, res) => {
     const teams = db.collection('teams');
-    const projectName = req.params.projectName;
     const teamName = req.params.teamName;
     const {username} = req.body;
 
@@ -159,34 +193,10 @@ router.post('/:teamName/removeProject/:projectName', express.json(), async (req,
         return res.status(404).send("Team not found");
     }
 
-    if(!team.projects.includes(projectName)) {
-        return res.status(400).send("Project not in team");
+    if (team.owner !== username) {
+        return res.status(401).send("You are not the owner of this team");
     }
 
-    //if you want to remove a project from a team, you need to be the projects owner
-    const projects = db.collection("projects");
-    const project = await projects.findOne({name: projectName});
-    if (!project) {
-        return res.status(404).send("Project does not exist");
-    }
-
-    if (project.owner !== username) {
-        return res.status(401).send("You are not the owner of this project");
-    }
-
-    await teams.updateOne({teamName: teamName}, {$pull: {projects: projectName}});
-    return res.status(200).send("Project removed from team");
-});
-
-router.delete('/:teamName', express.json(), async (req, res) => {
-    const teams = db.collection('teams');
-    const teamName = req.params.teamName;
-
-    const team = await teams.findOne({teamName: teamName});
-
-    if(!team) {
-        return res.status(404).send("Team not found");
-    }
     await teams.deleteOne({teamName: teamName});
     return res.status(200).send('Team deleted');
 });
