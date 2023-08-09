@@ -169,7 +169,7 @@ const ProjectDashboard = () => {
                       <ProjectStatus project={project} status={deployState.NOT_CLONED}/>
                     </div>
                     <Tooltip label={project.description} bg="white" color="black">
-                      <p>{project.description}</p>
+                      <p className="dashboard-project-desc">{project.description}</p>
                     </Tooltip>
                     <div className="dashboard-project-buttons">
                       <Button variant="customDefault" onClick={() => {handleClickEdit(project._id)}} rightIcon={<FontAwesomeIcon icon={faPenToSquare}/>}>Edit</Button>

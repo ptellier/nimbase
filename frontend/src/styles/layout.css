@@ -84,7 +84,7 @@ input, textarea {
     -webkit-text-fill-color: transparent;
 }
 
-.explore-project p, .dashboard-project p {
+.explore-project-desc, .dashboard-project-desc {
     margin: 0;
     font-size: 0.9rem;
     height: 4.5em;
@@ -95,6 +95,14 @@ input, textarea {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.explore-project-owner, .dashboard-project-owner {
+    margin: 0;
+    font-size: 0.9rem;
+    height: 1.5em;
+    text-align: left;
+    color: #2d2a45;
 }
 
 @media (prefers-reduced-motion: no-preference) {

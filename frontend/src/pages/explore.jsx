@@ -51,9 +51,9 @@ const Explore = () => {
                     <FontAwesomeIcon icon={faLink} color="lightblue"/>
                   </div>
                 </div>
-                  <Box ml="10px"><Text as="p">{"Created by: " + project.owner}</Text></Box>
+                <Text as="p" ml="10px" className="explore-project-owner">{"Owner: " + project.owner}</Text>
                 <Tooltip label={project.description} bg="white" color="black">
-                  <Box ml="10px"><Text as="p">{project.description}</Text></Box>
+                  <Box ml="10px"><Text as="p" className="explore-project-desc">{project.description}</Text></Box>
                 </Tooltip>
               </div>
             </a>
