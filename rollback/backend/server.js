@@ -17,7 +17,7 @@ const middleware = require('./api/middleware.js');
 // configure headers for the app
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
     credentials: true,
     accessControlAllowCredentials: true,
     accessControlAllowOrigin: true,
