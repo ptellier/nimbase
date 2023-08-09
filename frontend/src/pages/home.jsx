@@ -2,10 +2,12 @@ import '../styles/home.css';
 import NavBar from "../components/NavBar";
 import {Button, Heading, HStack, Text, VStack} from "@chakra-ui/react";
 import NimbaseIcon from "../static/svg/nimbase_icon.svg";
+import {useNavigate} from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   function onClickGetStared() {
-    window.location.href = "/login";
+    navigate('/project/dashboard');
   }
 
   return (

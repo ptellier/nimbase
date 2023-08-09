@@ -1,7 +1,7 @@
 import NimbaseIcon from "../static/svg/nimbase_icon.svg";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {emailSelector, logout, usernameSelector} from "../state/userSlice";
+import {accessTokenSelector, emailSelector, fetchUserTeams, logout, usernameSelector} from "../state/userSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {GoogleLogout} from "@leecheuk/react-google-login";
 import {faChevronDown, faCircleUser} from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +15,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const email = useSelector(emailSelector);
+  const accessToken = useSelector(accessTokenSelector);
 
   const onClickLogout = () => {
     dispatch(logout());
@@ -23,6 +24,7 @@ const NavBar = () => {
 
   const handleTeamsItem = () => {
     navigate("/teams");
+    dispatch(fetchUserTeams({username, accessToken}));
   }
 
   const isGoogleSSO = (username === email);
