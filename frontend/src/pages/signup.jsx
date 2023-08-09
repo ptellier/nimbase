@@ -123,9 +123,9 @@ const Signup = () => {
                            onChange={handleInputChange} error={usernameError} autoComplete="username"/>
                     <Field label="Email" type="text" name="email" value={formData.email}
                            onChange={handleInputChange} error={emailError} autoComplete="email"/>
-                    <Field label="Password" type="text" name="password" value={formData.password}
+                    <Field label="Password" type="password" name="password" value={formData.password}
                            onChange={handleInputChange} error={passwordError} autoComplete="new-password"/>
-                    <Field label="Confirm Password" type="text" name="confirmPassword" value={formData.confirmPassword}
+                    <Field label="Confirm Password" type="password" name="confirmPassword" value={formData.confirmPassword}
                            onChange={handleInputChange} error={confirmPasswordError} autoComplete="new-password"/>
 
                     <div>
