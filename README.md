@@ -75,7 +75,7 @@ Key Features:
 
 Nimbase combines these enhancements to offer developers a straightforward, secure, and user-friendly platform for project hosting.
 
-
+![Different structures of app supported by Nimbase](readme/app_infrastructure.jpg)
 
 
 Nimbase supports a comprehensive range of application stacks that cater to nearly 95% of projects aligned with its development purpose.
