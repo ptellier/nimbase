@@ -1,141 +1,140 @@
 .teams-container {
-    width: 90%;
-    padding: 2.5rem;
-    margin: 0 auto;
-    font-family: Roboto, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 90%;
+  padding: 2.5rem;
+  margin: 0 auto;
+  font-family: Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .teams-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    min-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    transition: all 0.3s ease;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transition: all 0.3s ease;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: none;
-    border-radius: 5px;
-    max-width: max-content;
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    font-family: Roboto, sans-serif;
-    display: flex;
-    flex-direction: column;
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  max-width: max-content;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  font-family: Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .close:hover {
-    color: #6ed2d2;
+  color: #6ed2d2;
 }
 
 .table-container {
-    border-radius: 5px;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    margin-top: 0.75rem;
-    background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  margin-top: 0.75rem;
+  background: #ffffff;
 }
 
 .teams-container table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .teams-container thead {
-    background-color: #d6efff;
-    color: #16404f;
+  background-color: #d6efff;
+  color: #16404f;
 }
 
-.teams-container th, td {
-    padding: 1rem;
-    text-align: left;
-    font-family: Roboto, sans-serif;
+.teams-container th,
+td {
+  padding: 1rem;
+  text-align: left;
+  font-family: Roboto, sans-serif;
 }
 
 .teams-container tr {
-    border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .teams-container tr:last-child {
-    border-bottom: 0;
+  border-bottom: 0;
 }
 
 .teams-container tr:hover {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .teams-container thead tr:hover {
-    background-color: #cbe2f1;
+  background-color: #cbe2f1;
 }
 
-
 .your-teams-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    color: rgb(112, 109, 135);
-    margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: rgb(112, 109, 135);
+  margin-top: 3rem;
 }
 
 .create-team-button,
 .add-team-modal-button {
-    margin-top: 20px;
-    width: 80%;
-    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
+  margin-top: 20px;
+  width: 80%;
+  background: linear-gradient(to right, #00203fff, #adefd1ff);
 }
 
 .create-team-button:hover,
 .add-team-modal-button:hover {
-    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
+  background: linear-gradient(to right, #adefd1ff, #00203fff);
 }
 
 .close-add-team-modal {
-    margin-top: 20px;
-    width: 80%;
-    background: linear-gradient(to right, #00203FFF, #ADEFD1FF);
+  margin-top: 20px;
+  width: 80%;
+  background: linear-gradient(to right, #00203fff, #adefd1ff);
 }
 
 .close-add-team-modal:hover {
-    background: linear-gradient(to right, #ADEFD1FF, #00203FFF);
+  background: linear-gradient(to right, #adefd1ff, #00203fff);
 }
 
-
 .light-grey-box {
-    background-color: #eaeaea;
-    padding: 20px;
-    border-radius: 5px;
+  background-color: #eaeaea;
+  padding: 20px;
+  border-radius: 5px;
 }
 
 .med-grey-box {
-    background-color: #e1d7db;
-    padding: 10px;
-    border-radius: 5px;
+  background-color: #e1d7db;
+  padding: 10px;
+  border-radius: 5px;
 }

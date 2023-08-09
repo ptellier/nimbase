@@ -1,7 +1,8 @@
-import {extendTheme} from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
-const ALL_FONTS = "inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
-  "'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;"
+const ALL_FONTS =
+  "inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
+  "'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;";
 
 const customTheme = extendTheme({
   fonts: {
@@ -11,8 +12,7 @@ const customTheme = extendTheme({
   },
   components: {
     Button: {
-      baseStyle: {
-      },
+      baseStyle: {},
       variants: {
         customDefault: {
           width: "max-content",
@@ -21,10 +21,12 @@ const customTheme = extendTheme({
           fontSize: "1.0rem",
           fontWeight: "medium",
           borderRadius: "2px",
-          fontFamily: "inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
+          fontFamily:
+            "inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
             "'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-          backgroundImage: "linear-gradient(to top right, rgba(125, 47, 62, 0.51), rgba(237, 137, 157, 0.5))",
-          backgroundColor:" #ffffff",
+          backgroundImage:
+            "linear-gradient(to top right, rgba(125, 47, 62, 0.51), rgba(237, 137, 157, 0.5))",
+          backgroundColor: " #ffffff",
           color: "#390000",
           cursor: "pointer",
           outline: "none",
@@ -35,12 +37,12 @@ const customTheme = extendTheme({
           _active: {
             backgroundColor: "#390000",
             color: "#ffffff",
-          }
+          },
         },
       },
       defaultProps: {
-        variant: 'customDefault'
-      }
+        variant: "customDefault",
+      },
     },
   },
 });

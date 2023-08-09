@@ -7,5 +7,5 @@ export const deployState = {
   DEPLOYING: 4,
   DEPLOYED: 5,
   DEPLOY_FAILED: 6,
-}
+};
 Object.freeze(deployState);

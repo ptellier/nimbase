@@ -1,240 +1,242 @@
 body {
-    margin: 0;
-    background-color: #DEF4F0;
-    font-family: inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  margin: 0;
+  background-color: #def4f0;
+  font-family: inika, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
 }
 
-
 .inika-font {
-    font-family: inika, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: inika, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
 
 .roboto-font {
-    font-family: roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
 
 .App {
-    text-align: center;
-
+  text-align: center;
 }
 
 .floaty-logo {
-    height: 5rem;
-    pointer-events: none;
+  height: 5rem;
+  pointer-events: none;
 }
 
 .nav-bar-logo {
-    height: 5rem;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: -15px;
+  height: 5rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: -15px;
 }
 
 .nav-bar-container {
-    padding: 1.2rem;
+  padding: 1.2rem;
 }
 .nav-bar {
-    padding: 0 0;
-    font-family: roboto, sans-serif;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: black;
+  padding: 0 0;
+  font-family: roboto, sans-serif;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
 }
 .nav-bar-section {
-    border-radius: 100px;
-    background-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
 }
 
 .nav-item {
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
-input, textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    outline: none;
-    box-sizing: border-box;
-    width: 100%;
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .red-brick-gradient-text {
-    background: -webkit-linear-gradient(#afa8a8, #a72a2a); 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: -webkit-linear-gradient(#afa8a8, #a72a2a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.explore-project-desc, .dashboard-project-desc {
-    margin: 0;
-    font-size: 0.9rem;
-    height: 4.5em;
-    text-align: left;
-    color: dimgrey;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* REFERENCE: used chatGPT to figure out how to wrap lines with an ellipsis for overflow */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.explore-project-desc,
+.dashboard-project-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  height: 4.5em;
+  text-align: left;
+  color: dimgrey;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* REFERENCE: used chatGPT to figure out how to wrap lines with an ellipsis for overflow */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.explore-project-owner, .dashboard-project-owner {
-    margin: 0;
-    font-size: 0.9rem;
-    height: 1.5em;
-    text-align: left;
-    color: #2d2a45;
+.explore-project-owner,
+.dashboard-project-owner {
+  margin: 0;
+  font-size: 0.9rem;
+  height: 1.5em;
+  text-align: left;
+  color: #2d2a45;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    .floaty-logo {
-        animation: logoAnimation infinite 5s ease-in-out;
-    }
+  .floaty-logo {
+    animation: logoAnimation infinite 5s ease-in-out;
+  }
 }
 
 .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
 .App-link {
-    color: #61dafb;
+  color: #61dafb;
 }
 
 @keyframes logoAnimation {
-    0% {
-        transform: translateX(-8px);
-    }
-    50% {
-        transform: translateX(8px);
-    }
-    100% {
-        transform: translateX(-8px);
-    }
+  0% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+  100% {
+    transform: translateX(-8px);
+  }
 }
 
 .dashboard-image-error {
-    width: 100%;
-    height: 100%;
-    border-radius: 4px;
-    background-color: lightgrey;
-    background-image: radial-gradient(circle at 60% 60%, #c3e2f3, #d7d7d7);
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background-color: lightgrey;
+  background-image: radial-gradient(circle at 60% 60%, #c3e2f3, #d7d7d7);
 }
 
 /***** FIELD ******/
 
-.field-with-error input, .field-with-error textarea{
-    border: 1px solid firebrick;
-    color: firebrick;
+.field-with-error input,
+.field-with-error textarea {
+  border: 1px solid firebrick;
+  color: firebrick;
 }
 
 .error-text {
-    color: firebrick;
+  color: firebrick;
 }
 
 /***** CONFIRMATION POPUP ******/
 
 .darken-background {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 .popup {
-    padding: 2em;
-    border-radius: 4px;
-    background-color: white;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  padding: 2em;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 .popup-container {
-    position: fixed;
-    top: 20%;
-    z-index: 100;
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  position: fixed;
+  top: 20%;
+  z-index: 100;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 /*********** IMAGE UPLOADER ************/
 
 .image-upload-container {
-    margin-top: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .image-upload-image-container {
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    height: 180px;
-    width: 300px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  height: 180px;
+  width: 300px;
 }
 .image-uploader-image {
-    object-fit: cover;
-    height: 180px;
-    width: 300px;
-    border-radius: inherit;
-    position: relative;
-    z-index: -2;
+  object-fit: cover;
+  height: 180px;
+  width: 300px;
+  border-radius: inherit;
+  position: relative;
+  z-index: -2;
 }
 
 /************ CUSTOM SCOLLBAR ************/
 /* note: doesn't work on firefox */
 
-
 ::-webkit-scrollbar {
-    margin-right: 2px;
-    width: 10px;
-    height: 10px;
+  margin-right: 2px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(to top right, rgba(234, 173, 189, 0.5), rgba(234, 173, 189, 0.5));
-    border-radius: 2px;
+  background-image: linear-gradient(
+    to top right,
+    rgba(234, 173, 189, 0.5),
+    rgba(234, 173, 189, 0.5)
+  );
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #ac7b7b;
+  background: #ac7b7b;
 }
 
 /************ ALERTS ************/
 
 .alert-footers {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 30px;
-    width: 100%;
-    background: #999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 30px;
+  width: 100%;
+  background: #999;
 }
-
-
-

@@ -1,31 +1,30 @@
-
 .title {
-    font-weight: 700;
-    text-align: center;
-    margin-top: calc(200px - 15vw);
-    margin-bottom: 0;
+  font-weight: 700;
+  text-align: center;
+  margin-top: calc(200px - 15vw);
+  margin-bottom: 0;
 }
 
 .sub-title {
-    color: black;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 1rem;
+  color: black;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 
 .sub-sub-title {
-    color: dimgrey;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 0;
+  color: dimgrey;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 section {
-    padding: 2em;
-    background-color: white;
-    color: black;
+  padding: 2em;
+  background-color: white;
+  color: black;
 }
 
 .section-text {
-    color: #412525;
+  color: #412525;
 }

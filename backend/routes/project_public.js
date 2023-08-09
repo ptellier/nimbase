@@ -1,19 +1,18 @@
-const express = require('express');
-const db  = require('../database/dbConn.js');
+const express = require("express");
+const db = require("../database/dbConn.js");
 
 const router = express.Router();
 
 // get all existing projects with public set to true
-router.get('/', express.json(), async (req, res) => {
+router.get("/", express.json(), async (req, res) => {
   const projectsCollection = db.collection("projects");
   const projects = await projectsCollection.find({ public: true }).toArray();
-  if (!projects ) {
+  if (!projects) {
     console.log(projects);
     res.status(404).send(projects);
     return;
   }
   res.status(200).send(projects);
 });
-
 
 module.exports = router;

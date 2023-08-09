@@ -1,69 +1,69 @@
 .background-image {
-    background-image: url('../static/svg/sky_gradient.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+  background-image: url("../static/svg/sky_gradient.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
 .content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 20px;
-    width: 90%;
-    margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 20px;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .explore-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 300px); 
-    grid-auto-rows: 300px;
-    column-gap: 50px;
-    row-gap: 20px;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  grid-auto-rows: 300px;
+  column-gap: 50px;
+  row-gap: 20px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
 }
 
 .explore-project {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
 }
 
 .explore-project h3 {
-    margin: 0;
-    line-height: 30px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  margin: 0;
+  line-height: 30px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .explore-image {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    position: relative;
-    z-index: -2;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+  z-index: -2;
 }
 .explore-image-container {
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    margin: 10px auto;
-    width: 300px;
-    height: 180px; 
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  margin: 10px auto;
+  width: 300px;
+  height: 180px;
 }
 
 .title {
-    text-align: center;
-    font-size: 2em;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    font-weight: normal;
+  text-align: center;
+  font-size: 2em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-weight: normal;
 }

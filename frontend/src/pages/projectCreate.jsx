@@ -18,27 +18,24 @@ import Modal from "react-bootstrap/Modal";
 
 const query = new Query();
 
-
 const ProjectCreate = () => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
+
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [projectNameError, setProjectNameError] = useState(false);
   const [projectDescError, setProjectDescError] = useState(false);
   const [projectImageError, setProjectImageError] = useState(false);
   const [githubLinkError, setGithubLinkError] = useState(false);
   const [envVarError, setEnvVarError] = useState(false);
-  
-  
+
   const username = useSelector(usernameSelector);
   const accessToken = useSelector(accessTokenSelector);
-  
 
   const [formData, setFormData] = useState({
-    _id : "",
+    _id: "",
     owner: username,
     name: "",
     description: "",
@@ -65,13 +62,15 @@ const ProjectCreate = () => {
           closeButton
           style={{ display: "flex", justifyContent: "center" }}
         >
-          <Modal.Title><h1>Services found in docker-compose</h1></Modal.Title>
+          <Modal.Title>
+            <h1>Services found in docker-compose</h1>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
             <div className="col">
               <DndProvider backend={HTML5Backend}>
-                <DndComponent/>
+                <DndComponent />
               </DndProvider>
             </div>
           </div>
@@ -111,9 +110,15 @@ const ProjectCreate = () => {
     dispatch(initProject(formData)).then(async (res) => {
       const response = await query.createProject(res.payload, accessToken);
       const inserted_id = response.message._id;
-      const response2 = await query.createProjectFiles(inserted_id, res.payload, accessToken);
+      const response2 = await query.createProjectFiles(
+        inserted_id,
+        res.payload,
+        accessToken
+      );
       const services = response2.message.services;
-      dispatch(initProject({ ...res.payload, services: services, _id: inserted_id })).then((res) => {
+      dispatch(
+        initProject({ ...res.payload, services: services, _id: inserted_id })
+      ).then((res) => {
         handleShow();
       });
     });
@@ -153,7 +158,6 @@ const ProjectCreate = () => {
       validateFormData();
     }
   }, [formData]);
-
 
   return (
     <>

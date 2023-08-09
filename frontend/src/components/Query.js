@@ -107,7 +107,6 @@ class Query {
       : { success: false, message: response.data };
   }
 
-
   async updateProject(_id, project, accessToken) {
     const response = await axiosInstance.post(
       BASE_URL + "/api/project/update",
@@ -149,7 +148,7 @@ class Query {
       ? { success: true, message: response.data }
       : { success: false, message: response.data };
   }
-  
+
   async getProject(project_id, accessToken) {
     const response = await axiosInstance.get(
       BASE_URL + `/api/project/${project_id}`,
@@ -230,14 +229,16 @@ class Query {
     );
   }
 
-
   async deleteTeam(teamName, accessToken, userName) {
-    return await axiosInstance.post(BASE_URL + `/api/team/${teamName}`,{
-      username: userName,
-    },
-        {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
+    return await axiosInstance.post(
+      BASE_URL + `/api/team/${teamName}`,
+      {
+        username: userName,
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
   }
 
   async getTeam(teamName, accessToken) {

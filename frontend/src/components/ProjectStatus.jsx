@@ -70,7 +70,9 @@ const ProjectStatus = ({ project }) => {
       setStatus(deployState.DEPLOYING);
       setTimeout(FUNCTION_MAP[deployState.DEPLOYING], 500);
     },
-    [deployState.CLONE_FAILED]: () => {FUNCTION_MAP[deployState.NOT_CLONED]();},
+    [deployState.CLONE_FAILED]: () => {
+      FUNCTION_MAP[deployState.NOT_CLONED]();
+    },
     [deployState.DEPLOYING]: async () => {
       const result = await deployedResult;
       if (result.success) {

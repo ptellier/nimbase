@@ -1,84 +1,82 @@
-
 .background-image {
-    background-image: url('../static/svg/sky_gradient.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    position:fixed;
-    width:100vw;
-    height:100vh;
+  background-image: url("../static/svg/sky_gradient.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
 }
 
 .projects-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    row-gap: 2em;
-    width: min-content;
-    margin: 0 auto 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2em;
+  width: min-content;
+  margin: 0 auto 2em auto;
 }
 
 .dashboard-project h3 {
-    margin: 0;
-    line-height: 30px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  margin: 0;
+  line-height: 30px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dashboard-project {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    column-gap: 2em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 2em;
 }
-
 
 .dashboard-image-container {
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
-    border-radius: 4px;
-    height: 180px;
-    width: 300px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  height: 180px;
+  width: 300px;
 }
 .dashboard-image {
-    object-fit: cover;
-    height: 180px;
-    width: 300px;
-    border-radius: inherit;
-    position: relative;
-    z-index: -2;
+  object-fit: cover;
+  height: 180px;
+  width: 300px;
+  border-radius: inherit;
+  position: relative;
+  z-index: -2;
 }
 .dashboard-text-container {
-    display:inline-block;
-    max-width: 250px;
+  display: inline-block;
+  max-width: 250px;
 }
 
 .dashboard-project-buttons {
-    margin-top:1em;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    column-gap: 1em;
-    width: max-content;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 1em;
+  width: max-content;
 }
 
 .dashboard-project-title-and-icon {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    column-gap: 1em;
-    width: max-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 1em;
+  width: max-content;
 }
 
 .create-project-link {
-    margin: 0;
-    text-align: center;
-    color: #456fb7;
+  margin: 0;
+  text-align: center;
+  color: #456fb7;
 }
 .create-project-link:hover {
-    color: #7cbae8;
+  color: #7cbae8;
 }

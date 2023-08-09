@@ -8,7 +8,6 @@ DOMAIN_NAME = process.env.HOSTNAME;
 REPO_BASE_URL = "repos";
 TRAEFIK_DOCKER_COMPOSE_FILE = "../../../docker-compose-traefik-inner.yml";
 
-
 // clone the repository as project_name
 async function cloneRepo(github_link, project_name) {
   try {
@@ -135,8 +134,7 @@ async function configureDockerComposeFiles(project_name, config_services) {
           `traefik.http.routers.${service}.entrypoints=https`,
           `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
         ];
-      }
-      else if (service === `${project_name}_${server}`) {
+      } else if (service === `${project_name}_${server}`) {
         projectDoc.services[service].labels = [
           "traefik.enable=true",
           "traefik.proxy=inner",
@@ -250,8 +248,8 @@ async function deployDocker(project_name) {
   );
 
   const { stdout: stdout5, stderr: stderr5 } = await exec(
-    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`)
-
+    `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
+  );
 
   return {
     status: "success",
@@ -276,7 +274,6 @@ async function removeProject(project_name) {
     const { stdout: stdout0, stderr: stderr0 } = await exec(
       `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down`
     );
-
     const { stdout: stdout1, stderr: stderr1 } = await exec(
       `docker-compose -f ${dockercompose} down`
     );
@@ -315,13 +312,13 @@ async function removeProject(project_name) {
         );
       }
     );
-
     const { stdout: stdout2, stderr: stderr2 } = await exec(
       `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
     );
     return {
       status: "success",
-      message: "Docker image stopped, repo cleared, traefik reconfigured and started",
+      message:
+        "Docker image stopped, repo cleared, traefik reconfigured and started",
     };
   } catch (error) {
     return {
@@ -332,10 +329,10 @@ async function removeProject(project_name) {
 }
 
 module.exports = {
-    cloneRepo,
-    envFileWrite,
-    analyzeServices,
-    configureDockerComposeFiles,
-    deployDocker,
-    removeProject
-}
+  cloneRepo,
+  envFileWrite,
+  analyzeServices,
+  configureDockerComposeFiles,
+  deployDocker,
+  removeProject,
+};
