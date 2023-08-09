@@ -85,9 +85,9 @@ Nimbase supports a comprehensive range of application stacks that cater to nearl
 
 
 ### Github links of the projects used for demo
-- Rollback Project : Frontend, Backend, MongoDB Atlas, Authentication, Mapbox Api ([Link](https://github.com/Aryan-B/rollback){:target="_blank"})
-- Wordpress Project : Wordpress docker image from Docker Hub, DB hosted on port 3306/33060 ([Link](https://github.com/Aryan-B/wordpress){:target="_blank"})
-- React Project : Frontend only, Create-React-App first render ([Link]((https://github.com/Aryan-B/demo){:target="_blank"}))
+- Rollback Project : Frontend, Backend, MongoDB Atlas, Authentication, Mapbox Api [Link](https://github.com/Aryan-B/rollback)
+- Wordpress Project : Wordpress docker image from Docker Hub, DB hosted on port 3306/33060 [Link](https://github.com/Aryan-B/wordpress)
+- React Project : Frontend only, Create-React-App first render [Link](https://github.com/Aryan-B/demo)
 
 ### Next Steps
 
