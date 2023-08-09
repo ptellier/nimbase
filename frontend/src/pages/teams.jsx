@@ -18,6 +18,7 @@ import "../styles/layout.css";
 import {Button, Flex, Heading, HStack, VStack} from "@chakra-ui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
+import {faArrowsRotate} from "@fortawesome/free-solid-svg-icons";
 
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
@@ -42,10 +43,11 @@ const Teams = () => {
     const teams = useSelector(teamsSelector);
     const username = useSelector(usernameSelector);
 
-    const handleDeleteTeamButton = (team) => {
-        dispatch(deleteTeam({teamName: selectedTeam.teamName, accessToken: accessToken, userName: username}));
+    const handleDeleteTeamButton = async (team) => {
+        await dispatch(deleteTeam({teamName: selectedTeam.teamName, accessToken: accessToken, userName: username}));
         setShowTeamEditModal(false);
         setShowTeams(false);
+        dispatch(fetchUserTeams({username: username, accessToken: accessToken}));
     }
 
     const handleAddMemberButton = () => {
@@ -140,16 +142,16 @@ const Teams = () => {
         setShowRemoveProjectForm(false);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(createTeam({
+        await dispatch(createTeam({
             teamName,
             description,
             owner: username,
             accessToken
         }));
-
+        dispatch(fetchUserTeams({username, accessToken}));
         setTeamName("");
         setDescription("");
         setShowTeams(false);
@@ -183,11 +185,10 @@ const Teams = () => {
                                 </div>
                             </div>
                         )}
-                        <Button onClick={handleViewTeams}>View Teams</Button>
+                        <Button onClick={handleViewTeams}> <FontAwesomeIcon icon={faArrowsRotate} /> </Button>
                     </HStack>
-                    {showTeams && <Heading as="h2" fontWeight={500} fontSize="28px" className="your-teams-header inika-font">Your Teams</Heading>}
-                    {showTeams && (
-                        <div className="table-container">
+                    <Heading as="h2" fontWeight={500} fontSize="28px" className="your-teams-header inika-font">Your Teams</Heading>
+                    <div className="table-container">
                         <table>
                             <thead>
                             <tr>
@@ -196,7 +197,7 @@ const Teams = () => {
                                 <th>Owner</th>
                                 <th>Members</th>
                                 <th>Projects</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -212,8 +213,7 @@ const Teams = () => {
                             ))}
                             </tbody>
                         </table>
-                        </div>
-                    )}
+                    </div>
                 </div>
             </div>
 
