@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../database/dbConn.js");
 const router = express.Router();
-const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(CLIENT_ID);
 
