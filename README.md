@@ -1,6 +1,6 @@
-# CPSC 455 Project Progress #1: Project Requirements
+# CPSC 455 Project : Nimbase
 
-###### Group Members: Landseer Enga, Phillip Tellier, Jake Milad, Bhairaw Aryan
+###### Group Members: Bhairaw Aryan, Jake Milad, Landseer Enga, Phillip Tellier
 ###### Github Repo Link: https://github.com/ptellier/nimbase
 ###### Project name: *Nimbase*
 
@@ -64,6 +64,21 @@ to the internet.
 
 
 ### Above and beyond functionality
+Nimbase has reimagined project hosting, introducing features that redefine the hosting experience. These enhancements bring advanced capabilities to the forefront, making project management smoother and more efficient.
+
+Key Features:
+- Effective Separation: Nimbase uses Docker containers to neatly package each project's parts - backend, database, and frontend. This keeps projects independent and dependable.
+- Network Harmony: Nimbase takes care of networking by keeping each Docker Compose project isolated. This prevents conflicts over ports, letting identical projects run side by side.
+- Uninterrupted Service: Nimbase’s dual-layer reverse proxy manager ensures that the core platform runs continuously, while effectively routing traffic for hosted apps.
+- Automated Security: Security is a priority with Nimbase. SSL certificates are automatically assigned, protecting hosted projects with encryption without user intervention.
+- User-Focused Design: Nimbase is designed with users in mind. The backend takes care of complex server setups, so users can concentrate on their projects.
+
+Nimbase combines these enhancements to offer developers a straightforward, secure, and user-friendly platform for project hosting.
+
+
+
+
+Nimbase supports a comprehensive range of application stacks that cater to nearly 95% of projects aligned with its development purpose.
 
 ### Next Steps
 
@@ -77,12 +92,15 @@ to the internet.
 
 ### Team Member Contributions
 
-**Phillip Tellier**: Documentation of requirements, features, and use of technologies. Authentication/Authorization back-end
- end points and login and sign-in front-end pages. CRUD operation back-end end-points for user accounts and `project` collection.
-Pages to see all a user's projects, and to edit individual projects.
+#### Bhairaw Aryan: 
+>    - ##### Rollback project : Frontend, Backend, MongoDB, Auth, Mapbox Api
+>    - ##### Nimbase : Developed project redux, and create/edit page workflow [Frontend], Implemented devops services api endpoints [Backend], Wrote scripts for automating docker compose configs, creating/deleting/restarting containers, and implementing docker network isolation [DevOps], Configured and deployed a two-layered Traefik sandwich for reverse proxy management, integrated domain name registration with a Digital Ocean droplet, secured wildcard SSL certification through Cloudflare for dynamic subdomains, and setup an authenticated Traefik monitoring dashboard [cloud]
 
-**Landseer Enga**: Created initial 'explore' page, then primarily worked on the teams feature. Contributed to back-end routes
-for all things related to managing teams and their associated members/projects. Helped create front-end feature to allow users to manage teams.
+#### Jake Milad: 
+> ##### Implemented protected routes component for authorized users to access. Refresh, and access token JWT workflow with Axios interceptors implemented for user persistence, login and signup React base templates, Teams feature MongoDB collection schema and CRUD endpoints as well as Teams redux state management and Google login SSO.
 
-**Jake Milad**: Implemented protected routes component for authorized users to access. Refresh, and access token JWT workflow with Axios interceptors implemented for user persistence,
-login and signup React base templates, Teams feature MongoDB collection schema and CRUD endpoints as well as Teams redux state management and Google login SSO.
+#### Landseer Enga:
+> ##### Created initial 'explore' page, then primarily worked on the teams feature. Contributed to back-end routes for all things related to managing teams and their associated members/projects. Helped create front-end feature to allow users to manage teams.
+
+#### Phillip Tellier: 
+> ##### Documentation of requirements, features, and use of technologies. Authentication/Authorization back-end end points and login and sign-in front-end pages. CRUD operation back-end end-points for user accounts and `project` collection. Pages to see all a user's projects, and to edit individual projects.
