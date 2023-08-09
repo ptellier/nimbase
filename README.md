@@ -83,3 +83,6 @@ Pages to see all a user's projects, and to edit individual projects.
 
 **Landseer Enga**: Created initial 'explore' page, then primarily worked on the teams feature. Contributed to back-end routes
 for all things related to managing teams and their associated members/projects. Helped create front-end feature to allow users to manage teams.
+
+**Jake Milad**: Implemented protected routes component for authorized users to access. Refresh, and access token JWT workflow with Axios interceptors implemented for user persistence,
+login and signup React base templates, Teams feature MongoDB collection schema and CRUD endpoints as well as Teams redux state management and Google login SSO.
