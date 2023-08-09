@@ -26,7 +26,6 @@ class Query {
     );
   }
 
-  // Get all projects (ids) of a user
   async getUserProjects(username, accessToken) {
     return await axiosInstance.get(
       BASE_URL + `/api/user/${username}/projects`,
@@ -36,7 +35,6 @@ class Query {
     );
   }
 
-  // Authenticate/ login user
   async loginUser(username, password) {
     return await axiosInstance
       .post(
@@ -56,7 +54,6 @@ class Query {
       });
   }
 
-  // logout user
   async logoutUser() {
     return await axios.post(BASE_URL + "/api/auth/logout", {});
   }
@@ -67,7 +64,6 @@ class Query {
     });
   }
 
-  // create a new project
   async createProject(project, accessToken) {
     const response = await axiosInstance.post(
       BASE_URL + "/api/project/init",
@@ -112,9 +108,7 @@ class Query {
   }
 
 
-  // set an existing project's fields (all of them except _id which must match an existing project)
   async updateProject(_id, project, accessToken) {
-    console.log("updateProject", project);
     const response = await axiosInstance.post(
       BASE_URL + "/api/project/update",
       {
@@ -151,7 +145,6 @@ class Query {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
-    console.log(response);
     return response.status === 200
       ? { success: true, message: response.data }
       : { success: false, message: response.data };
@@ -223,56 +216,6 @@ class Query {
       });
   }
 
-  async devOpsClone(project, accessToken) {
-    const response = await axiosInstance.post(
-      BASE_URL + "/api/devops/clone",
-      {
-        github_url: project.github_url,
-        name: project.name,
-        env_vars: project.env_vars,
-        _id: project._id,
-      },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        validateStatus: (status) => status === 200 || status === 500,
-      }
-    );
-    console.log(response);
-    return response.status === 200
-      ? { success: true, data: response.data }
-      : { success: false, error: response.data };
-  }
-
-  async devOpsDeploy(_id, accessToken, configs) {
-    const response = await axiosInstance.post(
-      BASE_URL + "/api/devops/deploy",
-      {
-        id: _id,
-        configs: configs,
-      },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        validateStatus: (status) => status === 200 || status === 500,
-      }
-    );
-    return response.status === 200
-      ? { success: true, data: response.data }
-      : { success: false, error: response.data };
-  }
-
-  async devOpsRemove(_id, accessToken) {
-    return await axiosInstance.post(
-      BASE_URL + "/api/devops/remove",
-      {
-        id: _id,
-      },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
-  }
-
-  // TEAMS
   async createTeam(teamName, description, owner, accessToken) {
     return await axiosInstance.post(
       BASE_URL + "/api/team",

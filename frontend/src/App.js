@@ -19,7 +19,7 @@ import Teams from "./pages/teams";
 import ProjectAlerts from "./components/ProjectAlerts";
 import {gapi} from "gapi-script";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const InitComponent = () => {
   const dispatch = useDispatch();

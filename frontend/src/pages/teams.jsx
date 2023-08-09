@@ -23,7 +23,6 @@ import {faArrowsRotate} from "@fortawesome/free-solid-svg-icons";
 const Teams = () => {
     const [teamName, setTeamName] = useState("");
     const [description, setDescription] = useState("");
-    const [owner, setOwner] = useState("");
     const [showTeams, setShowTeams] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showTeamEditModal, setShowTeamEditModal] = useState(false);

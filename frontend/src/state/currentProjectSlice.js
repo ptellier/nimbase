@@ -1,4 +1,4 @@
-import {createSlice, isAnyOf} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import { initProject, resetProject } from "./projectThunks";
 import Query from "../components/Query";
 export {initProject, resetProject} from "./projectThunks";
@@ -61,4 +61,3 @@ export const currentProjectSlice = createSlice({
 
 
 export const currentProjectSelector = (state) => state.currentProject;
-export const currentProjectIdSelector = (state) => state.currentProject._id;

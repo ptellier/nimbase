@@ -7,18 +7,12 @@ export const AlertsContext = createContext({});
 const ProjectAlerts = ({}) => {
   const [alerts, setAlerts] = useState([]);
 
-  /**
-   *   remove the alert in the alerts array at index i
-   */
   const deleteAlert = (index) => {
     let newAlerts = [...alerts];
     newAlerts.splice(index, 1);
     setAlerts(newAlerts);
   }
 
-  /**
-   *   add an alert to the alerts array
-   */
   const createAlert = (alert) => {
     let newAlerts = [...alerts];
     newAlerts.push(alert);

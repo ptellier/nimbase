@@ -9,7 +9,6 @@ const ImageUploader = ({error, image, setImage}) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log("file: ", file)
     if (file.type === "image/jpeg" || file.type === "image/png") {
       setPreviewImage(URL.createObjectURL(file));
       const reader = new FileReader();

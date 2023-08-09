@@ -59,14 +59,8 @@ const ProjectStatus = ({ project }) => {
     [deployState.NOT_CLONED]: async () => {
       setStatus(deployState.CLONING);
       deployedResult = query.deployProject(project._id, accessToken);
-      console.log(deployedResult);
-      //  if (deployedResult.success) {
       setStatus(deployState.CLONING);
       setTimeout(FUNCTION_MAP[deployState.CLONING], 100);
-      //  } else {
-      // setStatus(deployState.CLONE_FAILED);
-      // console.error(deployedResult.error);
-      //  }
     },
     [deployState.CLONING]: () => {
       setStatus(deployState.CLONED);
@@ -79,13 +73,11 @@ const ProjectStatus = ({ project }) => {
     [deployState.CLONE_FAILED]: () => {FUNCTION_MAP[deployState.NOT_CLONED]();},
     [deployState.DEPLOYING]: async () => {
       const result = await deployedResult;
-      console.log(result);
       if (result.success) {
         setStatus(deployState.DEPLOYED);
         setTimeout(FUNCTION_MAP[deployState.DEPLOYED], 1000);
       } else {
         setStatus(deployState.CLONE_FAILED);
-        console.error(result.message);
       }
     },
     [deployState.DEPLOYED]: () => {

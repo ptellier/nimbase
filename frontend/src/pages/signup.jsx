@@ -84,7 +84,6 @@ const Signup = () => {
         const isValid = validateFormData();
         if (!isValid) {return;}
         try {
-            console.log("Dispatching signup action")
             dispatch(signup({
                 firstName: formData.firstName,
                 lastName: formData.lastName,
@@ -99,7 +98,6 @@ const Signup = () => {
         } catch (error) {
             console.error("Error creating user:", error);
         }
-        console.log("Form submitted");
     }
 
     return (

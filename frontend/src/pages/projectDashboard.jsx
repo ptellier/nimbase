@@ -75,7 +75,6 @@ const ProjectDashboard = () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
       const result = await query.deleteProject(deletePopupId, accessToken);
       if (result.success === true) {
-        // await query.devOpsRemove(deletePopupId, accessToken);
         let newProjects = [...projects];
         newProjects.splice(deletePopupIndex, 1);
         setProjects(newProjects);
@@ -86,7 +85,6 @@ const ProjectDashboard = () => {
         createAlert(ALERT_DELETE_ERROR);
       }
     } else {
-      console.log("Still loading: id or index is null");
       createAlert(ALERT_DELETE_ERROR);
     }
   }
@@ -109,7 +107,6 @@ const ProjectDashboard = () => {
   }
 
   const oneTwoThree = [1,2,3];
-  console.log(projects)
 
   return (
     <>
@@ -153,7 +150,6 @@ const ProjectDashboard = () => {
                   <div className="dashboard-text-container">
                     <div className="dashboard-project-title-and-icon">
                       <h3>
-                        {/* create a link to external site with project.url */}
                           <a href= {project.url || "#"}
                             style={{textDecoration: "none", color: "black"}}
                             target="_blank"

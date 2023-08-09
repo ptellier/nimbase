@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import {faTrashCan} from "@fortawesome/free-regular-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { currentProjectSelector } from "../state/currentProjectSlice";
-import { initProject, resetProject } from "../state/currentProjectSlice";
+import { resetProject } from "../state/currentProjectSlice";
 
 const query = new Query();
 
@@ -63,12 +63,6 @@ const DndComponent =  () => {
   const [connectionUrl, setConnectionUrl] = useState("")
   
   const handleDeploy = async (connectionUrl, client, server) => {
-    console.log(project._id, connectionUrl, client, server)
-    // const result = await query.devOpsDeploy(project._id, accessToken, {
-    //   "connection_url": connectionUrl, 
-    //   "client": client, 
-    //   "server": server
-    // })
     const result = await query.updateProject(project._id, {
       ...project,
       "connection_url": connectionUrl,
@@ -77,9 +71,7 @@ const DndComponent =  () => {
       },
       accessToken
     )
-    // reset the redux store for current project to be the inital state
     dispatch(resetProject());
-    console.log(result)
     navigate("/project/dashboard")
   }
 

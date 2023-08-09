@@ -9,7 +9,7 @@ import {faTriangleExclamation} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {Button, Heading} from "@chakra-ui/react";
 import {GoogleLogin} from "@leecheuk/react-google-login";
-const CLIENT_ID= "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const CLIENT_ID= process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -27,9 +27,7 @@ const Login = () => {
     };
 
     const onSuccess = (res) => {
-        console.log("login success");
         const tokenId = res.tokenId;
-        console.log("token id: ", tokenId);
         dispatch(googleLogin({tokenId})).then((res) => {
             if (res.payload) {
                 navigate("/project/dashboard");
@@ -38,7 +36,6 @@ const Login = () => {
     }
 
     const onFailure = (res) => {
-        console.log("login failed");
         navigate("/");
     }
 

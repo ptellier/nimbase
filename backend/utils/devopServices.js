@@ -126,11 +126,6 @@ async function configureDockerComposeFiles(project_name, config_services) {
     }
     services = Object.keys(projectDoc.services);
 
-    // remove ports
-    // for (const service of services) {
-    //   delete projectDoc.services[service].ports;
-    // }
-
     for (const service of services) {
       if (service === `${project_name}_${client}`) {
         projectDoc.services[service].labels = [
@@ -141,7 +136,6 @@ async function configureDockerComposeFiles(project_name, config_services) {
           `traefik.http.routers.${service}.tls.certresolver=dns-cloudflare`,
         ];
       }
-      //find the server service
       else if (service === `${project_name}_${server}`) {
         projectDoc.services[service].labels = [
           "traefik.enable=true",
@@ -178,7 +172,6 @@ async function configureDockerComposeFiles(project_name, config_services) {
       }
     );
 
-    //configure docker compose file for inner traefik layer
     const traefik_dockercompose = fs.readFileSync(
       TRAEFIK_DOCKER_COMPOSE_FILE,
       "utf8"
@@ -241,8 +234,6 @@ async function configureDockerComposeFiles(project_name, config_services) {
 
 // deploy docker compose file
 async function deployDocker(project_name) {
-  //deploy project's docker-compose file
-  //deploy inner traefik's docker-compose file
   const { stdout: stdout4, stderr: stderr4 } = await exec(
     `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down`
   );
@@ -272,7 +263,6 @@ async function deployDocker(project_name) {
 // remove a project
 async function removeProject(project_name) {
   const dockercompose = `${REPO_BASE_URL}/${project_name}/docker-compose-traefik.yml`;
-  // check if docker-compose file exists
   const fileExists = fs.existsSync(dockercompose);
   if (!fileExists) {
     console.log("docker-compose file does not exist");
@@ -283,22 +273,14 @@ async function removeProject(project_name) {
     };
   }
   try {
-    // docker-compose down the inner traefik
     const { stdout: stdout0, stderr: stderr0 } = await exec(
       `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" down`
     );
 
-    // docker-compose down the project
     const { stdout: stdout1, stderr: stderr1 } = await exec(
       `docker-compose -f ${dockercompose} down`
     );
-    console.log("stderr:", stderr1);
-    console.log("stdout:", stdout1);
-
-    // clear the repo
     fs.rmdirSync(`${REPO_BASE_URL}/${project_name}`, { recursive: true });
-
-    // reconfigure the inner traefik docker compose file
     const traefik_dockercompose = fs.readFileSync(
       TRAEFIK_DOCKER_COMPOSE_FILE,
       "utf8"
@@ -334,7 +316,6 @@ async function removeProject(project_name) {
       }
     );
 
-    //deploy inner traefik's docker-compose file
     const { stdout: stdout2, stderr: stderr2 } = await exec(
       `docker-compose -f "${TRAEFIK_DOCKER_COMPOSE_FILE}" -p "inner" up -d`
     );
@@ -350,7 +331,6 @@ async function removeProject(project_name) {
   }
 }
 
-// export functions
 module.exports = {
     cloneRepo,
     envFileWrite,

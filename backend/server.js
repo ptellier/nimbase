@@ -18,7 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.json());
 
-// root sends welcome message
 app.get('/', (req, res) => {
     res.send('Welcome to the Nimbase Back-end API!');
 });
@@ -37,10 +36,9 @@ app.use(verifyJWT);
 
 app.use('/api/project', require('./routes/project_private.js'));
 app.use('/api/user', require('./routes/user.js'));
-// app.use('/api/devops', require('./routes/devops.js'));
 app.use('/api/team', require('./routes/teams.js'));
 
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Server started at port : ${port}`);
 });

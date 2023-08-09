@@ -8,7 +8,6 @@ export const login = createAsyncThunk(
         const response = await query.loginUser(data.username, data.password);
         const payload = response.data
         payload.loginError = response.data.message;
-        console.log(payload);
         return payload;
     }
 )

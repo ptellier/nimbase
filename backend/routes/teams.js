@@ -23,8 +23,6 @@ router.post('/', express.json(), async (req, res) => {
     if(!teamName || !description || !owner) {
         return res.status(400).send("Missing required fields");
     }
-    console.log(req.body)
-
     const existingTeam = await teams.findOne({teamName: teamName});
     if(existingTeam){
         return res.status(400).send("Team name already exists");
@@ -53,10 +51,6 @@ router.get('/:teamName/members', express.json(), async (req, res) => {
     if(!team) {
         return res.status(404).send("Team not found");
     }
-
-    console.log("inside teammates route - team: ", team);
-
-    console.log("inside teammates route - memebers: ", team.members);
 
     return res.status(200).json(team.members);
 
@@ -176,12 +170,10 @@ router.post('/:teamName/removeProject/:projectName', express.json(), async (req,
         return res.status(200).send("Project removed from team");
 
     } catch (error) {
-        console.error("Error removing project:", error);
         return res.status(500).send("Internal server error");
     }
 });
 
-// changed from delete to post
 router.post('/:teamName', express.json(), async (req, res) => {
     const teams = db.collection('teams');
     const teamName = req.params.teamName;

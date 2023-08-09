@@ -5,15 +5,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db  = require('../database/dbConn.js');
 const router = express.Router();
-const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(CLIENT_ID);
 
-const MAX_AGE_OF_REFRESH_TOKEN_COOKIE = 24 * 60 * 60 * 1000; // 1 day (in milliseconds)
+const MAX_AGE_OF_REFRESH_TOKEN_COOKIE = 24 * 60 * 60 * 1000; 
 const EXPIRY_TIME_OF_ACCESS_TOKEN = '1d';
 const EXPIRY_TIME_OF_REFRESH_TOKEN = '7d';
-
-
 
 // authenticate/login user
 router.post('/login', async (req, res) => {
@@ -26,13 +24,10 @@ router.post('/login', async (req, res) => {
   if (!foundUser ) {
     return res.status(401).json({ 'message': `Could not find user "${username}"` });
   }
-  // evaluate password
   console.log("foundUser: ", foundUser.password_hash)
-  console.log("password: ", password)
   console.log("email: ", foundUser.email)
   const match = await bcrypt.compare(password, foundUser.password_hash);
   if (match) {
-    // create JWTs
     const accessToken = jwt.sign(
       { "username": foundUser.username },
       process.env.ACCESS_TOKEN_SECRET,
@@ -43,7 +38,6 @@ router.post('/login', async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: EXPIRY_TIME_OF_REFRESH_TOKEN }
     );
-    // Saving refreshToken with current user
     await users.updateOne({username: foundUser.username}, { $set: {refreshToken: refreshToken}});
     res.cookie('jwt', refreshToken, {
       httpOnly: true,
@@ -60,15 +54,11 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
-// logout user
 router.post('/logout', async (req, res) => {
-  // on client, also delete the accessToken
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
+  if (!cookies?.jwt) return res.sendStatus(204); 
   const refreshToken = cookies.jwt;
 
-  // is refreshToken in db?
   const users = db.collection("users");
   const foundUser = await users.findOne({refreshToken: refreshToken});
   if (foundUser) {

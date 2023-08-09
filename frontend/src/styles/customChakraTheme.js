@@ -12,7 +12,6 @@ const customTheme = extendTheme({
   components: {
     Button: {
       baseStyle: {
-        // ...define your base styles
       },
       variants: {
         customDefault: {

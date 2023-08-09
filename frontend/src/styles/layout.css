@@ -79,7 +79,7 @@ input, textarea {
 }
 
 .red-brick-gradient-text {
-    background: -webkit-linear-gradient(#afa8a8, #a72a2a); /* Example gradient */
+    background: -webkit-linear-gradient(#afa8a8, #a72a2a); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -143,7 +143,6 @@ input, textarea {
     height: 100%;
     border-radius: 4px;
     background-color: lightgrey;
-    /* grey to lighter grey off centre radial gradient */
     background-image: radial-gradient(circle at 60% 60%, #c3e2f3, #d7d7d7);
 }
 

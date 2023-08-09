@@ -15,6 +15,5 @@ router.get('/', express.json(), async (req, res) => {
   res.status(200).send(projects);
 });
 
-// TODO: perform gitHub action on project '/api/project/deploy'
 
 module.exports = router;

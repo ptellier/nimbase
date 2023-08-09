@@ -7,7 +7,7 @@ import {GoogleLogout} from "@leecheuk/react-google-login";
 import {faChevronDown, faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import {Box, Hide, HStack, Menu, MenuButton, MenuItem, MenuList, Text} from "@chakra-ui/react";
 
-const CLIENT_ID = "821439699286-35djg3u6211rl2a3op9ea06iam9v10hq.apps.googleusercontent.com";
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const FONT_SIZES = {base: '16px', sm: '18px', md: '24px'};
 
 const NavBar = () => {
