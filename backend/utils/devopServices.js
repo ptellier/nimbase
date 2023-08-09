@@ -272,6 +272,16 @@ async function deployDocker(project_name) {
 // remove a project
 async function removeProject(project_name) {
   const dockercompose = `${REPO_BASE_URL}/${project_name}/docker-compose-traefik.yml`;
+  // check if docker-compose file exists
+  const fileExists = fs.existsSync(dockercompose);
+  if (!fileExists) {
+    console.log("docker-compose file does not exist");
+    fs.rmdirSync(`${REPO_BASE_URL}/${project_name}`, { recursive: true });
+    return {
+      status: "success",
+      message: "docker-compose file does not exist, so removed the project",
+    };
+  }
   try {
     // docker-compose down the inner traefik
     const { stdout: stdout0, stderr: stderr0 } = await exec(
@@ -282,8 +292,8 @@ async function removeProject(project_name) {
     const { stdout: stdout1, stderr: stderr1 } = await exec(
       `docker-compose -f ${dockercompose} down`
     );
-    console.log("stderr:", stderr);
-    console.log("stdout:", stdout);
+    console.log("stderr:", stderr1);
+    console.log("stdout:", stdout1);
 
     // clear the repo
     fs.rmdirSync(`${REPO_BASE_URL}/${project_name}`, { recursive: true });

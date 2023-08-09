@@ -75,7 +75,7 @@ const ProjectDashboard = () => {
     if (deletePopupId !== null && deletePopupIndex !== null) {
       const result = await query.deleteProject(deletePopupId, accessToken);
       if (result.success === true) {
-        await query.devOpsRemove(deletePopupId, accessToken);
+        // await query.devOpsRemove(deletePopupId, accessToken);
         let newProjects = [...projects];
         newProjects.splice(deletePopupIndex, 1);
         setProjects(newProjects);

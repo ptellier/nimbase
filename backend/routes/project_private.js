@@ -321,6 +321,9 @@ router.delete("/:id", express.json(), async (req, res) => {
     { username: req.user },
     { $pull: { project_ids: req.params.id } }
   );
+    // removeProject(req.params.id);
+    const removeResult = await removeProject(req.params.id);
+    console.log(removeResult);
   res.status(200).send(resultUpdate);
 });
 
