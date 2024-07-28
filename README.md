@@ -1,3 +1,9 @@
+### Prof's note
+<p align="center">
+<img alt="Nimbase icon" src="readme/cpsc455_prof.png" width="500px">
+</p>
+
+
 # CPSC 455 Project : Nimbase
 
 ###### Group Members: Bhairaw Aryan, Jake Milad, Landseer Enga, Phillip Tellier
